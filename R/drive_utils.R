@@ -8,7 +8,7 @@
     mustWork = TRUE
   ) %>%
   utils::read.csv(stringsAsFactors = FALSE) %>%
-  as_tibble()
+  dplyr::as_tibble()
 
 
 ## get the default export MIME type for a native Google MIME type
