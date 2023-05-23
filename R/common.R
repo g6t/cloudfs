@@ -200,37 +200,22 @@ assert_desc_field <- function(key, value, file) {
 #' @inheritParams cloud_not_wd_warning
 #'
 #' @noRd   
-g6tr_validate_desc <- function(project = getwd()) {
-  path_meta <- g6tr_get_project_meta_from_path(project)
+validate_desc <- function(project = getwd()) {
   desc_path <- file.path(project, "DESCRIPTION")
+  
   if (!file.exists(desc_path)) {
     cli::cli_warn("Cannot find {.path DESCRIPTION} file in {.field {project}}.")
-    yeah <- g6tr.ui::cli_yeah("Generate it automatically?", straight = TRUE)
+    yeah <- cli_yeah("Generate it automatically?", straight = TRUE)
     if (yeah) {
-      desc_content <- c(
-        "Package: -",
-        "Type: g6tr project",
-        paste("Name:", path_meta$name)
-      )
-      if (!is.na(path_meta$base_pkg)) 
-        desc_content <- c(desc_content, paste("BasePkg:", path_meta$base_pkg))
+      desc_content <- c("Name: -",
+                        "Title: -")
+      
       writeLines(con = desc_path, desc_content)
       desc::desc_print(desc_path)
       return(invisible(TRUE))
     } else {
-      stop("Cannot proceed without having DESCRIPTION file")
+      cli::cli_abort("Cannot proceed without having DESCRIPTION file")
     }
-  }
-  package <- desc::desc_get("Package", desc_path)
-  if (!is.na(package) & package != "-") {
-    cli::cli_warn(
-      "This folder {.field {project}} is a package folder. You probably \\
-      should not use {.pkg cloud} functions with it."
-    )
-  } else {
-    assert_desc_field(key = "Name", value = path_meta$name, file = desc_path)
-    if (!is.na(path_meta$base_pkg))
-      assert_desc_field(key = "BasePkg", value = path_meta$base_pkg, file = desc_path)
   }
   invisible(TRUE)
 }
