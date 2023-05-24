@@ -20,7 +20,10 @@ cloud_talk <- function() {
 
 #' @title Extract values from DESCRUPTION file
 #' 
-#' @noRd 
+#' @param key Character. What field to search for in DESCRIPTION file.
+#' @param project Character. Path to a project. By default it is current working
+#'   directory.
+#' 
 proj_desc_get <- function(key, project = getwd()) {
   stopifnot(is.character(key) & length(key) == 1)
   stopifnot(is.character(project) & length(project) == 1)

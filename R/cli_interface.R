@@ -28,7 +28,7 @@
 #' cli_yeah("{.field Yes} or {.field No}?", straight = TRUE)
 #' }
 #' 
-#' @export
+#' @noRd 
 cli_yeah <- function(x, straight = FALSE, .envir = parent.frame()) {
   check_scalar(x, arg_class = "character")
   check_scalar(straight, arg_class = "logical")
@@ -102,7 +102,7 @@ cli_yeah <- function(x, straight = FALSE, .envir = parent.frame()) {
 #' check_scalar(num_s, arg_class = "integer")
 #' check_scalar(logical_v, arg_class = "integer", alt_null = TRUE)
 #' }
-#' @export
+#' @noRd 
 check_scalar <- function(..., arg_class, alt_null = FALSE) {
   
   .args <- check_args(...)
@@ -176,7 +176,7 @@ check_scalar <- function(..., arg_class, alt_null = FALSE) {
 #' check_class(nl1, arg_class = "character", alt_null = TRUE)
 #' check_class(n2, arg_class = "character", alt_null = TRUE)
 #' }
-#' @export
+#' @noRd 
 check_class <- function(x, arg_class, alt_null = FALSE, add_msg = NULL) {
   if(!(inherits(arg_class, "character") & length(arg_class) == 1)) {
     cli_abort(
@@ -251,7 +251,7 @@ check_class <- function(x, arg_class, alt_null = FALSE, add_msg = NULL) {
 #'   nl1, arg_length = 2L, alt_null = TRUE, add_msg = "{.arg {x_name}} should be short"
 #' )
 #' }
-#' @export
+#' @noRd 
 check_length <- function(x, arg_length = 1L, alt_null = FALSE, add_msg = NULL) {
   if(!inherits(arg_length, "integer") | length(arg_length) != 1) {
     cli_abort(
@@ -290,7 +290,7 @@ check_length <- function(x, arg_length = 1L, alt_null = FALSE, add_msg = NULL) {
 #' 
 #' @param ... unqouted arguments names
 #' 
-#' @export
+#' @noRd 
 check_args <- function(...) {
   rlang::quos(...)
 }
@@ -304,7 +304,7 @@ check_args <- function(...) {
 #' @param x Argument to check if is NULL.
 #' @param alt_null Logical. If `TRUE` it will check if `x` is `NULL`.
 #' 
-#' @export
+#' @noRd 
 check_null_cond <- function(x, alt_null){
   if(!(isTRUE(alt_null) | isFALSE(alt_null) | length(alt_null) != 1)) {
     cli_abort(

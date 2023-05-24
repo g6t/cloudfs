@@ -1,3 +1,77 @@
+
+#' @title Attach S3 folder to project
+#'
+#' @description The `cloud_s3_attach()` function is used to add a field to the
+#'   DESCRIPTION file of a project, which uniquely identifies the location of
+#'   the project's folder in an S3 cloud storage. It prompts the user to visit
+#'   the S3 cloud storage website (https://s3.console.aws.amazon.com/) where
+#'   they can find or create a dedicated folder for the project. After the user
+#'   has selected or created the desired folder, they can copy the URL of the
+#'   folder from the web browser and paste it into the R console. The function
+#'   then parses the URL and populates the corresponding field (CloudS3) in the
+#'   DESCRIPTION file with a string that represents the location of the project
+#'   in the S3 cloud storage.
+#'
+#' @inheritParams proj_desc_get
+#'
+#' @examples
+#' \dontrun{cloud_s3_attach()}
+#'
+#' @export
+cloud_s3_attach <- function(project = getwd()) {
+  validate_desc(project)
+  
+  name <- proj_desc_get("Name", project)
+  s3_desc <- proj_desc_get("CloudS3", project)
+  
+  if (is.na(s3_desc)) {
+    cli::cli_alert_info(
+      "For {.code cloud_s3_*} functions to work, project's {.path DESCRIPTION} \\
+      file needs to contain a path to a dedicated S3 folder."
+    )
+  } else {
+    cli::cli_alert_info(
+      "Project's {.path DESCRIPTION} file already contains a path to an S3 folder."
+    )
+    if (!cli_yeah("Update it?", straight = TRUE)) {
+      return(invisible(TRUE))
+    }
+  }
+  
+  yeah <- cli_yeah("Do you wish to visit S3 to find/create a folder?", straight = TRUE)
+  
+  if (yeah) { utils::browseURL("https://s3.console.aws.amazon.com/") }
+  
+  repeat {
+    ok <- TRUE
+    cli::cli_text("Paste folder URL below")
+    url <- readline("URL: ")
+    info <- tryCatch(
+      cloud_s3_get_info_from_url(url),
+      error = function(e) e
+    )
+
+    if (inherits(info, "error")) {
+      cli::cli_warn(info$message)
+      ok <- FALSE
+    }
+    
+    if (ok) {
+      desc::desc_set(CloudS3 = info, file = file.path(project, "DESCRIPTION"))
+      cli::cli_alert_success(
+        "Attached S3 folder {.path {info}} to {.field {name}} project.\n
+        {.field CloudS3} field in {.path DESCRIPTION} has been updated sucessfully."
+      )
+      return(invisible(TRUE))
+    } else {
+      if (cli_yeah("Try again?", straight = TRUE)) {
+        cli::cli_text("Aborting ...")
+        break
+      }
+    }
+  }
+}
+
 #' @title List project folders on S3
 #' 
 #' @description Lists project folders in "bucket-name" S3 bucket
@@ -55,87 +129,6 @@ s3_create_project_folder <- function(name, .check = TRUE) {
   aws.s3::put_folder(bucket = bucket_name, folder = paste0(name, "/data"))
   aws.s3::put_folder(bucket = bucket_name, folder = paste0(name, "/models"))
   cli::cli_alert_success("Created needed S3 buckets on AWS!")
-}
-
-#' @title Attach S3 folder to project
-#' 
-#' @description A regular (client) project with a name `name` is normally
-#'   located in monorepo at
-#'   "packages/g6tr.projects/vignettes/{iso-date}_{name}". A newsletter project
-#'   is located at "packages/g6tr.voice/vignettes/{iso-date}_{name}". The right
-#'   S3 folder for a regular project would be "{name}" folder in the
-#'   "bucket-name" bucket. The right S3 folder for a newsletter project would
-#'   be "newsletter/{year}-{month}". If a project is set up using [g6tr_setup]
-#'   or [g6tr::g6tr_newsletter_setup] with `s3_bucket` set to `TRUE`, a
-#'   folder will be created following the conventions described above and
-#'   project DESCRIPTION will contain the address of the project S3 folder. If
-#'   you happen to run an `cloud_s3_*` function in a project where DESCRIPTION
-#'   does not contain an address of an S3 folder, you'll be asked to provide a
-#'   link to a folder. This link will then be processed and put to DESCRIPTION.
-#'   You can trigger this process manually by calling `cloud_s3_attach()`.
-#'   
-#' @inheritParams cloud_not_wd_warning
-#' @param prefix It is possible to suppress the dialogue where you are asked to
-#'   provide a folder URL by passing a prefix to this parameter. Although this
-#'   is not recommended. This option exists mainly to be used by other
-#'   functions.
-#' 
-#' @examples 
-#' \dontrun{cloud_s3_attach()}
-#' 
-#' @export
-cloud_s3_attach <- function(project = getwd()) {
-  validate_desc(project)
-  
-  name <- proj_desc_get("Name", project)
-  s3_desc <- proj_desc_get("CloudS3", project)
-  
-  if (is.na(s3_desc)) {
-    cli::cli_alert_info(
-      "For {.code cloud_s3_*} functions to work, project's {.path DESCRIPTION} \\
-      file needs to contain a path to a dedicated S3 folder."
-    )
-  } else {
-    cli::cli_alert_info(
-      "Project's {.path DESCRIPTION} file already contains a path to an S3 folder."
-    )
-    if (!cli_yeah("Update it?", straight = TRUE)) {
-      return(invisible(TRUE))
-    }
-  }
-  
-  yeah <- cli_yeah("Do you wish to visit S3 to find/create a folder?", straight = TRUE)
-  
-  if (yeah) { utils::browseURL("https://s3.console.aws.amazon.com/") }
-  
-  repeat {
-    ok <- TRUE
-    cli::cli_text("Paste folder URL below")
-    url <- readline("URL: ")
-    info <- tryCatch(
-      cloud_s3_get_info_from_url(url),
-      error = function(e) e
-    )
-
-    if (inherits(info, "error")) {
-      cli::cli_warn(info$message)
-      ok <- FALSE
-    }
-    
-    if (ok) {
-      desc::desc_set(CloudS3 = info, file = file.path(project, "DESCRIPTION"))
-      cli::cli_alert_success(
-        "Attached S3 folder {.path {info}} to {.field {name}} project.\n
-        {.field CloudS3} field in {.path DESCRIPTION} has been updated sucessfully."
-      )
-      return(invisible(TRUE))
-    } else {
-      if (cli_yeah("Try again?", straight = TRUE)) {
-        cli::cli_text("Aborting ...")
-        break
-      }
-    }
-  }
 }
 
 #' @title Get Project's S3 Location
