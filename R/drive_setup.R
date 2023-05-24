@@ -10,42 +10,32 @@
 #' 
 #' @export
 cloud_drive_attach <- function(project = getwd()) {
-  g6tr_validate_desc(project)
+  
+  ## Check for description file and add if not found
+  validate_desc(project)
   
   name <- proj_desc_get("Name", project)
-  base_pkg <- proj_desc_get("BasePkg", project)
-  newsletter <- base_pkg == "g6tr.voice"
-  drive_desc <- proj_desc_get("GoogleDrive", project)
+  drive_desc <- proj_desc_get("CloudDrive", project)
   
   if (is.na(drive_desc)) {
     cli::cli_alert_info(
-      "For {.code cloud_drive_*} functions to work, project's \\
-      {.path DESCRIPTION} file needs to contain a link to a dedicated \\
-      Google Drive folder."
+      "For {.code cloud_drive_*} functions to work, project's {.path DESCRIPTION} file needs to contain a link to a dedicated Google Drive folder."
     )
   } else {
     cli::cli_alert_info(
-      "Project's {.path DESCRIPTION} file already contains a link to a Google \\
-      Drive folder."
+      "Project's {.path DESCRIPTION} file already contains a link to a Google Drive folder."
     )
-    if (!g6tr.ui::cli_yeah("Update it?", straight = TRUE)) {
+    if (!cli_yeah("Update it?", straight = TRUE)) {
       return(invisible(TRUE))
     }
   }
   
-  yeah <- g6tr.ui::cli_yeah(
+  yeah <- cli_yeah(
     "Do you wish to visit Google Drive to find/create a folder?",
     straight = TRUE
   )
   
-  if (yeah) {
-    if (is.na(base_pkg)) {
-      utils::browseURL("https://drive.google.com/drive/shared-drives")
-    } else {
-      catalogue_id <- cloud_drive_get_catalogue_id(newsletter)
-      googledrive::drive_browse(catalogue_id)
-    }
-  }
+  if (yeah) { utils::browseURL("https://drive.google.com/") }
   
   repeat {
     ok <- TRUE
@@ -65,16 +55,16 @@ cloud_drive_attach <- function(project = getwd()) {
     }
     
     if (ok) {
-      desc::desc_set(GoogleDrive = id, file = project)
+      desc::desc_set(CloudDrive = id, file = file.path(project, "DESCRIPTION"))
       folder_name <- drbl$name
       cli::cli_alert_success(
         "Attached Google Drive folder {.val {folder_name}} to \\
-        {.field {name}} project. {.field GoogleDrive} field in \\
-        {.path DESCRIPTION} updated."
+        {.field {name}} project. {.field CloudDrive} field in \\
+        {.path DESCRIPTION} has been updated sucessfully."
       )
       return(invisible(TRUE))
     } else {
-      if (!g6tr.ui::cli_yeah("Try again?", straight = TRUE)) {
+      if (!cli_yeah("Try again?", straight = TRUE)) {
         cli::cli_text("Aborting ...")
         break
       }
