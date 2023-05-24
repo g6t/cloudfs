@@ -18,6 +18,18 @@ cloud_talk <- function() {
   opt
 }
 
+#' @title Extract values from DESCRUPTION file
+#' 
+#' @noRd 
+proj_desc_get <- function(key, project = getwd()) {
+  stopifnot(is.character(key) & length(key) == 1)
+  stopifnot(is.character(project) & length(project) == 1)
+  validate_desc(project)
+  desc_file <- file.path(project, "DESCRIPTION")
+  value <- desc::desc_get(key, desc_file)
+  unname(value)
+}
+
 #' @title Warn if cloud function is used not for current working directory
 #' 
 #' @description Functions for uploading/downloading files from project cloud
@@ -201,17 +213,22 @@ assert_desc_field <- function(key, value, file) {
 #'
 #' @noRd   
 validate_desc <- function(project = getwd()) {
+  
   desc_path <- file.path(project, "DESCRIPTION")
   
   if (!file.exists(desc_path)) {
-    cli::cli_warn("Cannot find {.path DESCRIPTION} file in {.field {project}}.")
-    yeah <- cli_yeah("Generate it automatically?", straight = TRUE)
+    
+    yeah <- cli_yeah("Cannot find {.path DESCRIPTION} file in {.field {project}}.\n
+                     Do you want to generate it automatically?", straight = TRUE)
     if (yeah) {
-      desc_content <- c("Name: -",
-                        "Title: -")
+      desc_content <- c("Name: [Project Name]",
+                        "Title: [Description about the project]")
       
       writeLines(con = desc_path, desc_content)
       desc::desc_print(desc_path)
+      
+      cli::cli_alert_success("A sample DESCRIPTION file has been created in {.field {project}}.\n
+                             Kindly edit the {.field Name} and {.field Title} fields to reflect your current project.\n")
       return(invisible(TRUE))
     } else {
       cli::cli_abort("Cannot proceed without having DESCRIPTION file")
