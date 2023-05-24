@@ -1,4 +1,5 @@
 #' @import rlang
+#' @importFrom cli cli_abort
 #' 
 #' @title User Interface: Ask a Yes/No question
 #' 
@@ -108,7 +109,7 @@ check_scalar <- function(..., arg_class, alt_null = FALSE) {
   .args <- check_args(...)
   
   if (length(.args) != 1) {
-    cli_abort("Cannot pass more than one variable name to {.var ...}")
+    cli::cli_abort("Cannot pass more than one variable name to {.var ...}")
   }
   
   scalar_msg <- paste0(
@@ -179,13 +180,13 @@ check_scalar <- function(..., arg_class, alt_null = FALSE) {
 #' @noRd 
 check_class <- function(x, arg_class, alt_null = FALSE, add_msg = NULL) {
   if(!(inherits(arg_class, "character") & length(arg_class) == 1)) {
-    cli_abort(
+    cli::cli_abort(
       "{.arg arg_class} needs to be {.cls character} of length {.val 1}"
     )
   }
   
   if(!(inherits(add_msg, "character") | is.null(add_msg))){
-    cli_abort(
+    cli::cli_abort(
       "!" = "{.arg add_msg} needs to be {.cls character} or {.cls NULL}",
       "x" = "{.arg add_msg} is {.cls class(add_msg)}"
     )
@@ -205,7 +206,7 @@ check_class <- function(x, arg_class, alt_null = FALSE, add_msg = NULL) {
       "{.arg {x_name}} should be of class {.cls {arg_class}}"
     )
     
-    cli_abort(c(
+    cli::cli_abort(c(
       "i" = add_msg,
       "!" = warn_msg, 
       "x" = "{.arg {x_name}} is {.cls {wrong_class}}"
@@ -254,7 +255,7 @@ check_class <- function(x, arg_class, alt_null = FALSE, add_msg = NULL) {
 #' @noRd 
 check_length <- function(x, arg_length = 1L, alt_null = FALSE, add_msg = NULL) {
   if(!inherits(arg_length, "integer") | length(arg_length) != 1) {
-    cli_abort(
+    cli::cli_abort(
       "{.arg arg_length} should be an {.cls integer} of length {.val {1}}"
     )
   }
@@ -275,7 +276,7 @@ check_length <- function(x, arg_length = 1L, alt_null = FALSE, add_msg = NULL) {
       "{.arg {x_name}} should be of length {.val {arg_length}}"
     )
     
-    cli_abort(c(
+    cli::cli_abort(c(
       "i" = add_msg,
       "!" = warn_msg, 
       "x" = "{.arg {x_name}} is of length {.val {wrong_length}}"
@@ -307,7 +308,7 @@ check_args <- function(...) {
 #' @noRd 
 check_null_cond <- function(x, alt_null){
   if(!(isTRUE(alt_null) | isFALSE(alt_null) | length(alt_null) != 1)) {
-    cli_abort(
+    cli::cli_abort(
       "{.arg alt_null} should be either {.val TRUE} or {.val FALSE} and length 1"
     )
   }

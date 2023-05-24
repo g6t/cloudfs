@@ -74,20 +74,20 @@ cloud_s3_attach <- function(project = getwd()) {
 
 #' @title List project folders on S3
 #' 
-#' @description Lists project folders in "bucket-name" S3 bucket
+#' @description Lists project folders in a S3 bucket
 #' 
-#' @param newsletter If `FALSE` (default) lists regular project's S3 folders, 
-#'   i.e located in the root of "bucket-name". If `TRUE`, returns all 
-#'   subfolders of "newsletter" folder in "bucket-name".
+#' @param bucket S3 Bucket name
+#' @param prefix sub folder in `bucket`
 #' 
 #' @noRd
-cloud_s3_list_projects <- function(newsletter = FALSE) {
-  stopifnot(is.logical(newsletter) & !is.na(newsletter))
-  prefix <- ifelse(newsletter, "newsletter/", "")
+cloud_s3_list_projects <- function(bucket, prefix = "") {
+  check_scalar(bucket, arg_class = "character")
+  check_scalar(prefix, arg_class = "character")
+  
   response <- 
     aws.s3::s3HTTP(
       verb = "GET",
-      bucket = "bucket-name",
+      bucket = bucket,
       query = list(
         delimiter = "/",
         prefix = prefix
@@ -97,21 +97,16 @@ cloud_s3_list_projects <- function(newsletter = FALSE) {
   res1 <- response[names(response) == "CommonPrefixes"]
   res2 <- as.character(res1)
   res <- basename(res2)
-  if (!newsletter) res <- setdiff(res, "newsletter")
+  
   res
 }
 
 #' @title Check that a project folder exists on S3
 #' 
-#' @description If `newsletter` is `FALSE` (default), returns `TRUE` is `name`
-#'   is among first-level folders of "bucket-name". If `newsletter` is `TRUE`,
-#'   returns `TRUE` if `name` is among subfolders of "newsletter" folder in
-#'   "bucket-name".
-#' 
 #' @noRd
-cloud_s3_project_exists <- function(name, newsletter = FALSE) {
+cloud_s3_project_exists <- function(name, bucket, prefix = "") {
   check_scalar(name, arg_class = "character")
-  name %in% cloud_s3_list_projects(newsletter = newsletter)
+  name %in% cloud_s3_list_projects(bucket = bucket, prefix = prefix)
 }
 
 
@@ -123,7 +118,7 @@ cloud_s3_project_exists <- function(name, newsletter = FALSE) {
 #' @param name name of the project
 #'
 #' @noRd
-s3_create_project_folder <- function(name, .check = TRUE) {
+s3_create_project_folder <- function(bucket, .check = TRUE) {
   cli::cli_alert_info("Creating needed S3 buckets on AWS.")
   bucket_name <- "bucket-name"
   aws.s3::put_folder(bucket = bucket_name, folder = paste0(name, "/data"))
@@ -138,10 +133,10 @@ s3_create_project_folder <- function(name, .check = TRUE) {
 #' 
 #' @noRd
 cloud_s3_get_location <- function(project = getwd()) {
-  loc <- proj_desc_get("S3", project)
+  loc <- proj_desc_get("CloudS3", project)
   if (is.na(loc)) {
     cloud_s3_attach(project = project)
-    loc <- proj_desc_get("S3", project)
+    loc <- proj_desc_get("CloudS3", project)
   }
   loc
 }

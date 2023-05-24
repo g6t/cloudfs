@@ -189,7 +189,7 @@ cloud_object_prep_bulk <- function(content, quiet = FALSE) {
   cli::cli_text()
   
   if (!quiet) {
-    yeah <- g6tr.ui::cli_yeah("Do you wish to continue?", straight = TRUE)
+    yeah <- cli_yeah("Do you wish to continue?", straight = TRUE)
     if (!yeah) cli::cli_abort("Aborting.")
   }
   cont

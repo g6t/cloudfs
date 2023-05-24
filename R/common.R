@@ -57,7 +57,7 @@ cloud_not_wd_warning <- function(project) {
       cli::cli_warn(
         "This function is meant to be used without changing the {.arg project} parameter."
       )
-      yeah <- g6tr.ui::cli_yeah("Do you want to continue?")
+      yeah <- cli_yeah("Do you want to continue?")
       if (!yeah) {
         cli::cli_abort("Aborting")
       }
@@ -185,7 +185,7 @@ assert_desc_field <- function(key, value, file) {
   desc_value <- desc::desc_get(keys = key, file = file)
   if (is.na(desc_value)) {
     cli::cli_warn("Field {.field key} does not exist in {.path DESCRIPTION}.")
-    yeah <- g6tr.ui::cli_yeah("Fill it with {.val value}?", straight = TRUE)
+    yeah <- cli_yeah("Fill it with {.val value}?", straight = TRUE)
     if (yeah) {
       desc::desc_set_list(key, value, file = file)
       return(invisible(TRUE))
