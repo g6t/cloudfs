@@ -117,53 +117,6 @@ cloud_validate_file_names <- function(x) {
   return(invisible(TRUE))
 }
 
-#' @title Extract the project name and base package from a path
-#' 
-#' @description given a path to a directory first checks that it's a subdir
-#' of vignettes dir of either packages/g6tr.projects or packages/g6tr.voice.
-#' If this condition is satisfied, returns a list with two fields:
-#' - `name` - project's name derived as basename(path)
-#' - `base_pkg` - project's base package. So either "g6tr.projects" or 
-#' "g6tr.voice"
-#' If the condition is not satisfied, returns a list with same names, filled
-#' with NA values.
-#' 
-#' @inheritParams cloud_not_wd_warning
-#' 
-#' @examples
-#' \dontrun{
-#' g6tr_get_project_meta_from_path(g6tr_here(
-#'   "packages/g6tr.projects/vignettes/2021-11-04_acai/"
-#' ))
-#' #> $name
-#' #> [1] "acai"
-#' #>
-#' #> $base_pkg
-#' #> [1] "g6tr.projects" 
-#' }
-#' 
-#' @noRd
-g6tr_get_project_meta_from_path <- function(project = getwd()) {
-  stopifnot(is.character(project))
-  stopifnot(dir.exists(project))
-  project <- normalizePath(project)
-  name_with_date <- basename(project)
-  name <- gsub("^[0-9]{4}-[0-9]{2}-[0-9]{2}_", "", name_with_date)
-  # will be returned like this if project is not in a standard location
-  res <- list(name = name, base_pkg = NA_character_)
-  # if 3 levels up is not "packages"
-  if (dirname(dirname(dirname(project))) != g6tr_here("packages")) return(res)
-  # if 1 level up is not vignettes
-  if (basename(dirname(project)) != "vignettes") base_pkg <- return(res)
-  # remove ISO date at the beginning
-  base_pkg <- basename(dirname(dirname(project)))
-  if (!(base_pkg %in% c("g6tr.projects", "g6tr.voice"))) return(res)
-  list(
-    name = name,
-    base_pkg = base_pkg
-  )
-}
-
 #' @title Assert that a key in project's DESCRIPTION file has a certain value
 #' 
 #' @description Given a path do DESCRIPTION file or to a project containing such

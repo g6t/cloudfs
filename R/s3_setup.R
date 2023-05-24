@@ -112,19 +112,32 @@ cloud_s3_project_exists <- function(name, bucket, prefix = "") {
 
 #' @title Create S3 folder for a project
 #'
-#' @description Creates a new folder with a given name inside bucket-name
-#'   bucket. Puts empty `data` and `models` subfolders into it.
+#' @description Creates new folder[s] with a given name inside a bucket.
 #'
-#' @param name name of the project
+#' @param bucket_name The name of the bucket in S3.
+#' @param folder_name The name of the main folder in the S3 bucket.
+#' @param sub_folders A character vector specifying additional subfolder names
+#'   to be created inside the main folder.
 #'
 #' @noRd
-s3_create_project_folder <- function(bucket, .check = TRUE) {
-  cli::cli_alert_info("Creating needed S3 buckets on AWS.")
-  bucket_name <- "bucket-name"
-  aws.s3::put_folder(bucket = bucket_name, folder = paste0(name, "/data"))
-  aws.s3::put_folder(bucket = bucket_name, folder = paste0(name, "/models"))
-  cli::cli_alert_success("Created needed S3 buckets on AWS!")
-}
+s3_create_project_folder <-
+  function(bucket_name,
+           folder_name,
+           sub_folders) {
+    
+    check_scalar(bucket_name, arg_class = "character")
+    check_scalar(folder_name, arg_class = "character")
+    check_class(sub_folders, arg_class = "character")
+    
+    cli::cli_alert_info("Creating needed S3 buckets on AWS.")
+    
+    for (value in seq_along(sub_folders)) {
+      aws.s3::put_folder(bucket = bucket_name,
+                         folder = paste(folder_name, sub_folders[value], sep = "/"))
+    }
+    
+    cli::cli_alert_success("Created needed S3 buckets on AWS!")
+  }
 
 #' @title Get Project's S3 Location
 #' 
