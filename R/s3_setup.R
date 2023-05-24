@@ -84,35 +84,11 @@ s3_create_project_folder <- function(name, .check = TRUE) {
 #' \dontrun{cloud_s3_attach()}
 #' 
 #' @export
-cloud_s3_attach <- function(prefix = NULL, project = getwd()) {
-  g6tr_validate_desc(project)
-  
-  if (!is.null(prefix)) {
-    if (!is.character(prefix) | length(prefix) > 1) {
-      cli::cli_abort(
-        "{.arg prefix} should be either {.code NULL} or a character \\
-        vector of length 1."
-      )
-    }
-    res <- grepl("^([A-Za-z]|[0-9]|-|_|\\.| |/)+$", prefix)
-    if (prefix == "") stop("A valid folder prefix should not be empty.")
-    if (!res) cli::cli_abort(c(
-      "Prefix {.path {prefix}} is not valid. A prefix may consist of:",
-      "*" = "uppercase/lowercase letters",
-      "*" = "digits",
-      "*" = "spaces",
-      "*" = "'/' symbols to describe its location inside project's folder",
-      "*" = "'_', '-', '.' symbols"
-    ))
-    s3_create_project_folder(prefix)
-    desc::desc_set(S3 = prefix, file = project)
-    cli::cli_alert_success("Added S3 folder {.path {prefix}} to {.path DESCRIPTION}.")
-    return(invisible(TRUE))
-  }
+cloud_s3_attach <- function(project = getwd()) {
+  validate_desc(project)
   
   name <- proj_desc_get("Name", project)
-  base_pkg <- proj_desc_get("BasePkg", project)
-  s3_desc <- proj_desc_get("S3", project)
+  s3_desc <- proj_desc_get("CloudS3", project)
   
   if (is.na(s3_desc)) {
     cli::cli_alert_info(
@@ -121,41 +97,36 @@ cloud_s3_attach <- function(prefix = NULL, project = getwd()) {
     )
   } else {
     cli::cli_alert_info(
-      "Project's {.path DESCRIPTION} file alread contains a path to an S3 folder."
+      "Project's {.path DESCRIPTION} file already contains a path to an S3 folder."
     )
-    if (!g6tr.ui::cli_yeah("Update it?", straight = TRUE)) {
+    if (!cli_yeah("Update it?", straight = TRUE)) {
       return(invisible(TRUE))
     }
   }
   
-  yeah <- g6tr.ui::cli_yeah("Do you wish to visit S3 to find/create a folder?", straight = TRUE)
-  if (yeah) {
-    if (!is.na(base_pkg) & base_pkg == "g6tr.voice") {
-      cloud_s3_browse_prefix("newsletter/")
-    } else {
-      cloud_s3_browse_prefix()
-    }
-  }
+  yeah <- cli_yeah("Do you wish to visit S3 to find/create a folder?", straight = TRUE)
+  
+  if (yeah) { utils::browseURL("https://s3.console.aws.amazon.com/") }
   
   repeat {
     ok <- TRUE
     cli::cli_text("Paste folder URL below")
     url <- readline("URL: ")
-    prefix <- tryCatch(
-      cloud_s3_get_prefix_from_url(url),
+    info <- tryCatch(
+      cloud_s3_get_info_from_url(url),
       error = function(e) e
     )
 
-    if (inherits(prefix, "error")) {
-      cli::cli_warn(prefix$message)
+    if (inherits(info, "error")) {
+      cli::cli_warn(info$message)
       ok <- FALSE
     }
     
     if (ok) {
-      desc::desc_set(S3 = prefix, file = project)
+      desc::desc_set(CloudS3 = info, file = file.path(project, "DESCRIPTION"))
       cli::cli_alert_success(
-        "Attached S3 folder {.path {prefix}} to {.field {name}} project. \\
-        {.field S3} field in {.path DESCRIPTION} updated."
+        "Attached S3 folder {.path {info}} to {.field {name}} project.\n
+        {.field CloudS3} field in {.path DESCRIPTION} has been updated sucessfully."
       )
       return(invisible(TRUE))
     } else {
@@ -193,14 +164,36 @@ cloud_s3_get_location <- function(project = getwd()) {
 #' #> [1] "alpha"
 #' 
 #' @noRd
-cloud_s3_get_prefix_from_url <- function(url) {
-  # if (gre)
-  if (!grepl("s3/buckets/bucket-name", url)) {
-    cli::cli_abort(
-      "Project's S3 folder must be a subfolder of the {.path bucket-name} bucket."
+cloud_s3_get_info_from_url <- function(url) {
+  
+  if (!stringr::str_detect(url, "s3/buckets/[^/?]+")) {
+    cli::cli_abort("Project's S3 URL is invalid.")
+  }
+  
+  # Extract bucket
+  bucket <- stringr::str_extract(url, "(?<=buckets/)[^?]+")
+  
+  # Extract region
+  region <- stringr::str_extract(url, "(?<=region=)[^&]+")
+
+  
+  # Extract prefix
+  prefix <- stringr::str_extract(url, "(?<=prefix=)[^&]+")
+  prefix <- stringr::str_remove(prefix, "/+$")
+  
+  if (is.na(prefix)) {
+    cli::cli_alert_info(
+      "Project's S3 bucket has no subfolder."
     )
   }
-  prefix <- stringr::str_extract(url, "(?<=prefix=).*(?=&)")
-  prefix <- stringr::str_remove(prefix, "/+$")
-  prefix
+  
+  glue::glue("{bucket}/{region}/{prefix}")
+  
+  # list(bucket = bucket,
+  #      region = region,
+  #      prefix = prefix)
+}
+
+cloud_s3_split_info <- function(info){
+  stringr::str_split_1(info, "/")
 }
