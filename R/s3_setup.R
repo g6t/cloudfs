@@ -130,7 +130,7 @@ cloud_s3_attach <- function(project = getwd()) {
       )
       return(invisible(TRUE))
     } else {
-      if (!g6tr.ui::cli_yeah("Try again?", straight = TRUE)) {
+      if (cli_yeah("Try again?", straight = TRUE)) {
         cli::cli_text("Aborting ...")
         break
       }
@@ -153,33 +153,39 @@ cloud_s3_get_location <- function(project = getwd()) {
   loc
 }
 
-#' @title Extract S3 prefix from URL
-#' @description First makes sure that provided url points to a folder inside the
-#'   `bucket-name` bucket. If not, throws an error. Then returns the folder
-#'   prefix
+#' @title Extract S3 info from URL
+#' @description First makes sure that provided url is an S3 link.
+#'  If not, throws an error. Then returns bucket-name|region|prefix.
 #'   
 #' @examples 
 #' url <- "https://s3.console.aws.amazon.com/s3/buckets/bucket-name?region=us-east-1&prefix=alpha/&showversions=false"
-#' cloud_s3_get_prefix_from_url(url)
-#' #> [1] "alpha"
+#' cloud_s3_get_info_from_url(url)
+#' #> [1] "bucket-name|us-east-1|alpha"
 #' 
 #' @noRd
 cloud_s3_get_info_from_url <- function(url) {
   
-  if (!stringr::str_detect(url, "s3/buckets/[^/?]+")) {
+  if (!grepl("s3/buckets/[^/?]+", url)) {
     cli::cli_abort("Project's S3 URL is invalid.")
   }
   
   # Extract bucket
-  bucket <- stringr::str_extract(url, "(?<=buckets/)[^?]+")
+  bucket_match <- regmatches(url, regexpr("buckets/([^?]+)", url))
+  bucket <- substring(bucket_match[[1]], 9)
   
   # Extract region
-  region <- stringr::str_extract(url, "(?<=region=)[^&]+")
-
+  region_match <- regmatches(url, regexpr("region=([^&]+)", url))
+  region <- substring(region_match[[1]], 8)
   
   # Extract prefix
-  prefix <- stringr::str_extract(url, "(?<=prefix=)[^&]+")
-  prefix <- stringr::str_remove(prefix, "/+$")
+  prefix_match <- regmatches(url, regexpr("prefix=([^&]+)", url))
+  
+  if (length(prefix_match) == 0) {
+    prefix <- NA
+  } else {
+    prefix <- substring(prefix_match[[1]], 8)
+    prefix <- sub("/+$", "", prefix)
+  }
   
   if (is.na(prefix)) {
     cli::cli_alert_info(
@@ -187,13 +193,10 @@ cloud_s3_get_info_from_url <- function(url) {
     )
   }
   
-  glue::glue("{bucket}/{region}/{prefix}")
+  paste(bucket, region, prefix, sep = "|")
   
-  # list(bucket = bucket,
-  #      region = region,
-  #      prefix = prefix)
 }
 
-cloud_s3_split_info <- function(info){
-  stringr::str_split_1(info, "/")
+cloud_s3_split_info <- function(info) {
+  strsplit(info, split = "|", fixed = T)[[1]]
 }
