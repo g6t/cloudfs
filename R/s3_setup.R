@@ -33,7 +33,7 @@ cloud_s3_attach <- function(project = getwd()) {
     cli::cli_alert_info(
       "Project's {.path DESCRIPTION} file already contains a path to an S3 folder."
     )
-    if (!cli_yeah("Update it?", straight = TRUE)) {
+    if (!cli_yeah("Do you want to update it?", straight = TRUE)) {
       return(invisible(TRUE))
     }
   }
