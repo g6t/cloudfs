@@ -156,27 +156,30 @@ cloud_s3_get_location <- function(project = getwd()) {
 
 #' @title Extract S3 info from URL
 #' @description First makes sure that provided url is an S3 link.
-#'  If not, throws an error. Then returns bucket-name|region|prefix.
+#'  If not, throws an error. Then returns bucket-name|prefix.
 #'   
 #' @examples 
 #' url <- "https://s3.console.aws.amazon.com/s3/buckets/bucket-name?region=us-east-1&prefix=alpha/&showversions=false"
 #' cloud_s3_get_info_from_url(url)
-#' #> [1] "bucket-name|us-east-1|alpha"
+#' #> [1] "bucket-name|alpha"
 #' 
 #' @noRd
 cloud_s3_get_info_from_url <- function(url) {
   
   if (!grepl("s3/buckets/[^/?]+", url)) {
-    cli::cli_abort("Project's S3 URL is invalid.")
+    
+    url_sample <- "https://s3.console.aws.amazon.com/s3/buckets/bucket-name/..."
+    
+    cli::cli_abort(c(
+      "Project's S3 URL is invalid:",
+      "i" = "URL should be of the format {.path {url_sample}}",
+      "x" = "URL provided doesn't meet that specification."
+    ))
   }
   
   # Extract bucket
   bucket_match <- regmatches(url, regexpr("buckets/([^?]+)", url))
   bucket <- substring(bucket_match[[1]], 9)
-  
-  # Extract region
-  region_match <- regmatches(url, regexpr("region=([^&]+)", url))
-  region <- substring(region_match[[1]], 8)
   
   # Extract prefix
   prefix_match <- regmatches(url, regexpr("prefix=([^&]+)", url))
@@ -189,12 +192,10 @@ cloud_s3_get_info_from_url <- function(url) {
   }
   
   if (is.na(prefix)) {
-    cli::cli_alert_info(
-      "Project's S3 bucket has no subfolder."
-    )
+    cli::cli_alert_info("Project's S3 bucket has no subfolder.")
   }
   
-  paste(bucket, region, prefix, sep = "|")
+  paste(bucket, prefix, sep = "|")
   
 }
 
