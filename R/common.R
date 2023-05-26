@@ -177,14 +177,19 @@ validate_desc <- function(project = getwd()) {
     yeah <- cli_yeah("Cannot find {.path DESCRIPTION} file in {.field {project}}.\n
                      Do you want to generate it automatically?", straight = TRUE)
     if (yeah) {
-      desc_content <- c("Name: [Project Name]",
-                        "Title: [Description about the project]")
+      desc_content <- c(
+        "Package: -",
+        "Name: [Project Name]",
+        "Title: [Description about the project]"
+      )
       
       writeLines(con = desc_path, desc_content)
       desc::desc_print(desc_path)
       
-      cli::cli_alert_success("A sample DESCRIPTION file has been created in {.field {project}}.\n
-                             Kindly edit the {.field Name} and {.field Title} fields to reflect your current project.\n")
+      cli::cli_alert_success(
+        "A sample DESCRIPTION file has been created in {.path {project}}.\n
+        Kindly edit the {.field Name} and {.field Title} fields to reflect your current project.\n"
+      )
       return(invisible(TRUE))
     } else {
       cli::cli_abort("Cannot proceed without having DESCRIPTION file")
