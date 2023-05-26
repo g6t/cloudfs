@@ -1,23 +1,3 @@
-#' @title Turn cloud functions dialogues on/off
-#'
-#' @description [cloud_talk_on], [cloud_talk_off] set dialogue mode on/off,
-#'   [cloud_talk] gets the current state.
-#' 
-#' @noRd 
-cloud_talk_on <- function() {
-  options(cloud.talk = TRUE)
-}
-cloud_talk_off <- function() {
-  options(cloud.talk = FALSE)
-}
-cloud_talk <- function() {
-  opt <- getOption("cloud.talk")
-  if (is.null(opt)) return(FALSE)
-  stopifnot(is.logical(opt))
-  stopifnot(!is.na(opt))
-  opt
-}
-
 #' @title Extract values from DESCRUPTION file
 #' 
 #' @param key Character. What field to search for in DESCRIPTION file.
@@ -55,7 +35,8 @@ cloud_not_wd_warning <- function(project) {
     project <- normalizePath(project)
     if (wd != project) {
       cli::cli_warn(
-        "This function is meant to be used without changing the {.arg project} parameter."
+        "This function is meant to be used without changing the \\
+        {.arg project} parameter."
       )
       yeah <- cli_yeah("Do you want to continue?")
       if (!yeah) {
@@ -174,8 +155,11 @@ validate_desc <- function(project = getwd()) {
   
   if (!file.exists(desc_path)) {
     
-    yeah <- cli_yeah("Cannot find {.path DESCRIPTION} file in {.field {project}}.\n
-                     Do you want to generate it automatically?", straight = TRUE)
+    yeah <- cli_yeah(
+      "Cannot find {.path DESCRIPTION} file in {.path {project}}.
+      Do you want to generate it automatically?",
+      straight = TRUE
+    )
     if (yeah) {
       desc_content <- c(
         "Package: -",
@@ -184,15 +168,16 @@ validate_desc <- function(project = getwd()) {
       )
       
       writeLines(con = desc_path, desc_content)
-      desc::desc_print(desc_path)
       
-      cli::cli_alert_success(
-        "A sample DESCRIPTION file has been created in {.path {project}}.\n
-        Kindly edit the {.field Name} and {.field Title} fields to reflect your current project.\n"
-      )
+      cli::cli_bullets(c(
+        "v" = "A sample DESCRIPTION file has been created at \\
+        {.path {project}/DESCRIPTION}.",
+        " " = "Feel free to edit the {.field Name} and {.field Title} fields \\
+        as needed to reflect your current project (optional)."
+      ))
       return(invisible(TRUE))
     } else {
-      cli::cli_abort("Cannot proceed without having DESCRIPTION file")
+      cli::cli_abort("Cannot proceed without having {.path DESCRIPTION} file")
     }
   }
   invisible(TRUE)
