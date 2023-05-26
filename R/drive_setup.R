@@ -27,11 +27,14 @@ cloud_drive_attach <- function(project = getwd()) {
   
   if (is.na(drive_desc)) {
     cli::cli_alert_info(
-      "For {.code cloud_drive_*} functions to work, project's {.path DESCRIPTION} file needs to contain a link to a dedicated Google Drive folder."
+      "For {.code cloud_drive_*} functions to work, project's \\
+      {.path DESCRIPTION} file needs to contain ID of a dedicated \\
+      Google Drive folder."
     )
   } else {
     cli::cli_alert_info(
-      "Project's {.path DESCRIPTION} file already contains a link to a Google Drive folder."
+      "Project's {.path DESCRIPTION} file already contains a link to a \\
+      Google Drive folder."
     )
     if (!cli_yeah("Do you want to update it?", straight = TRUE)) {
       return(invisible(TRUE))
@@ -87,10 +90,10 @@ cloud_drive_attach <- function(project = getwd()) {
 #' 
 #' @noRd
 cloud_drive_get_location <- function(project = getwd()) {
-  loc <- proj_desc_get("GoogleDrive", project)
+  loc <- proj_desc_get("CloudDrive", project)
   if (is.na(loc)) {
     cloud_drive_attach(project = project)
-    loc <- proj_desc_get("GoogleDrive", project)
+    loc <- proj_desc_get("CloudDrive", project)
   }
   googledrive::as_id(loc)
 }
