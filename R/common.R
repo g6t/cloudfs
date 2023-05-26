@@ -1,21 +1,16 @@
-#' @title Turn cloud functions dialogues on/off
-#'
-#' @description [cloud_talk_on], [cloud_talk_off] set dialogue mode on/off,
-#'   [cloud_talk] gets the current state.
+#' @title Extract values from DESCRUPTION file
 #' 
-#' @noRd 
-cloud_talk_on <- function() {
-  options(cloud.talk = TRUE)
-}
-cloud_talk_off <- function() {
-  options(cloud.talk = FALSE)
-}
-cloud_talk <- function() {
-  opt <- getOption("cloud.talk")
-  if (is.null(opt)) return(FALSE)
-  stopifnot(is.logical(opt))
-  stopifnot(!is.na(opt))
-  opt
+#' @param key Character. What field to search for in DESCRIPTION file.
+#' @param project Character. Path to a project. By default it is current working
+#'   directory.
+#' 
+proj_desc_get <- function(key, project = getwd()) {
+  stopifnot(is.character(key) & length(key) == 1)
+  stopifnot(is.character(project) & length(project) == 1)
+  validate_desc(project)
+  desc_file <- file.path(project, "DESCRIPTION")
+  value <- desc::desc_get(key, desc_file)
+  unname(value)
 }
 
 #' @title Warn if cloud function is used not for current working directory
@@ -40,9 +35,10 @@ cloud_not_wd_warning <- function(project) {
     project <- normalizePath(project)
     if (wd != project) {
       cli::cli_warn(
-        "This function is meant to be used without changing the {.arg project} parameter."
+        "This function is meant to be used without changing the \\
+        {.arg project} parameter."
       )
-      yeah <- g6tr.ui::cli_yeah("Do you want to continue?")
+      yeah <- cli_yeah("Do you want to continue?")
       if (!yeah) {
         cli::cli_abort("Aborting")
       }
@@ -102,53 +98,6 @@ cloud_validate_file_names <- function(x) {
   return(invisible(TRUE))
 }
 
-#' @title Extract the project name and base package from a path
-#' 
-#' @description given a path to a directory first checks that it's a subdir
-#' of vignettes dir of either packages/g6tr.projects or packages/g6tr.voice.
-#' If this condition is satisfied, returns a list with two fields:
-#' - `name` - project's name derived as basename(path)
-#' - `base_pkg` - project's base package. So either "g6tr.projects" or 
-#' "g6tr.voice"
-#' If the condition is not satisfied, returns a list with same names, filled
-#' with NA values.
-#' 
-#' @inheritParams cloud_not_wd_warning
-#' 
-#' @examples
-#' \dontrun{
-#' g6tr_get_project_meta_from_path(g6tr_here(
-#'   "packages/g6tr.projects/vignettes/2021-11-04_acai/"
-#' ))
-#' #> $name
-#' #> [1] "acai"
-#' #>
-#' #> $base_pkg
-#' #> [1] "g6tr.projects" 
-#' }
-#' 
-#' @noRd
-g6tr_get_project_meta_from_path <- function(project = getwd()) {
-  stopifnot(is.character(project))
-  stopifnot(dir.exists(project))
-  project <- normalizePath(project)
-  name_with_date <- basename(project)
-  name <- gsub("^[0-9]{4}-[0-9]{2}-[0-9]{2}_", "", name_with_date)
-  # will be returned like this if project is not in a standard location
-  res <- list(name = name, base_pkg = NA_character_)
-  # if 3 levels up is not "packages"
-  if (dirname(dirname(dirname(project))) != g6tr_here("packages")) return(res)
-  # if 1 level up is not vignettes
-  if (basename(dirname(project)) != "vignettes") base_pkg <- return(res)
-  # remove ISO date at the beginning
-  base_pkg <- basename(dirname(dirname(project)))
-  if (!(base_pkg %in% c("g6tr.projects", "g6tr.voice"))) return(res)
-  list(
-    name = name,
-    base_pkg = base_pkg
-  )
-}
-
 #' @title Assert that a key in project's DESCRIPTION file has a certain value
 #' 
 #' @description Given a path do DESCRIPTION file or to a project containing such
@@ -170,7 +119,7 @@ assert_desc_field <- function(key, value, file) {
   desc_value <- desc::desc_get(keys = key, file = file)
   if (is.na(desc_value)) {
     cli::cli_warn("Field {.field key} does not exist in {.path DESCRIPTION}.")
-    yeah <- g6tr.ui::cli_yeah("Fill it with {.val value}?", straight = TRUE)
+    yeah <- cli_yeah("Fill it with {.val value}?", straight = TRUE)
     if (yeah) {
       desc::desc_set_list(key, value, file = file)
       return(invisible(TRUE))
@@ -200,37 +149,36 @@ assert_desc_field <- function(key, value, file) {
 #' @inheritParams cloud_not_wd_warning
 #'
 #' @noRd   
-g6tr_validate_desc <- function(project = getwd()) {
-  path_meta <- g6tr_get_project_meta_from_path(project)
+validate_desc <- function(project = getwd()) {
+  
   desc_path <- file.path(project, "DESCRIPTION")
+  
   if (!file.exists(desc_path)) {
-    cli::cli_warn("Cannot find {.path DESCRIPTION} file in {.field {project}}.")
-    yeah <- g6tr.ui::cli_yeah("Generate it automatically?", straight = TRUE)
+    
+    yeah <- cli_yeah(
+      "Cannot find {.path DESCRIPTION} file in {.path {project}}.
+      Do you want to generate it automatically?",
+      straight = TRUE
+    )
     if (yeah) {
       desc_content <- c(
         "Package: -",
-        "Type: g6tr project",
-        paste("Name:", path_meta$name)
+        "Name: [Project Name]",
+        "Title: [Description about the project]"
       )
-      if (!is.na(path_meta$base_pkg)) 
-        desc_content <- c(desc_content, paste("BasePkg:", path_meta$base_pkg))
+      
       writeLines(con = desc_path, desc_content)
-      desc::desc_print(desc_path)
+      
+      cli::cli_bullets(c(
+        "v" = "A sample DESCRIPTION file has been created at \\
+        {.path {project}/DESCRIPTION}.",
+        " " = "Feel free to edit the {.field Name} and {.field Title} fields \\
+        as needed to reflect your current project (optional)."
+      ))
       return(invisible(TRUE))
     } else {
-      stop("Cannot proceed without having DESCRIPTION file")
+      cli::cli_abort("Cannot proceed without having {.path DESCRIPTION} file")
     }
-  }
-  package <- desc::desc_get("Package", desc_path)
-  if (!is.na(package) & package != "-") {
-    cli::cli_warn(
-      "This folder {.field {project}} is a package folder. You probably \\
-      should not use {.pkg cloud} functions with it."
-    )
-  } else {
-    assert_desc_field(key = "Name", value = path_meta$name, file = desc_path)
-    if (!is.na(path_meta$base_pkg))
-      assert_desc_field(key = "BasePkg", value = path_meta$base_pkg, file = desc_path)
   }
   invisible(TRUE)
 }

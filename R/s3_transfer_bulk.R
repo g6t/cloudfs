@@ -58,9 +58,9 @@ cloud_s3_prep_bulk <- function(content, what = c("read", "upload", "download"),
   if (!quiet) {
     if (total_size > safe_size) {
       cli::cli_warn("This is quite a lot.")
-      yeah <- g6tr.ui::cli_yeah("Do you really wish to continue?")
+      yeah <- cli_yeah("Do you really wish to continue?")
     } else {
-      yeah <- g6tr.ui::cli_yeah("Do you wish to continue?", straight = TRUE)
+      yeah <- cli_yeah("Do you wish to continue?", straight = TRUE)
     } 
     if (!yeah) cli::cli_abort("Aborting.")
   }

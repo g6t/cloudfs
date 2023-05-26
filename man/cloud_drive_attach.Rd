@@ -7,11 +7,20 @@
 cloud_drive_attach(project = getwd())
 }
 \arguments{
-\item{project}{Path to a project. By default it is current working directory.}
+\item{project}{Character. Path to a project. By default it is current working
+directory.}
 }
 \description{
-Launches a dialogue asking user to provide a link to a Google
-Drive to be attached as the dedicated Google Drive folder of the project.
+The \code{cloud_drive_attach()} function is designed to add a field
+to the DESCRIPTION file of a project, which uniquely identifies the
+location of the project's folder in Google Drive. The function prompts the
+user to visit the Google Drive website (https://drive.google.com/) where
+they can find or create a dedicated folder for the project. Once the user
+has located or created the desired folder, they can copy the URL of the
+folder from the web browser and paste it into the R console. The function
+then parses the URL and populates the corresponding field (CloudDrive) in
+the DESCRIPTION file with a string that represents the location of the
+project in Google Drive.
 }
 \examples{
 \dontrun{cloud_drive_attach()}

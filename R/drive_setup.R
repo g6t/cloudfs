@@ -1,51 +1,52 @@
 #' @title Attach Google Drive folder to project
-#' 
-#' @description Launches a dialogue asking user to provide a link to a Google
-#'   Drive to be attached as the dedicated Google Drive folder of the project.
-#'   
-#' @inheritParams cloud_not_wd_warning
-#' 
-#' @examples 
+#'
+#' @description The `cloud_drive_attach()` function is designed to add a field
+#'   to the DESCRIPTION file of a project, which uniquely identifies the
+#'   location of the project's folder in Google Drive. The function prompts the
+#'   user to visit the Google Drive website (https://drive.google.com/) where
+#'   they can find or create a dedicated folder for the project. Once the user
+#'   has located or created the desired folder, they can copy the URL of the
+#'   folder from the web browser and paste it into the R console. The function
+#'   then parses the URL and populates the corresponding field (CloudDrive) in
+#'   the DESCRIPTION file with a string that represents the location of the
+#'   project in Google Drive.
+#'
+#' @inheritParams proj_desc_get
+#'
+#' @examples
 #' \dontrun{cloud_drive_attach()}
-#' 
+#'
 #' @export
 cloud_drive_attach <- function(project = getwd()) {
-  g6tr_validate_desc(project)
+  
+  ## Check for description file and add if not found
+  validate_desc(project)
   
   name <- proj_desc_get("Name", project)
-  base_pkg <- proj_desc_get("BasePkg", project)
-  newsletter <- base_pkg == "g6tr.voice"
-  drive_desc <- proj_desc_get("GoogleDrive", project)
+  drive_desc <- proj_desc_get("CloudDrive", project)
   
   if (is.na(drive_desc)) {
     cli::cli_alert_info(
       "For {.code cloud_drive_*} functions to work, project's \\
-      {.path DESCRIPTION} file needs to contain a link to a dedicated \\
+      {.path DESCRIPTION} file needs to contain ID of a dedicated \\
       Google Drive folder."
     )
   } else {
     cli::cli_alert_info(
-      "Project's {.path DESCRIPTION} file already contains a link to a Google \\
-      Drive folder."
+      "Project's {.path DESCRIPTION} file already contains a link to a \\
+      Google Drive folder."
     )
-    if (!g6tr.ui::cli_yeah("Update it?", straight = TRUE)) {
+    if (!cli_yeah("Do you want to update it?", straight = TRUE)) {
       return(invisible(TRUE))
     }
   }
   
-  yeah <- g6tr.ui::cli_yeah(
+  yeah <- cli_yeah(
     "Do you wish to visit Google Drive to find/create a folder?",
     straight = TRUE
   )
   
-  if (yeah) {
-    if (is.na(base_pkg)) {
-      utils::browseURL("https://drive.google.com/drive/shared-drives")
-    } else {
-      catalogue_id <- cloud_drive_get_catalogue_id(newsletter)
-      googledrive::drive_browse(catalogue_id)
-    }
-  }
+  if (yeah) { utils::browseURL("https://drive.google.com/") }
   
   repeat {
     ok <- TRUE
@@ -65,16 +66,16 @@ cloud_drive_attach <- function(project = getwd()) {
     }
     
     if (ok) {
-      desc::desc_set(GoogleDrive = id, file = project)
+      desc::desc_set(CloudDrive = id, file = file.path(project, "DESCRIPTION"))
       folder_name <- drbl$name
       cli::cli_alert_success(
         "Attached Google Drive folder {.val {folder_name}} to \\
-        {.field {name}} project. {.field GoogleDrive} field in \\
-        {.path DESCRIPTION} updated."
+        {.field {name}} project. {.field CloudDrive} field in \\
+        {.path DESCRIPTION} has been updated sucessfully."
       )
       return(invisible(TRUE))
     } else {
-      if (!g6tr.ui::cli_yeah("Try again?", straight = TRUE)) {
+      if (!cli_yeah("Try again?", straight = TRUE)) {
         cli::cli_text("Aborting ...")
         break
       }
@@ -89,10 +90,10 @@ cloud_drive_attach <- function(project = getwd()) {
 #' 
 #' @noRd
 cloud_drive_get_location <- function(project = getwd()) {
-  loc <- proj_desc_get("GoogleDrive", project)
+  loc <- proj_desc_get("CloudDrive", project)
   if (is.na(loc)) {
     cloud_drive_attach(project = project)
-    loc <- proj_desc_get("GoogleDrive", project)
+    loc <- proj_desc_get("CloudDrive", project)
   }
   googledrive::as_id(loc)
 }

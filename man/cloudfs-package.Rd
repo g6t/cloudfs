@@ -9,7 +9,20 @@
 What the package does (one paragraph).
 }
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: Stefan Musch \email{stefan@gradientmetrics.com}
+
+Authors:
+\itemize{
+  \item Tom Vladeck \email{tom@gradientmetrics.com }
+  \item Iaroslav Domin \email{iaroslav@gradientmetrics.com}
+  \item Michal Czyz \email{michal@gradientmetrics.com}
+  \item Emmanuel Ugochukwu \email{emmanuel@gradientmetrics.com}
+}
+
+Other contributors:
+\itemize{
+  \item Gradient Metrics [copyright holder]
+}
 
 }
 \keyword{internal}

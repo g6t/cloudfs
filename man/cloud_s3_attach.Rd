@@ -4,31 +4,23 @@
 \alias{cloud_s3_attach}
 \title{Attach S3 folder to project}
 \usage{
-cloud_s3_attach(prefix = NULL, project = getwd())
+cloud_s3_attach(project = getwd())
 }
 \arguments{
-\item{prefix}{It is possible to suppress the dialogue where you are asked to
-provide a folder URL by passing a prefix to this parameter. Although this
-is not recommended. This option exists mainly to be used by other
-functions.}
-
-\item{project}{Path to a project. By default it is current working directory.}
+\item{project}{Character. Path to a project. By default it is current working
+directory.}
 }
 \description{
-A regular (client) project with a name \code{name} is normally
-located in monorepo at
-"packages/g6tr.projects/vignettes/{iso-date}\emph{{name}". A newsletter project
-is located at "packages/g6tr.voice/vignettes/{iso-date}}{name}". The right
-S3 folder for a regular project would be "{name}" folder in the
-"bucket-name" bucket. The right S3 folder for a newsletter project would
-be "newsletter/{year}-{month}". If a project is set up using \link{g6tr_setup}
-or \link[g6tr:g6tr_newsletter_setup]{g6tr::g6tr_newsletter_setup} with \code{s3_bucket} set to \code{TRUE}, a
-folder will be created following the conventions described above and
-project DESCRIPTION will contain the address of the project S3 folder. If
-you happen to run an \verb{cloud_s3_*} function in a project where DESCRIPTION
-does not contain an address of an S3 folder, you'll be asked to provide a
-link to a folder. This link will then be processed and put to DESCRIPTION.
-You can trigger this process manually by calling \code{cloud_s3_attach()}.
+The \code{cloud_s3_attach()} function is used to add a field to the
+DESCRIPTION file of a project, which uniquely identifies the location of
+the project's folder in an S3 cloud storage. It prompts the user to visit
+the S3 cloud storage website (https://s3.console.aws.amazon.com/) where
+they can find or create a dedicated folder for the project. After the user
+has selected or created the desired folder, they can copy the URL of the
+folder from the web browser and paste it into the R console. The function
+then parses the URL and populates the corresponding field (CloudS3) in the
+DESCRIPTION file with a string that represents the location of the project
+in the S3 cloud storage.
 }
 \examples{
 \dontrun{cloud_s3_attach()}
