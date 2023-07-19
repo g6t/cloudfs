@@ -18,7 +18,6 @@
 #'
 #' @export
 cloud_s3_attach <- function(project = getwd()) {
-  validate_desc(project)
   
   name <- proj_desc_get("Name", project)
   s3_desc <- proj_desc_get("CloudS3", project)

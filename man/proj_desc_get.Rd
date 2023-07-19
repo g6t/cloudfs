@@ -4,7 +4,7 @@
 \alias{proj_desc_get}
 \title{Extract values from DESCRUPTION file}
 \usage{
-proj_desc_get(key, project = getwd())
+proj_desc_get(key, project = ".")
 }
 \arguments{
 \item{key}{Character. What field to search for in DESCRIPTION file.}

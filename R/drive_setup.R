@@ -19,9 +19,6 @@
 #' @export
 cloud_drive_attach <- function(project = getwd()) {
   
-  ## Check for description file and add if not found
-  validate_desc(project)
-  
   name <- proj_desc_get("Name", project)
   drive_desc <- proj_desc_get("CloudDrive", project)
   

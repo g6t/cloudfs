@@ -3,8 +3,8 @@ Title: What the Package Does (One Line, Title Case)
 Version: 0.0.0.9000
 Authors@R: c(
     person("Tom", "Vladeck", email = "tom@gradientmetrics.com ", role  = c("aut")),
-    person("Stefan", "Musch", email = "stefan@gradientmetrics.com", role = c("aut", "cre")),
-    person("Iaroslav", "Domin", email = "iaroslav@gradientmetrics.com", role = c("aut")),
+    person("Stefan", "Musch", email = "stefan@gradientmetrics.com", role = c("aut")),
+    person("Iaroslav", "Domin", email = "iaroslav@gradientmetrics.com", role = c("aut", "cre")),
     person("Michal", "Czyz", email = "michal@gradientmetrics.com", role = c("aut")),
     person("Emmanuel", "Ugochukwu", email = "emmanuel@gradientmetrics.com", role = c("aut")),
     person("Gradient Metrics", role = c("cph"))

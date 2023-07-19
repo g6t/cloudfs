@@ -33,7 +33,7 @@ cloud_s3_browse_prefix <- function(prefix = "") {
 #' }
 #' 
 #' @export
-cloud_s3_browse <- function(path = "", project = getwd()) {
+cloud_s3_browse <- function(path = "", root = NULL) {
   stopifnot(is.character(path) & length(path) == 1)
   s3_folder <- cloud_s3_get_location(project = project)
   prefix <- file.path(s3_folder, path, "/")
@@ -67,11 +67,16 @@ cloud_s3_browse <- function(path = "", project = getwd()) {
 cloud_s3_ls <- function(path = "", recursive = FALSE, full_names = FALSE,
                       project = getwd()) {
   stopifnot(is.character(path) & length(path) == 1)
-  s3_folder <- cloud_s3_get_location(project = project)
   stopifnot(isTRUE(recursive) | isFALSE(recursive))
   stopifnot(isTRUE(full_names) | isFALSE(full_names))
-  prefix <- clean_file_path(s3_folder, path, "/")
-  cli::cli_text("{.field prefix}: {.path {prefix}}")
+  
+  s3_location <- cloud_s3_get_location(project = project)
+  s3_path <- clean_file_path(s3_location, path, "/")
+  cli::cli_text("{.field S3 path}: {.path {s3_path}}")
+  
+  s3_path_split <- strsplit(s3_path, "/")[[1]]
+  bucket <- s3_path_split[[1]]
+  prefix <- paste0(paste(s3_path_split[-1], collapse = "/"), "/")
 
   # NOTE: this lists all contents recursively regardless of `recursive`
   # parameter because this way it is easier to parse the response. Shouldn't
@@ -79,7 +84,7 @@ cloud_s3_ls <- function(path = "", recursive = FALSE, full_names = FALSE,
   # with thousands of files (highly unlikely).
   resp_df <- 
     aws.s3::get_bucket_df(
-      bucket = "bucket-name",
+      bucket = bucket,
       delimiter = "",
       prefix = prefix,
       max = Inf

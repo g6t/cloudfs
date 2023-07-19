@@ -4,46 +4,13 @@
 #' @param project Character. Path to a project. By default it is current working
 #'   directory.
 #' 
-proj_desc_get <- function(key, project = getwd()) {
-  stopifnot(is.character(key) & length(key) == 1)
-  stopifnot(is.character(project) & length(project) == 1)
+proj_desc_get <- function(key, project = ".") {
+  check_string(key)
+  check_string(project)
   validate_desc(project)
   desc_file <- file.path(project, "DESCRIPTION")
   value <- desc::desc_get(key, desc_file)
   unname(value)
-}
-
-#' @title Warn if cloud function is used not for current working directory
-#' 
-#' @description Functions for uploading/downloading files from project cloud
-#'   locations are designed to synchronize local and cloud folder structures.
-#'   That is e.g. when you call `cloud_s3_upload` with `file` parameter set to
-#'   "data/demo.csv" and `project` parameter set to something different from the
-#'   current working directory it is always assumed that "data/demo.csv" from
-#'   **the project's folder** and not from the current working directory needs
-#'   to be uploaded to S3. But for development purposes it is handy to be able
-#'   to call the functions not only for the current wd. This function checks
-#'   that project is set to the current wd. If not, it throws a warning and asks
-#'   if user wants to continue.
-#'   
-#' @param project Path to a project. By default it is current working directory.
-#'
-cloud_not_wd_warning <- function(project) {
-  stopifnot(is.character(project) & length(project) == 1)
-  if (cloud_talk()) {
-    wd <- normalizePath(getwd())
-    project <- normalizePath(project)
-    if (wd != project) {
-      cli::cli_warn(
-        "This function is meant to be used without changing the \\
-        {.arg project} parameter."
-      )
-      yeah <- cli_yeah("Do you want to continue?")
-      if (!yeah) {
-        cli::cli_abort("Aborting")
-      }
-    }
-  }
 }
 
 #' @title Validate file path for cloud functions
@@ -57,7 +24,7 @@ cloud_not_wd_warning <- function(project) {
 #'   file path.
 #'   
 cloud_validate_file_path <- function(file, error = TRUE) {
-  stopifnot(is.character(file))
+  check_string(file)
   res <- grepl("^([A-Za-z]|[0-9]|-|_|\\.| |/)+$", file)
   if (error) {
     if (file == "") stop("A valid file name should not be empty.")
@@ -81,7 +48,7 @@ cloud_validate_file_path <- function(file, error = TRUE) {
 #' 
 #' @noRd
 cloud_validate_file_names <- function(x) {
-  stopifnot(is.character(x))
+  check_class(x, arg_class = "character")
   bad_na <- is.na(x)
   bad_symbols <- !grepl("^([A-Za-z]|[0-9]|-|_| |\\.)+$", x)
   x_trimmed <- gsub("^[ ]+", "", gsub("[ ]+$", "", x))
@@ -98,60 +65,17 @@ cloud_validate_file_names <- function(x) {
   return(invisible(TRUE))
 }
 
-#' @title Assert that a key in project's DESCRIPTION file has a certain value
-#' 
-#' @description Given a path do DESCRIPTION file or to a project containing such
-#' file makes sure that field `key` in it has value `value`. 
-#' - If this field is absent, proposes to populate it with `value`.
-#' - If this field exists, but is populated with a different value, throws an
-#'   error.
-#' - If this field exists and is populated with the right value, silently 
-#'   returns TRUE.
-#'   
-#' @param key field name, character
-#' @param value required field value, character
-#' @param file path to DESCRIPTION file
-#'  
-#' @noRd
-assert_desc_field <- function(key, value, file) {
-  stopifnot(is.character(key) & length(key) == 1)
-  stopifnot(is.character(value) & length(value) == 1)
-  desc_value <- desc::desc_get(keys = key, file = file)
-  if (is.na(desc_value)) {
-    cli::cli_warn("Field {.field key} does not exist in {.path DESCRIPTION}.")
-    yeah <- cli_yeah("Fill it with {.val value}?", straight = TRUE)
-    if (yeah) {
-      desc::desc_set_list(key, value, file = file)
-      return(invisible(TRUE))
-    } else {
-      cli::cli_abort("Stopping")
-    }
-  }
-  if (desc_value != value) 
-    cli::cli_abort(
-      "Value found in {.path DESCRIPTION}, {.val {desc_value}}, is different \\
-      from what should be there - {.val {value}}."
-    )
-  return(invisible(TRUE))
-}
-
 #' @title Validate project's DESCRIPTION file
 #' 
-#' @description Given a path to a project, figures out project name and base 
-#' package. Checks that `Name` and `BasePkg` fields in project's 
-#' DESCRIPTION file have corresponding values.
-#' - If DESCRIPTION file is not found, proposes to create one and populate all
-#'   the main fields (including `Name` and `BasePkg`) automatically.
-#' - If DESCRIPTION exists but `Name` and/or `BasePkg` are not populated,
-#'   proposes to populate these fields.
-#' - If applied to a package folder, throws a warning.
+#' @description Checks that DESCRIPTION file exists in a project folder. If it's
+#' not the case, proposes to create a DESCRIPTION file from template.
 #'   
 #' @inheritParams cloud_not_wd_warning
 #'
 #' @noRd   
-validate_desc <- function(project = getwd()) {
+validate_desc <- function(project = ".") {
   
-  desc_path <- file.path(project, "DESCRIPTION")
+  desc_path <- normalizePath(file.path(project, "DESCRIPTION"))
   
   if (!file.exists(desc_path)) {
     
@@ -164,16 +88,19 @@ validate_desc <- function(project = getwd()) {
       desc_content <- c(
         "Package: -",
         "Name: [Project Name]",
-        "Title: [Description about the project]"
+        "Title: [Project Title]",
+        "Description: [Project Description]"
       )
       
       writeLines(con = desc_path, desc_content)
       
       cli::cli_bullets(c(
         "v" = "A sample DESCRIPTION file has been created at \\
-        {.path {project}/DESCRIPTION}.",
-        " " = "Feel free to edit the {.field Name} and {.field Title} fields \\
-        as needed to reflect your current project (optional)."
+        {.path {desc_path}}.",
+        " " = "Feel free to edit the {.field Name}, {.field Title} and \\
+        {.field Description} fields as needed to reflect your current project \\
+        (optional).",
+        " " = "Please don't change the {.field Package} field."
       ))
       return(invisible(TRUE))
     } else {
@@ -207,8 +134,12 @@ validate_desc <- function(project = getwd()) {
 #'   names to give a relative file path.
 #' 
 cloud_prep_ls <- function(data, path, recursive, full_names) {
-  stopifnot(is.data.frame(data))
-  stopifnot(all(c("short_name", "last_modified", "size_b") %in% names(data)))
+  check_class(data, arg_class = "data.frame")
+  required_cols <- c("short_name", "last_modified", "size_b")
+  if (!all(required_cols %in% names(data)))
+    cli::cli_abort("{.arg data} must contain the following column names: \\
+      {.val {required_cols}}")
+  
   data <- data[data$short_name != "", ]
   
   if (nrow(data) == 0) {

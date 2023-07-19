@@ -4,13 +4,11 @@
 \alias{cloud_s3_browse}
 \title{Browse project's S3 folder}
 \usage{
-cloud_s3_browse(path = "", project = getwd())
+cloud_s3_browse(path = "", root = NULL)
 }
 \arguments{
 \item{path}{(optional) Path inside S3 folder to open. By default, when
 \code{path = ""}, navigates to the root level of project's S3 folder.}
-
-\item{project}{Path to a project. By default it is current working directory.}
 }
 \description{
 Opens project's S3 folder in browser.

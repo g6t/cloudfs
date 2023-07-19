@@ -9,8 +9,6 @@ cloud_drive_browse(path = "", project = getwd())
 \arguments{
 \item{path}{(optional) Path inside Google Drive folder to open. By default,
 when \code{path = ""}, navigates to the root level of project's folder.}
-
-\item{project}{Path to a project. By default it is current working directory.}
 }
 \description{
 Opens project's Google Drive folder in browser.

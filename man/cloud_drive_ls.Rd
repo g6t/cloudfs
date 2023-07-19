@@ -21,8 +21,6 @@ nested subfolders. Default is \code{FALSE}.}
 
 \item{full_names}{(logical) If \code{TRUE}, folder path is appended to object
 names to give a relative file path.}
-
-\item{project}{Path to a project. By default it is current working directory.}
 }
 \description{
 Prints names, timestamps and sizes of files and folders inside

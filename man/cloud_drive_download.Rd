@@ -9,8 +9,6 @@ cloud_drive_download(file, project = getwd())
 \arguments{
 \item{file}{Path to a file relative to project folder root. Can contain only
 letters, digits, '-', '_', '.', spaces and '/' symbols.}
-
-\item{project}{Path to a project. By default it is current working directory.}
 }
 \description{
 Downloads a file from project's Google Drive folder to local

@@ -17,8 +17,6 @@ cloud_local_ls(
 a subfolder. By default, when \code{path = ""}, lists root-level files and
 folders.}
 
-\item{project}{Path to a project. By default it is current working directory.}
-
 \item{recursive}{(logical) If \code{TRUE}, lists contents recursively in all
 nested subfolders. Default is \code{FALSE}.}
 

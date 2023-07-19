@@ -22,8 +22,6 @@ be attempted to guess an appropriate reading function from file extension.}
 
 \item{quiet}{All caution messages may be turned off by setting this parameter
 to \code{TRUE}.}
-
-\item{project}{Path to a project. By default it is current working directory.}
 }
 \description{
 \link{cloud_drive_ls} function returns a dataframe of contents of a

@@ -9,12 +9,12 @@
 What the package does (one paragraph).
 }
 \author{
-\strong{Maintainer}: Stefan Musch \email{stefan@gradientmetrics.com}
+\strong{Maintainer}: Iaroslav Domin \email{iaroslav@gradientmetrics.com}
 
 Authors:
 \itemize{
   \item Tom Vladeck \email{tom@gradientmetrics.com }
-  \item Iaroslav Domin \email{iaroslav@gradientmetrics.com}
+  \item Stefan Musch \email{stefan@gradientmetrics.com}
   \item Michal Czyz \email{michal@gradientmetrics.com}
   \item Emmanuel Ugochukwu \email{emmanuel@gradientmetrics.com}
 }

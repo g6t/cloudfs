@@ -137,6 +137,12 @@ check_scalar <- function(..., arg_class, alt_null = FALSE) {
   }
 }
 
+#' @description [check_scalar] for `arg_class` equal to "character".
+#' @noRd
+check_string <- function(..., alt_null = FALSE) {
+  check_scalar(..., arg_class = "character", alt_null = alt_null)
+}
+
 #' @title Check Argument's Class
 #' 
 #' @description Check if argument is of proper class.
