@@ -6,7 +6,7 @@
 \usage{
 cloud_local_ls(
   path = "",
-  project = getwd(),
+  project = ".",
   recursive = FALSE,
   full_names = FALSE,
   ignore = TRUE
@@ -16,8 +16,6 @@ cloud_local_ls(
 \item{path}{(optional) Path inside local project folder to list contents of
 a subfolder. By default, when \code{path = ""}, lists root-level files and
 folders.}
-
-\item{project}{Path to a project. By default it is current working directory.}
 
 \item{recursive}{(logical) If \code{TRUE}, lists contents recursively in all
 nested subfolders. Default is \code{FALSE}.}

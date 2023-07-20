@@ -17,7 +17,7 @@ cloud_s3_upload <- function(file, project = getwd()) {
   cloud_validate_file_path(file)
   cloud_not_wd_warning(project)
   project_name <- proj_desc_get("Name", project)
-  s3_folder <- cloud_s3_get_location(project = project)
+  s3_folder <- cloud_s3_get_root(project = project)
   file_path <- normalizePath(file.path(project, file), mustWork = FALSE)
   s3_file_path <- file.path(s3_folder, file)
   if (!file.exists(file_path)) {
@@ -53,7 +53,7 @@ cloud_s3_download <- function(file, project = getwd()) {
   cloud_validate_file_path(file)
   cloud_not_wd_warning(project)
   project_name <- proj_desc_get("Name", project)
-  s3_folder <- cloud_s3_get_location(project = project)
+  s3_folder <- cloud_s3_get_root(project = project)
   file_path <- normalizePath(file.path(project, file), mustWork = FALSE)
   s3_file_path <- file.path(s3_folder, file)
   
@@ -109,7 +109,7 @@ cloud_s3_write <- function(x, file, fun = NULL, ..., local = FALSE,
   if (is.null(fun)) {
     fun <- cloud_guess_write_fun(file)
   }
-  s3_folder <- cloud_s3_get_location(project = project)
+  s3_folder <- cloud_s3_get_root(project = project)
   s3_file_path <- file.path(s3_folder, file)
   
   if (local) {
@@ -163,7 +163,7 @@ cloud_s3_read <- function(file, fun = NULL, ..., project = getwd()) {
   if (is.null(fun)) {
     fun <- cloud_guess_read_fun(file)
   }
-  s3_folder <- cloud_s3_get_location(project = project)
+  s3_folder <- cloud_s3_get_root(project = project)
   s3_file_path <- file.path(s3_folder, file)
   cli::cli_alert_info(
     "Trying to read {.path {file}} from S3 folder of {.field {project_name}} project."

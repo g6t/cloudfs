@@ -7,9 +7,9 @@
 #'   they can find or create a dedicated folder for the project. After the user
 #'   has selected or created the desired folder, they can copy the URL of the
 #'   folder from the web browser and paste it into the R console. The function
-#'   then parses the URL and populates the corresponding field (CloudS3) in the
-#'   DESCRIPTION file with a string that represents the location of the project
-#'   in the S3 cloud storage.
+#'   then parses the URL and populates the corresponding field (cloudfs.s3) in
+#'   the DESCRIPTION file with a string that represents the location of the
+#'   project in the S3 cloud storage.
 #'
 #' @inheritParams proj_desc_get
 #'
@@ -17,11 +17,10 @@
 #' \dontrun{cloud_s3_attach()}
 #'
 #' @export
-cloud_s3_attach <- function(project = getwd()) {
-  validate_desc(project)
+cloud_s3_attach <- function(project = ".") {
   
   name <- proj_desc_get("Name", project)
-  s3_desc <- proj_desc_get("CloudS3", project)
+  s3_desc <- proj_desc_get("cloudfs.s3", project)
   
   if (is.na(s3_desc)) {
     cli::cli_alert_info(
@@ -60,7 +59,7 @@ cloud_s3_attach <- function(project = getwd()) {
     }
     
     if (ok) {
-      desc::desc_set(CloudS3 = info, file = file.path(project, "DESCRIPTION"))
+      desc::desc_set(cloudfs.s3 = info, file = file.path(project, "DESCRIPTION"))
       cli::cli_alert_success(
         "Attached S3 folder {.path {info}} to {.field {name}} project.\n
         {.field CloudS3} field in {.path DESCRIPTION} has been updated \\
@@ -78,15 +77,15 @@ cloud_s3_attach <- function(project = getwd()) {
 
 #' @title Get Project's S3 Location
 #' 
-#' @description Tries to read `S3` field from project's DESCRIPTION file. If
-#'   it's absent, tries to attach it with [cloud_s3_attach].
+#' @description Tries to read `cloudfs.s3` field from project's DESCRIPTION
+#'   file. If it's absent, tries to attach it with [cloud_s3_attach].
 #' 
 #' @noRd
-cloud_s3_get_location <- function(project = getwd()) {
-  loc <- proj_desc_get("CloudS3", project)
+cloud_s3_get_root <- function(project = ".") {
+  loc <- proj_desc_get("cloudfs.s3", project)
   if (is.na(loc)) {
     cloud_s3_attach(project = project)
-    loc <- proj_desc_get("CloudS3", project)
+    loc <- proj_desc_get("cloudfs.s3", project)
   }
   loc
 }
@@ -110,7 +109,7 @@ cloud_s3_get_info_from_url <- function(url) {
     cli::cli_abort(c(
       "Project's S3 URL is invalid:",
       "i" = "URL should be of the format {.path {url_sample}}",
-      "x" = "URL provided doesn't meet that specification."
+      "x" = "Provided URL doesn't meet that specification."
     ))
   }
   
@@ -133,5 +132,4 @@ cloud_s3_get_info_from_url <- function(url) {
   }
   
   paste(bucket, prefix, sep = "/")
-  
 }

@@ -4,12 +4,7 @@
 \alias{cloud_s3_ls}
 \title{List Contents of Project's S3 Folder}
 \usage{
-cloud_s3_ls(
-  path = "",
-  recursive = FALSE,
-  full_names = FALSE,
-  project = getwd()
-)
+cloud_s3_ls(path = "", recursive = FALSE, full_names = FALSE, root = NULL)
 }
 \arguments{
 \item{path}{(optional) Path inside S3 folder to list contents of a subfolder.
@@ -21,7 +16,9 @@ nested subfolders. Default is \code{FALSE}.}
 \item{full_names}{(logical) If \code{TRUE}, folder path is appended to object
 names to give a relative file path.}
 
-\item{project}{Path to a project. By default it is current working directory.}
+\item{root}{S3 path of the project root -- point relative to which to
+consider all relative paths. When left as \code{NULL}, the root is automatically
+derived from the \code{cloudfs.s3} field of the project's DESCRIPTION file.}
 }
 \description{
 Prints names, timestamps and sizes of files and folders inside

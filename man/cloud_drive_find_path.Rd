@@ -4,10 +4,10 @@
 \alias{cloud_drive_find_path}
 \title{Find Google Drive folder based on a path}
 \usage{
-cloud_drive_find_path(root_id, path = "", create = FALSE)
+cloud_drive_find_path(root, path = "", create = FALSE)
 }
 \arguments{
-\item{root_id}{ID of the folder to start search at}
+\item{root}{ID of the folder to start search at}
 
 \item{path}{Relative location with respect to the root folder}
 

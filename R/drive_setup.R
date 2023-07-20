@@ -7,7 +7,7 @@
 #'   they can find or create a dedicated folder for the project. Once the user
 #'   has located or created the desired folder, they can copy the URL of the
 #'   folder from the web browser and paste it into the R console. The function
-#'   then parses the URL and populates the corresponding field (CloudDrive) in
+#'   then parses the URL and populates the corresponding field (cloudfs.drive) in
 #'   the DESCRIPTION file with a string that represents the location of the
 #'   project in Google Drive.
 #'
@@ -17,13 +17,11 @@
 #' \dontrun{cloud_drive_attach()}
 #'
 #' @export
-cloud_drive_attach <- function(project = getwd()) {
-  
-  ## Check for description file and add if not found
-  validate_desc(project)
+cloud_drive_attach <- function(project = ".") {
+  check_string(project)
   
   name <- proj_desc_get("Name", project)
-  drive_desc <- proj_desc_get("CloudDrive", project)
+  drive_desc <- proj_desc_get("cloudfs.drive", project)
   
   if (is.na(drive_desc)) {
     cli::cli_alert_info(
@@ -46,7 +44,7 @@ cloud_drive_attach <- function(project = getwd()) {
     straight = TRUE
   )
   
-  if (yeah) { utils::browseURL("https://drive.google.com/") }
+  if (yeah) utils::browseURL("https://drive.google.com/")
   
   repeat {
     ok <- TRUE
@@ -66,11 +64,11 @@ cloud_drive_attach <- function(project = getwd()) {
     }
     
     if (ok) {
-      desc::desc_set(CloudDrive = id, file = file.path(project, "DESCRIPTION"))
+      desc::desc_set(cloudfs.drive = id, file = file.path(project, "DESCRIPTION"))
       folder_name <- drbl$name
       cli::cli_alert_success(
         "Attached Google Drive folder {.val {folder_name}} to \\
-        {.field {name}} project. {.field CloudDrive} field in \\
+        {.field {name}} project. {.field cloudfs.drive} field in \\
         {.path DESCRIPTION} has been updated sucessfully."
       )
       return(invisible(TRUE))
@@ -89,11 +87,11 @@ cloud_drive_attach <- function(project = getwd()) {
 #'   file. If it's absent, proposes to attach it with [cloud_drive_attach].
 #' 
 #' @noRd
-cloud_drive_get_location <- function(project = getwd()) {
-  loc <- proj_desc_get("CloudDrive", project)
+cloud_drive_get_root <- function(project = ".") {
+  loc <- proj_desc_get("cloudfs.drive", project)
   if (is.na(loc)) {
     cloud_drive_attach(project = project)
-    loc <- proj_desc_get("CloudDrive", project)
+    loc <- proj_desc_get("cloudfs.drive", project)
   }
   googledrive::as_id(loc)
 }
@@ -104,7 +102,7 @@ cloud_drive_get_location <- function(project = getwd()) {
 #'   inside this folder, returns id of the object (file or folder) corresponding
 #'   to this path.
 #'   
-#' @param root_id ID of the folder to start search at
+#' @param root ID of the folder to start search at
 #' @param path Relative location with respect to the root folder
 #' @param create Create folders describing path if they do not exist? Default is
 #'   `FALSE` so by default the function throws an error if path was not found.
@@ -130,15 +128,18 @@ cloud_drive_get_location <- function(project = getwd()) {
 #' cloud_drive_find_path("1ul0MYeHb0nJtnuaPinKV1WtH0n3igmN2", "models/kmeans")
 #' }
 #' 
-cloud_drive_find_path <- function(root_id, path = "", create = FALSE) {
-  stopifnot(is.character(path) & length(path) == 1)
-  path <- clean_up_file_path(path)
-  root_id <- googledrive::as_id(root_id)
+cloud_drive_find_path <- function(root, path = "", create = FALSE) {
+  check_string(path)
+  check_string(root)
+  check_bool(create)
   
-  if (path == "") return(root_id)
+  path <- clean_up_file_path(path)
+  root <- googledrive::as_id(root)
+  
+  if (path == "") return(root)
   
   path_seq <- strsplit(path, "/")[[1]]
-  current_id <- root_id
+  current_id <- root
   for (i in seq_along(path_seq)) {
     current_target <- path_seq[[i]]
     current_content <- googledrive::drive_ls(current_id)

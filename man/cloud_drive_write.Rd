@@ -21,8 +21,6 @@ extension.}
 
 \item{local}{(logical) If \code{TRUE}, will additionally create a local file at
 the corresponding path. Default is \code{FALSE}.}
-
-\item{project}{Path to a project. By default it is current working directory.}
 }
 \description{
 Writes an R object to a file in project's Google Drive folder.

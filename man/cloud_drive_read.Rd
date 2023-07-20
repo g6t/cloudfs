@@ -14,8 +14,6 @@ letters, digits, '-', '_', '.', spaces and '/' symbols.}
 be attempted to guess an appropriate reading function from file extension.}
 
 \item{...}{Further parameters to pass to \code{fun}.}
-
-\item{project}{Path to a project. By default it is current working directory.}
 }
 \description{
 Reads a file from project's Google Drive. This function tries to

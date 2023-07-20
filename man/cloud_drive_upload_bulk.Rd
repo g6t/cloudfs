@@ -11,8 +11,6 @@ cloud_drive_upload_bulk(content, quiet = FALSE, project = getwd())
 
 \item{quiet}{All caution messages may be turned off by setting this parameter
 to \code{TRUE}.}
-
-\item{project}{Path to a project. By default it is current working directory.}
 }
 \description{
 \link{cloud_local_ls} function returns a dataframe of contents of

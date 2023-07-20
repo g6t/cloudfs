@@ -28,8 +28,6 @@ the corresponding path. Default is \code{FALSE}.}
 
 \item{quiet}{all caution messages may be turned off by setting this parameter
 to \code{TRUE}.}
-
-\item{project}{Path to a project. By default it is current working directory.}
 }
 \description{
 Given a named list of objects \link{cloud_object_ls} function returns

@@ -137,6 +137,12 @@ check_scalar <- function(..., arg_class, alt_null = FALSE) {
   }
 }
 
+#' @description [check_scalar] for `arg_class` equal to "character".
+#' @noRd
+check_string <- function(..., alt_null = FALSE) {
+  check_scalar(..., arg_class = "character", alt_null = alt_null)
+}
+
 #' @title Check Argument's Class
 #' 
 #' @description Check if argument is of proper class.
@@ -319,4 +325,75 @@ check_null_cond <- function(x, alt_null){
     check_null <- is.null(x)
   }
   check_null
+}
+
+#' @title Check if Argument is Single TRUE or FALSE
+#' 
+#' @description Check if an argument is single TRUE or FALSE. As an option it is
+#'   possible to allow `NULL` value when `alt_null = TRUE`.
+#'
+#' @param x Function argument that is being asserted.
+#' @param alt_null Logical. Should argument accept `NULL` value.
+#' @param add_msg Is an additional message that can be printed over the standard
+#'   function error message. You can:
+#'   * pass the names of the arguments that failed the test by using
+#'   `{x_name}` in the message body (e.g. "What are the \{x_name\}");
+#'   * pass the class of the arguments that failed the test by using 
+#'   `{wrong_class}` in the message body (e.g. "\{wrong_class\} is wrong")
+#'
+#' @return If argument is single `TRUE` or `FALSE` (optionally `NULL`) it 
+#'   returns invisible `NULL`. Otherwise the function throws an error.
+#'
+#' @examples
+#' c1 <- c("x", "y")
+#' n1 <- c(1,3,4)
+#' n2 <- c(1.5, 2.5)
+#' i1 <- 1L
+#' nl1 <- NULL
+#' l1 <- FALSE
+#' l2 <- c(FALSE, TRUE)
+#' \dontrun{
+#' check_bool(c1)
+#' check_bool(nl1)
+#' check_bool(nl1, alt_null = TRUE)
+#' check_bool(n2, alt_null = TRUE)
+#' check_bool(i1)
+#' check_bool(l1)
+#' check_bool(l2)
+#' }
+#' @export
+check_bool <- function(x, alt_null = FALSE, add_msg = NULL) {
+  
+  check_class(add_msg, arg_class = "character", alt_null = TRUE)
+  check_null <- check_null_cond(x = x, alt_null = alt_null)
+  
+  if(!(isTRUE(x) | isFALSE(x) | check_null)) {
+    x_name <- deparse(substitute(x))
+    # wrong_class stores class of wrong argument, to be reused in messages
+    wrong_class <- class(x)
+    if(wrong_class == "logical") {
+      if (length(x) > 1) {
+        error_msg <- paste0(
+          "{.arg {x_name}} is a {.cls logical} vector,",
+          " but should be a scalar (single value)"
+        )
+      } else {
+        error_msg <- "{.arg {x_name}} is {.code {x}}"
+      }
+    } else {
+      error_msg <- "{.arg {x_name}} is {.cls {wrong_class}}"
+    }
+    
+    warn_msg <- ifelse(
+      alt_null,
+      "{.arg {x_name}} should be either {.code TRUE} or {.code FALSE} or {.cls NULL}",
+      "{.arg {x_name}} should be either {.code TRUE} or {.code FALSE}"
+    )
+    
+    cli_abort(c(
+      "i" = add_msg,
+      "!" = warn_msg, 
+      "x" = error_msg
+    ))
+  }
 }
