@@ -3,7 +3,7 @@
 #' @description Prints names, timestamps and sizes of files and folders inside
 #'   local project folder.
 #'   
-#' @inheritParams cloud_not_wd_warning
+#' @inheritParams validate_desc
 #' @inheritParams cloud_prep_ls
 #' 
 #' @param path (optional) Path inside local project folder to list contents of
@@ -28,7 +28,7 @@
 #' }
 #' 
 #' @export
-cloud_local_ls <- function(path = "", project = getwd(), recursive = FALSE,
+cloud_local_ls <- function(path = "", project = ".", recursive = FALSE,
                            full_names = FALSE, ignore = TRUE) {
   stopifnot(is.logical(full_names))
   stopifnot(is.logical(recursive))

@@ -6,7 +6,7 @@
 \usage{
 cloud_local_ls(
   path = "",
-  project = getwd(),
+  project = ".",
   recursive = FALSE,
   full_names = FALSE,
   ignore = TRUE

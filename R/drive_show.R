@@ -2,7 +2,7 @@
 #' 
 #' @description Opens project's Google Drive folder in browser.
 #' 
-#' @inheritParams cloud_not_wd_warning
+#' @inheritParams cloud_drive_ls
 #' @param path (optional) Path inside Google Drive folder to open. By default,
 #'   when `path = ""`, navigates to the root level of project's folder.
 #'   
@@ -15,9 +15,11 @@
 #' }
 #' 
 #' @export
-cloud_drive_browse <- function(path = "", project = getwd()) {
-  root_id <- cloud_drive_get_location(project = project)
-  id <- cloud_drive_find_path(root_id, path)
+cloud_drive_browse <- function(path = "", root = NULL) {
+  check_string(path)
+  check_string(root, alt_null = TRUE)
+  if (is.null(root)) root <- cloud_drive_get_root()
+  id <- cloud_drive_find_path(root, path)
   googledrive::drive_browse(id)
 }
 
@@ -26,12 +28,15 @@ cloud_drive_browse <- function(path = "", project = getwd()) {
 #' @description Prints names, timestamps and sizes of files and folders inside
 #'   Google Drive folder.
 #'
-#' @inheritParams cloud_not_wd_warning
 #' @inheritParams cloud_prep_ls
 #' 
 #' @param path (optional) Path inside Google Drive folder to list contents of
 #'   subfolders. By default, when `path = ""`, lists root-level files and
 #'   folders.
+#' @param root GoogleDrive id or URL of the project root -- point relative to
+#'   which to consider all relative paths. When left as `NULL`, the root is
+#'   automatically derived from the `cloudfs.drive` field of the project's
+#'   DESCRIPTION file.
 #'   
 #' @inherit cloud_drive_find_path details
 #' 
@@ -49,14 +54,16 @@ cloud_drive_browse <- function(path = "", project = getwd()) {
 #' 
 #' @export
 cloud_drive_ls <- function(path = "", recursive = FALSE, full_names = FALSE,
-                        project = getwd()) {
-  root_id <- cloud_drive_get_location(project = project)
-  stopifnot(is.character(path) & length(path) == 1)
+                        root = NULL) {
+  check_string(path)
+  check_bool(recursive)
+  check_bool(full_names)
+  check_string(root, alt_null = TRUE)
+  
+  if (is.null(root)) root <- cloud_drive_get_root()
   path <- clean_up_file_path(path)
   cli::cli_text("{.field path}: {.path {path}}")
-  head_id <- cloud_drive_find_path(root_id, path)
-  stopifnot(isTRUE(recursive) | isFALSE(recursive))
-  stopifnot(isTRUE(full_names) | isFALSE(full_names))
+  head_id <- cloud_drive_find_path(root, path)
   
   # This lists all contents of a folder recursively, but shows only basenames.
   # We need to get relative paths instead. To do this for each object in the

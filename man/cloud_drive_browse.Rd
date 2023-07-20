@@ -4,11 +4,16 @@
 \alias{cloud_drive_browse}
 \title{Browse project's Google Drive folder}
 \usage{
-cloud_drive_browse(path = "", project = getwd())
+cloud_drive_browse(path = "", root = NULL)
 }
 \arguments{
 \item{path}{(optional) Path inside Google Drive folder to open. By default,
 when \code{path = ""}, navigates to the root level of project's folder.}
+
+\item{root}{GoogleDrive id or URL of the project root -- point relative to
+which to consider all relative paths. When left as \code{NULL}, the root is
+automatically derived from the \code{cloudfs.drive} field of the project's
+DESCRIPTION file.}
 }
 \description{
 Opens project's Google Drive folder in browser.

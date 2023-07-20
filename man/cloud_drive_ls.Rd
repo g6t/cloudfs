@@ -4,12 +4,7 @@
 \alias{cloud_drive_ls}
 \title{List Contents of Project's Google Drive Folder}
 \usage{
-cloud_drive_ls(
-  path = "",
-  recursive = FALSE,
-  full_names = FALSE,
-  project = getwd()
-)
+cloud_drive_ls(path = "", recursive = FALSE, full_names = FALSE, root = NULL)
 }
 \arguments{
 \item{path}{(optional) Path inside Google Drive folder to list contents of
@@ -21,6 +16,11 @@ nested subfolders. Default is \code{FALSE}.}
 
 \item{full_names}{(logical) If \code{TRUE}, folder path is appended to object
 names to give a relative file path.}
+
+\item{root}{GoogleDrive id or URL of the project root -- point relative to
+which to consider all relative paths. When left as \code{NULL}, the root is
+automatically derived from the \code{cloudfs.drive} field of the project's
+DESCRIPTION file.}
 }
 \description{
 Prints names, timestamps and sizes of files and folders inside

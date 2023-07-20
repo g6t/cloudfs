@@ -1,8 +1,7 @@
 #' @title Extract values from DESCRUPTION file
 #' 
+#' @inheritParams validate_desc
 #' @param key Character. What field to search for in DESCRIPTION file.
-#' @param project Character. Path to a project. By default it is current working
-#'   directory.
 #' 
 proj_desc_get <- function(key, project = ".") {
   check_string(key)
@@ -70,7 +69,8 @@ cloud_validate_file_names <- function(x) {
 #' @description Checks that DESCRIPTION file exists in a project folder. If it's
 #' not the case, proposes to create a DESCRIPTION file from template.
 #'   
-#' @inheritParams cloud_not_wd_warning
+#' @param project Character. Path to a project. By default it is current working
+#'   directory.
 #'
 #' @noRd   
 validate_desc <- function(project = ".") {

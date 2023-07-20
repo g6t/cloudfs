@@ -7,6 +7,7 @@
 #' 
 #' @noRd
 s3_path_to_bucket_prefix <- function(path) {
+  check_string(path)
   path <- gsub("/+", "/", path)
   path <- gsub("^/", "", path)
   bucket <- gsub("\\/.*", "", path)
@@ -30,7 +31,6 @@ s3_path_to_bucket_prefix <- function(path) {
 #' 
 #' @noRd
 cloud_s3_browse_path <- function(path = "") {
-  check_string(path)
   bucket_prefix <- s3_path_to_bucket_prefix(path)
   
   url <- "https://s3.console.aws.amazon.com/s3/buckets/"
@@ -47,7 +47,7 @@ cloud_s3_browse_path <- function(path = "") {
 #' 
 #' @description Opens project's S3 folder in browser.
 #' 
-#' @inheritParams cloud_not_wd_warning
+#' @inheritParams cloud_s3_ls
 #' @param path (optional) Path inside S3 folder to open. By default, when 
 #'   `path = ""`, navigates to the root level of project's S3 folder.
 #' 
@@ -71,11 +71,13 @@ cloud_s3_browse <- function(path = "", root = NULL) {
 #' @description Prints names, timestamps and sizes of files and folders inside
 #'   S3 folder.
 #'
-#' @inheritParams cloud_not_wd_warning
 #' @inheritParams cloud_prep_ls
 #' 
 #' @param path (optional) Path inside S3 folder to list contents of a subfolder.
 #'   By default, when `path = ""`, lists root-level files and folders.
+#' @param root S3 path of the project root -- point relative to which to
+#'   consider all relative paths. When left as `NULL`, the root is automatically
+#'   derived from the `cloudfs.s3` field of the project's DESCRIPTION file.
 #' 
 #' @examples 
 #' \dontrun{
@@ -95,6 +97,7 @@ cloud_s3_ls <- function(path = "", recursive = FALSE, full_names = FALSE,
   check_string(path)
   check_bool(recursive)
   check_bool(full_names)
+  check_string(root, alt_null = TRUE)
   
   if (is.null(root)) root <- cloud_s3_get_root()
   full_path <- file.path(root, path, "/")

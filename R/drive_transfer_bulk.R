@@ -83,7 +83,7 @@ cloud_drive_content_find_dirs <- function(cont, project = project) {
   dir_df <- tibble(dir = unique(cont$dir))
   dir_df$dir_id <- googledrive::as_id(NA_character_)
   
-  root_id <- cloud_drive_get_location(project = project)
+  root_id <- cloud_drive_get_root(project = project)
   for (i in seq_along(dir_df$dir)) {
     dir_df$dir_id[[i]] <- 
       cloud_drive_find_path(root_id, dir_df$dir[[i]], create = TRUE)

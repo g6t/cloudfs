@@ -25,7 +25,7 @@ cloud_drive_upload <- function(file, project = getwd()) {
     cli::cli_abort("Can't find {.path {file}} under {.field {project}}")
   }
   
-  root_id <- cloud_drive_get_location(project = project)
+  root_id <- cloud_drive_get_root(project = project)
   file_dir <- dirname(file)
   if (file_dir == ".") file_dir <- ""
   file_dir_id <- cloud_drive_find_path(root_id, file_dir, create = TRUE)
@@ -59,7 +59,7 @@ cloud_drive_download <- function(file, project = getwd()) {
   cloud_validate_file_path(file)
   cloud_not_wd_warning(project)
   project_name <- proj_desc_get("Name", project)
-  root_id <- cloud_drive_get_location(project = project)
+  root_id <- cloud_drive_get_root(project = project)
   file_path <- normalizePath(file.path(project, file), mustWork = FALSE)
   file_dir <- dirname(file_path)
   if (!dir.exists(file_dir)) dir.create(file_dir, recursive = TRUE)
@@ -117,7 +117,7 @@ cloud_drive_write <- function(x, file, fun = NULL, ..., local = FALSE,
   if (is.null(fun)) {
     fun <- cloud_guess_write_fun(file)
   }
-  root_id <- cloud_drive_get_location(project = project)
+  root_id <- cloud_drive_get_root(project = project)
   file_dir <- dirname(file)
   if (file_dir == ".") file_dir <- ""
   file_dir_id <- cloud_drive_find_path(root_id, file_dir, create = TRUE)
@@ -171,7 +171,7 @@ cloud_drive_read <- function(file, fun = NULL, ..., project = getwd()) {
   if (is.null(fun)) {
     fun <- cloud_guess_read_fun(file)
   }
-  root_id <- cloud_drive_get_location(project = project)
+  root_id <- cloud_drive_get_root(project = project)
   file <- clean_up_file_path(file)
   file_id <- cloud_drive_find_path(root_id, file)
   
