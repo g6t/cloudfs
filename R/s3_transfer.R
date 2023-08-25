@@ -4,7 +4,6 @@
 #'   location on project's S3 folder
 #' 
 #' @inheritParams cloud_validate_file_path
-#' @inheritParams cloud_not_wd_warning
 #'   
 #' @examples 
 #' \dontrun{
@@ -13,23 +12,25 @@
 #' }
 #' 
 #' @export
-cloud_s3_upload <- function(file, project = getwd()) {
+cloud_s3_upload <- function(file, root = NULL) {
   cloud_validate_file_path(file)
-  cloud_not_wd_warning(project)
-  project_name <- proj_desc_get("Name", project)
-  s3_folder <- cloud_s3_get_root(project = project)
-  file_path <- normalizePath(file.path(project, file), mustWork = FALSE)
-  s3_file_path <- file.path(s3_folder, file)
-  if (!file.exists(file_path)) {
-    cli::cli_abort("Can't find {.path {file}} under {.field {project}}.")
+
+  check_string(root, alt_null = TRUE)
+  if (is.null(root)) root <- cloud_s3_get_root()
+  full_path <- file.path(root, file)
+  bucket_prefix <- s3_path_to_bucket_prefix(full_path)
+  
+  s3_file_path <- file.path(root, file)
+  if (!file.exists(file)) {
+    cli::cli_abort("Can't find {.path {file}}.")
   }
   aws.s3::put_object(
-    bucket = "bucket-name",
-    file = file_path,
-    object = s3_file_path
+    bucket = bucket_prefix$bucket,
+    file = file,
+    object = bucket_prefix$prefix
   )
   cli::cli_alert_success(
-    "File {.path {file}} uploaded to S3 folder of {.field {project_name}} project."
+    "File {.path {file}} uploaded to S3 root {.field {root}}."
   )
 }
 
@@ -49,22 +50,21 @@ cloud_s3_upload <- function(file, project = getwd()) {
 #' }
 #' 
 #' @export
-cloud_s3_download <- function(file, project = getwd()) {
+cloud_s3_download <- function(file, root = NULL) {
   cloud_validate_file_path(file)
-  cloud_not_wd_warning(project)
-  project_name <- proj_desc_get("Name", project)
-  s3_folder <- cloud_s3_get_root(project = project)
-  file_path <- normalizePath(file.path(project, file), mustWork = FALSE)
-  s3_file_path <- file.path(s3_folder, file)
+  
+  check_string(root, alt_null = TRUE)
+  if (is.null(root)) root <- cloud_s3_get_root()
+  full_path <- file.path(root, file)
+  bucket_prefix <- s3_path_to_bucket_prefix(full_path)
   
   aws.s3::save_object(
-    bucket = "bucket-name",
-    object = s3_file_path,
-    file = file_path
+    bucket = bucket_prefix$bucket,
+    object = bucket_prefix$prefix,
+    file = file
   )
   cli::cli_alert_success(
-    "File {.path {file}} downloaded from S3 folder of {.field {project_name}} \\
-    project to {.path {file_path}}."
+    "File {.path {file}} downloaded from S3 root {.field {root}}."
   )
 }
 
@@ -102,18 +102,22 @@ cloud_s3_download <- function(file, project = getwd()) {
 #' 
 #' @export
 cloud_s3_write <- function(x, file, fun = NULL, ..., local = FALSE,
-                         project = getwd()) {
+                         root = NULL) {
   cloud_validate_file_path(file)
-  stopifnot(is.logical(local))
-  project_name <- proj_desc_get("Name", project)
+  check_bool(local)
+  check_class(fun, "function", alt_null = TRUE)
+  check_string(root, alt_null = TRUE)
+  
   if (is.null(fun)) {
     fun <- cloud_guess_write_fun(file)
   }
-  s3_folder <- cloud_s3_get_root(project = project)
-  s3_file_path <- file.path(s3_folder, file)
+  
+  if (is.null(root)) root <- cloud_s3_get_root()
+  full_path <- file.path(root, file)
+  bucket_prefix <- s3_path_to_bucket_prefix(full_path)
   
   if (local) {
-    local_file <- file.path(project, file)
+    local_file <- file
   } else {
     local_file <- tempfile(fileext = paste0(".", tools::file_ext(file)))
   }
@@ -124,13 +128,13 @@ cloud_s3_write <- function(x, file, fun = NULL, ..., local = FALSE,
   
   aws.s3::put_object(
     file = local_file,
-    bucket = "bucket-name",
-    object = s3_file_path
+    bucket = bucket_prefix$bucket,
+    object = bucket_prefix$prefix
   )
   
   if (!local) {unlink(local_file)}
   cli::cli_alert_success(
-    "Written to {.path {file}} on S3 folder of {.field {project_name}} project."
+    "Written to {.path {file}} in S3 root {.field {root}}."
   )
 }
 
@@ -157,26 +161,30 @@ cloud_s3_write <- function(x, file, fun = NULL, ..., local = FALSE,
 #' }
 #' 
 #' @export
-cloud_s3_read <- function(file, fun = NULL, ..., project = getwd()) {
+cloud_s3_read <- function(file, fun = NULL, ..., root = NULL) {
   cloud_validate_file_path(file)
-  project_name <- proj_desc_get("Name", project)
+  check_string(root, alt_null = TRUE)
+  
   if (is.null(fun)) {
     fun <- cloud_guess_read_fun(file)
   }
-  s3_folder <- cloud_s3_get_root(project = project)
-  s3_file_path <- file.path(s3_folder, file)
+  
+  if (is.null(root)) root <- cloud_s3_get_root()
+  full_path <- file.path(root, file)
+  bucket_prefix <- s3_path_to_bucket_prefix(full_path)
+  
   cli::cli_alert_info(
-    "Trying to read {.path {file}} from S3 folder of {.field {project_name}} project."
+    "Trying to read {.path {file}} from S3 root {.field {root}}."
   )
   res <- 
     aws.s3::s3read_using(
-      bucket = "bucket-name",
-      object = s3_file_path,
+      bucket = bucket_prefix$bucket,
+      object = bucket_prefix$prefix,
       FUN = fun,
       ...
     )
 
-  meta <- cloud_s3_get_obj_meta(s3_file_path)
+  meta <- cloud_s3_get_obj_meta(bucket_prefix$bucket, bucket_prefix$prefix)
   
   for (n in names(meta)) {
     attr(res, n) <- meta[[n]]
@@ -193,22 +201,23 @@ cloud_s3_read <- function(file, fun = NULL, ..., project = getwd()) {
 #' with it's meta information like e.g. creation date.
 #' 
 #' @noRd
-cloud_s3_get_obj_meta <- function(path) {
-  stopifnot(is.character("path") & length(path) == 1)
+cloud_s3_get_obj_meta <- function(bucket, prefix) {
+  check_string(bucket)
+  check_string(prefix)
   obj <- 
     aws.s3::get_bucket(
-      bucket = "bucket-name",
-      prefix = path,
+      bucket = bucket,
+      prefix = prefix,
       delimiter = "/"
     )
   
   if (length(obj) == 0) cli::cli_abort(
-    "S3 request for {.path {path}} in {.path bucket-name} bucket did not \\
+    "S3 request for {.path {prefix}} in {.path {bucket}} bucket did not \\
     return any results."
   )
 
   if (length(obj) > 1) cli::cli_abort(
-    "S3 request for {.path {path}} in {.path bucket-name} bucket returned \\
+    "S3 request for {.path {prefix}} in {.path {bucket}} bucket returned \\
     more than one result."
   )
     
