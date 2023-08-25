@@ -1,3 +1,19 @@
+#' @title Get cloud roots of a project
+#' @description Returns a list with all `cloudfs.*` roots defined in a project's
+#'   DESCRIPTION.
+#' 
+#' @inheritParams validate_desc
+#' 
+#' @export
+cloud_get_roots <- function(project = ".") {
+  fields <- desc::desc_fields(project)
+  cloudfs_fiels <- str_subset_(fields, "^cloudfs\\.")
+  res <- as.list(desc::desc_get(cloudfs_fiels, file = project))
+  names(res) <- str_remove_(names(res), "^cloudfs\\.")
+  res
+}
+
+
 #' @title Extract values from DESCRUPTION file
 #' 
 #' @inheritParams validate_desc
