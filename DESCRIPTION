@@ -22,3 +22,10 @@ Imports:
     cli,
     utils,
     rlang
+Suggests: 
+    haven,
+    jsonlite,
+    readr,
+    readxl,
+    writexl,
+    xml2
