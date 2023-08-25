@@ -108,30 +108,4 @@ cloud_drive_put <- function(media, path) {
   )
   googledrive::local_drive_quiet()
   googledrive::drive_rename(id, name)
-  cloud_drive_postproc(id, type)
-}
-
-#' @description This determines which GD post-processing function to use based on
-#'   `type`.
-#' 
-#' @noRd
-cloud_drive_postproc <- function(id, type) {
-  if (is.null(type)) return(id)
-  fun <- switch (type,
-    "spreadsheet" = cloud_drive_postproc_spreadsheet,
-    identity
-  )
-  fun(id)
-}
-
-#' @describeIn Google Drive spreadsheet postprocessing. This is what happens
-#'   after an excel file was uploaded to GD. Namely, all columns are
-#'   automatically resised to fit the data.
-#' 
-#' @noRd
-cloud_drive_postproc_spreadsheet <- function(id) {
-  sheet_names <- googlesheets4::sheet_names(id)
-  for (sheet in sheet_names) {
-    googlesheets4::range_autofit(id, sheet = sheet)
-  }
 }
