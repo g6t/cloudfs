@@ -9,11 +9,12 @@
 #' @param path (optional) Path inside local project folder to list contents of
 #'   a subfolder. By default, when `path = ""`, lists root-level files and
 #'   folders.
+#' @param root Local path relative to which to consider all paths.
 #' @param ignore (logical) Currently just ignores the "renv" folder if `TRUE`.
-#'   The main reason for this parameter is in fact that "renv" folder usually
-#'   contains thousands of files and it takes a lot of time to calculate its
-#'   size. But potentially we may use something like global or project-level
-#'   cloud ignore files akin to .gitignore.
+#'   The main reason for this parameter is that "renv" folder usually contains
+#'   thousands of files and it takes a lot of time to calculate its size. But
+#'   potentially we may use something like global or project-level cloud ignore
+#'   files akin to .gitignore.
 #'   
 #' @examples 
 #' \dontrun{
@@ -28,16 +29,19 @@
 #' }
 #' 
 #' @export
-cloud_local_ls <- function(path = "", project = ".", recursive = FALSE,
+cloud_local_ls <- function(path = "", root = ".", recursive = FALSE,
                            full_names = FALSE, ignore = TRUE) {
-  stopifnot(is.logical(full_names))
-  stopifnot(is.logical(recursive))
-  stopifnot(is.logical(ignore))
+  check_bool(full_names)
+  check_bool(recursive)
+  check_bool(ignore)
+  check_string(root)
+  if (!dir.exists(root)) 
+    cli::cli_abort("Local root {.path {root}} does not exist.")
   path <- clean_file_path(path)
-  local_path <- file.path(project, path)
+  local_path <- file.path(root, path)
   if (!file.exists(local_path)) {
     cli::cli_abort(
-      "Path {.path {path}} under {.field {project}} project does not exist."
+      "Path {.path {path}} under {.field {root}} project does not exist."
     )
   }
   if (!dir.exists(local_path)) {
