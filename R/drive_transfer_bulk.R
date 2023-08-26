@@ -116,7 +116,6 @@ cloud_drive_content_find_dirs <- function(cont, project = project) {
 #'   
 #' @export
 cloud_drive_upload_bulk <- function(content, quiet = FALSE, project = getwd()) {
-  cloud_not_wd_warning(project)
   project_name <- proj_desc_get("Name", project)
   # Yes, S3 function. Google Drive prep function differs from the S3 only by
   # that it additionally checks the id column. When we list local files we don't
@@ -164,7 +163,6 @@ cloud_drive_upload_bulk <- function(content, quiet = FALSE, project = getwd()) {
 #'   
 #' @export
 cloud_drive_download_bulk <- function(content, quiet = FALSE, project = getwd()) {
-  cloud_not_wd_warning(project)
   project_name <- proj_desc_get("Name", project)
   cont <- cloud_drive_prep_bulk(content, what = "download", quiet = quiet)
   cont$local_path <- clean_file_path(project, cont$path)
@@ -221,7 +219,6 @@ cloud_drive_download_bulk <- function(content, quiet = FALSE, project = getwd())
 #' @export
 cloud_drive_write_bulk <- function(content, fun = NULL, ..., local = FALSE,
                                    quiet = FALSE, project = getwd()) {
-  cloud_not_wd_warning(project)
   cont <- cloud_object_prep_bulk(content, quiet = quiet)
   cont <- cloud_drive_content_find_dirs(cont, project = project)
   
@@ -283,7 +280,6 @@ cloud_drive_write_bulk <- function(content, fun = NULL, ..., local = FALSE,
 #' @export
 cloud_drive_read_bulk <- function(content, fun = NULL, ..., quiet = FALSE,
                                project = getwd()) {
-  cloud_not_wd_warning(project)
   project_name <- proj_desc_get("Name", project)
   cont <- cloud_s3_prep_bulk(content, what = "read", quiet = quiet)
   n <- nrow(cont)
