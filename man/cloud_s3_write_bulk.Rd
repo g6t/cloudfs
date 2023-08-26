@@ -10,7 +10,7 @@ cloud_s3_write_bulk(
   ...,
   local = FALSE,
   quiet = FALSE,
-  project = getwd()
+  root = NULL
 )
 }
 \arguments{
@@ -28,6 +28,10 @@ the corresponding path. Default is \code{FALSE}.}
 
 \item{quiet}{all caution messages may be turned off by setting this parameter
 to \code{TRUE}.}
+
+\item{root}{S3 path of the project root -- point relative to which to
+consider all relative paths. When left as \code{NULL}, the root is automatically
+derived from the \code{cloudfs.s3} field of the project's DESCRIPTION file.}
 }
 \description{
 Given a named list of objects \link{cloud_object_ls} function returns

@@ -4,7 +4,7 @@
 \alias{cloud_s3_read_bulk}
 \title{Read S3 contents in bulk}
 \usage{
-cloud_s3_read_bulk(content, fun = NULL, ..., quiet = FALSE, project = getwd())
+cloud_s3_read_bulk(content, fun = NULL, ..., quiet = FALSE, root = NULL)
 }
 \arguments{
 \item{content}{(data.frame) Output of \code{cloud_s3_ls()}}
@@ -16,6 +16,10 @@ be attempted to guess an appropriate reading function from file extension.}
 
 \item{quiet}{All caution messages may be turned off by setting this parameter
 to \code{TRUE}.}
+
+\item{root}{S3 path of the project root -- point relative to which to
+consider all relative paths. When left as \code{NULL}, the root is automatically
+derived from the \code{cloudfs.s3} field of the project's DESCRIPTION file.}
 }
 \description{
 \link{cloud_s3_ls} function returns a dataframe of contents of an S3

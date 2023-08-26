@@ -6,7 +6,7 @@
 \usage{
 cloud_local_ls(
   path = "",
-  project = ".",
+  root = ".",
   recursive = FALSE,
   full_names = FALSE,
   ignore = TRUE
@@ -17,8 +17,7 @@ cloud_local_ls(
 a subfolder. By default, when \code{path = ""}, lists root-level files and
 folders.}
 
-\item{project}{Character. Path to a project. By default it is current working
-directory.}
+\item{root}{Local path relative to which to consider all paths.}
 
 \item{recursive}{(logical) If \code{TRUE}, lists contents recursively in all
 nested subfolders. Default is \code{FALSE}.}
@@ -27,10 +26,10 @@ nested subfolders. Default is \code{FALSE}.}
 names to give a relative file path.}
 
 \item{ignore}{(logical) Currently just ignores the "renv" folder if \code{TRUE}.
-The main reason for this parameter is in fact that "renv" folder usually
-contains thousands of files and it takes a lot of time to calculate its
-size. But potentially we may use something like global or project-level
-cloud ignore files akin to .gitignore.}
+The main reason for this parameter is that "renv" folder usually contains
+thousands of files and it takes a lot of time to calculate its size. But
+potentially we may use something like global or project-level cloud ignore
+files akin to .gitignore.}
 }
 \description{
 Prints names, timestamps and sizes of files and folders inside
