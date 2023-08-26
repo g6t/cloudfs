@@ -21,13 +21,14 @@
 #'   
 cloud_s3_prep_bulk <- function(content, what = c("read", "upload", "download"),
                              safe_size = 5e7, quiet = FALSE) {
-  stopifnot(is.data.frame(content))
+  
+  check_class(content, "data.frame")
   stopifnot(all(c("name", "type", "size_b") %in% names(content)))
-  stopifnot(is.character(content$name))
-  stopifnot(is.character(content$type))
-  stopifnot(is.numeric(content$size_b))
-  stopifnot(is.logical(quiet) & !is.na(quiet))
-  what <- what[[1]]
+  check_class(content$name, "character")
+  check_class(content$type, "character")
+  check_numeric(content$size_b)
+  check_bool(quiet)
+  what <- rlang::arg_match(what)
   cont <- 
     content %>% 
     filter(.data$type != "folder", !is.na(.data$type)) %>% 
@@ -89,7 +90,10 @@ cloud_s3_prep_bulk <- function(content, what = c("read", "upload", "download"),
 #' }
 #'   
 #' @export
-cloud_s3_upload_bulk <- function(content, quiet = FALSE, project = getwd()) {
+cloud_s3_upload_bulk <- function(content, quiet = FALSE, root = NULL) {
+  check_string(root, alt_null = TRUE)
+  if (is.null(root)) root <- cloud_s3_get_root()
+  
   cont <- cloud_s3_prep_bulk(content, what = "upload", quiet = quiet)
   n <- nrow(cont)
   cli::cli_progress_bar(
@@ -98,7 +102,7 @@ cloud_s3_upload_bulk <- function(content, quiet = FALSE, project = getwd()) {
   )
   for (i in seq_along(cont$name)) {
     cli::cli_progress_update()
-    cloud_s3_upload(cont$path[[i]], project = project)
+    cloud_s3_upload(cont$path[[i]], root = root)
   }
   cli::cli_alert_success("Done!")
 }
@@ -124,7 +128,10 @@ cloud_s3_upload_bulk <- function(content, quiet = FALSE, project = getwd()) {
 #' }
 #'   
 #' @export
-cloud_s3_download_bulk <- function(content, quiet = FALSE, project = getwd()) {
+cloud_s3_download_bulk <- function(content, quiet = FALSE, root = NULL) {
+  check_string(root, alt_null = TRUE)
+  if (is.null(root)) root <- cloud_s3_get_root()
+  
   cont <- cloud_s3_prep_bulk(content, what = "download", quiet = quiet)
   n <- nrow(cont)
   cli::cli_progress_bar(
@@ -133,7 +140,7 @@ cloud_s3_download_bulk <- function(content, quiet = FALSE, project = getwd()) {
   )
   for (i in seq_along(cont$name)) {
     cli::cli_progress_update()
-    cloud_s3_download(cont$path[[i]], project = project)
+    cloud_s3_download(cont$path[[i]], root = root)
   }
   cli::cli_alert_success("Done!")
 }
@@ -166,7 +173,10 @@ cloud_s3_download_bulk <- function(content, quiet = FALSE, project = getwd()) {
 #'   
 #' @export
 cloud_s3_write_bulk <- function(content, fun = NULL, ..., local = FALSE,
-                                quiet = FALSE, project = getwd()) {
+                                quiet = FALSE, root = NULL) {
+  check_string(root, alt_null = TRUE)
+  if (is.null(root)) root <- cloud_s3_get_root()
+  
   cont <- cloud_object_prep_bulk(content, quiet = quiet)
   n <- nrow(cont)
   cli::cli_progress_bar(
@@ -180,7 +190,7 @@ cloud_s3_write_bulk <- function(content, fun = NULL, ..., local = FALSE,
       file = cont$path[[i]],
       fun = fun, ...,
       local = local,
-      project = project
+      root = root
     )
   }
   cli::cli_alert_success("Done!")
@@ -214,7 +224,10 @@ cloud_s3_write_bulk <- function(content, fun = NULL, ..., local = FALSE,
 #'   
 #' @export
 cloud_s3_read_bulk <- function(content, fun = NULL, ..., quiet = FALSE,
-                             project = getwd()) {
+                             root = NULL) {
+  check_string(root, alt_null = TRUE)
+  if (is.null(root)) root <- cloud_s3_get_root()
+  
   cont <- cloud_s3_prep_bulk(content, what = "read", quiet = quiet)
   n <- nrow(cont)
   res <- list()
@@ -225,7 +238,7 @@ cloud_s3_read_bulk <- function(content, fun = NULL, ..., quiet = FALSE,
   for (i in seq_along(cont$name)) {
     cli::cli_progress_update()
     res[[cont$name[[i]]]] <- 
-      cloud_s3_read(cont$path[[i]], fun, ..., project = project)
+      cloud_s3_read(cont$path[[i]], fun, ..., root = root)
   }
   cli::cli_alert_success("Done!")
   res
