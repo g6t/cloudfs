@@ -88,7 +88,7 @@ cloud_validate_file_names <- function(x) {
 #' @param project Character. Path to a project. By default it is current working
 #'   directory.
 #'
-#' @noRd   
+#' @keywords internal
 validate_desc <- function(project = ".") {
   
   desc_path <- normalizePath(file.path(project, "DESCRIPTION"))

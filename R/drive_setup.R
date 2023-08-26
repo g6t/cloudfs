@@ -7,8 +7,8 @@
 #'   they can find or create a dedicated folder for the project. Once the user
 #'   has located or created the desired folder, they can copy the URL of the
 #'   folder from the web browser and paste it into the R console. The function
-#'   then parses the URL and populates the corresponding field (cloudfs.drive) in
-#'   the DESCRIPTION file with a string that represents the location of the
+#'   then parses the URL and populates the corresponding field (cloudfs.drive)
+#'   in the DESCRIPTION file with a string that represents the location of the
 #'   project in Google Drive.
 #'
 #' @inheritParams proj_desc_get
@@ -102,8 +102,8 @@ cloud_drive_get_root <- function(project = ".") {
 #'   inside this folder, returns id of the object (file or folder) corresponding
 #'   to this path.
 #'   
-#' @param root ID of the folder to start search at
-#' @param path Relative location with respect to the root folder
+#' @param root ID of the folder to start search at.
+#' @param path Relative location with respect to the root folder.
 #' @param create Create folders describing path if they do not exist? Default is
 #'   `FALSE` so by default the function throws an error if path was not found.
 #'   If `TRUE`, the function will create all missing subdirectories. Note that

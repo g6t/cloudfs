@@ -4,7 +4,7 @@
 \alias{cloud_drive_write}
 \title{Write an object to Google Drive}
 \usage{
-cloud_drive_write(x, file, fun = NULL, ..., local = FALSE, project = getwd())
+cloud_drive_write(x, file, fun = NULL, ..., local = FALSE, root = NULL)
 }
 \arguments{
 \item{x}{An R object (e.g. data frame) to write to Google Drive.}
@@ -21,6 +21,11 @@ extension.}
 
 \item{local}{(logical) If \code{TRUE}, will additionally create a local file at
 the corresponding path. Default is \code{FALSE}.}
+
+\item{root}{GoogleDrive id or URL of the project root -- point relative to
+which to consider all relative paths. When left as \code{NULL}, the root is
+automatically derived from the \code{cloudfs.drive} field of the project's
+DESCRIPTION file.}
 }
 \description{
 Writes an R object to a file in project's Google Drive folder.

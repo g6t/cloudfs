@@ -4,6 +4,7 @@
 #'   location on project's S3 folder
 #' 
 #' @inheritParams cloud_validate_file_path
+#' @inheritParams cloud_s3_ls
 #'   
 #' @examples 
 #' \dontrun{
@@ -40,7 +41,7 @@ cloud_s3_upload <- function(file, root = NULL) {
 #' folder and saves it preserving folder structure.
 #' 
 #' @inheritParams cloud_validate_file_path
-#' @inheritParams cloud_not_wd_warning
+#' @inheritParams cloud_s3_ls
 #' 
 #' @examples 
 #' \dontrun{
@@ -77,7 +78,7 @@ cloud_s3_download <- function(file, root = NULL) {
 #'   suitable writing function and the output file name where possible.
 #'   
 #' @inheritParams cloud_validate_file_path
-#' @inheritParams cloud_not_wd_warning
+#' @inheritParams cloud_s3_ls
 #' 
 #' @param x an R object (e.g. data frame) to write to S3.
 #' @param fun a function to write a file to cloud location to which x and a file
@@ -144,8 +145,8 @@ cloud_s3_write <- function(x, file, fun = NULL, ..., local = FALSE,
 #'   appropriate reading function based on the `file` name, but you can also
 #'   provide a function by yourself if it's needed.
 #'   
-#' @inheritParams cloud_not_wd_warning
 #' @inheritParams cloud_validate_file_path
+#' @inheritParams cloud_s3_ls
 #' 
 #' @param fun Reading function. By default is `NULL` which means that it will
 #'   be attempted to guess an appropriate reading function from file extension.

@@ -4,7 +4,7 @@
 \alias{cloud_s3_write}
 \title{Write an object to S3}
 \usage{
-cloud_s3_write(x, file, fun = NULL, ..., local = FALSE, project = getwd())
+cloud_s3_write(x, file, fun = NULL, ..., local = FALSE, root = NULL)
 }
 \arguments{
 \item{x}{an R object (e.g. data frame) to write to S3.}
@@ -21,6 +21,10 @@ extension.}
 
 \item{local}{(logical) If \code{TRUE}, will additionally create a local file at
 the corresponding path. Default is \code{FALSE}.}
+
+\item{root}{S3 path of the project root -- point relative to which to
+consider all relative paths. When left as \code{NULL}, the root is automatically
+derived from the \code{cloudfs.s3} field of the project's DESCRIPTION file.}
 }
 \description{
 Writes an R object to a file in project's S3 folder. In most

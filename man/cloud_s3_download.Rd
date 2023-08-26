@@ -4,11 +4,15 @@
 \alias{cloud_s3_download}
 \title{Download a file from S3 to local project folder}
 \usage{
-cloud_s3_download(file, project = getwd())
+cloud_s3_download(file, root = NULL)
 }
 \arguments{
 \item{file}{Path to a file relative to project folder root. Can contain only
 letters, digits, '-', '_', '.', spaces and '/' symbols.}
+
+\item{root}{S3 path of the project root -- point relative to which to
+consider all relative paths. When left as \code{NULL}, the root is automatically
+derived from the \code{cloudfs.s3} field of the project's DESCRIPTION file.}
 }
 \description{
 Downloads a file from project's S3 folder to local project

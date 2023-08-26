@@ -4,11 +4,16 @@
 \alias{cloud_drive_download}
 \title{Download a file from Google Drive to local project folder}
 \usage{
-cloud_drive_download(file, project = getwd())
+cloud_drive_download(file, root = NULL)
 }
 \arguments{
 \item{file}{Path to a file relative to project folder root. Can contain only
 letters, digits, '-', '_', '.', spaces and '/' symbols.}
+
+\item{root}{GoogleDrive id or URL of the project root -- point relative to
+which to consider all relative paths. When left as \code{NULL}, the root is
+automatically derived from the \code{cloudfs.drive} field of the project's
+DESCRIPTION file.}
 }
 \description{
 Downloads a file from project's Google Drive folder to local
