@@ -4,7 +4,7 @@
 \alias{cloud_drive_download_bulk}
 \title{Download Google Drive contents in bulk}
 \usage{
-cloud_drive_download_bulk(content, quiet = FALSE, project = getwd())
+cloud_drive_download_bulk(content, quiet = FALSE)
 }
 \arguments{
 \item{content}{(data.frame) Output of \code{cloud_drive_ls()}}

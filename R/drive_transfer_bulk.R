@@ -117,12 +117,11 @@ cloud_drive_content_find_dirs <- function(cont, root = NULL) {
 #'   
 #' @export
 cloud_drive_upload_bulk <- function(content, quiet = FALSE, root = NULL) {
-  project_name <- proj_desc_get("Name", project)
   # Yes, S3 function. Google Drive prep function differs from the S3 only by
   # that it additionally checks the id column. When we list local files we don't
   # know GD ids initially.
   cont <- cloud_s3_prep_bulk(content, what = "upload", quiet = quiet)
-  cont$local_path <- clean_file_path(project, cont$path)
+  cont$local_path <- clean_file_path(cont$path)
   cont <- cloud_drive_content_find_dirs(cont, root = root)
 
   n <- nrow(cont)
@@ -134,8 +133,8 @@ cloud_drive_upload_bulk <- function(content, quiet = FALSE, root = NULL) {
     cli::cli_progress_update()
     cloud_drive_put(media = cont$local_path[[i]], path = cont$dir_id[[i]])
     cli::cli_alert_success(
-      "Local file {.path {cont$local_path[[i]]}} uploaded to Google Drive \\
-      folder of {.field {project_name}} project to {.path {cont$path[[i]]}}."
+      "Local file {.path {cont$local_path[[i]]}} uploaded to \\
+      {.path {cont$path[[i]]}} on Google Drive."
     )
   }
   cli::cli_alert_success("Done!")
