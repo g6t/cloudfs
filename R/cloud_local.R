@@ -89,7 +89,7 @@ cloud_local_ls <- function(path = "", root = ".", recursive = FALSE,
   )
 }
 
-#' @title Prepare a ls-like dataframe for a list of objects
+#' @title Prepare an ls dataframe for a list of objects
 #' 
 #' @description `cloud_*_ls` functions for cloud locations (e.g.
 #'   [`cloud_s3_ls`]) return content dataframes which can then be passed to
