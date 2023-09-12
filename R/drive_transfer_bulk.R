@@ -22,12 +22,12 @@
 #'   
 cloud_drive_prep_bulk <- function(content, what = c("read", "download"),
                                safe_size = 5e7, quiet = FALSE) {
-  stopifnot(is.data.frame(content))
+  check_class(content, "data.frame")
   stopifnot(all(c("name", "type", "size_b", "id") %in% names(content)))
-  check_string(content$name)
-  check_string(content$type)
+  check_class(content$name, "character")
+  check_class(content$type, "character")
   check_numeric(content$size_b)
-  check_string(content$id)
+  check_class(content$id, "character")
   check_bool(quiet)
   what <- what[[1]]
   cont <- 
