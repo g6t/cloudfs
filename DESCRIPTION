@@ -1,5 +1,5 @@
 Package: cloudfs
-Title: What the Package Does (One Line, Title Case)
+Title: Streamlined interface to interact with cloud storage platforms
 Version: 0.0.0.9000
 Authors@R: c(
     person("Tom", "Vladeck", email = "tom@gradientmetrics.com ", role  = c("aut")),
@@ -9,7 +9,9 @@ Authors@R: c(
     person("Emmanuel", "Ugochukwu", email = "emmanuel@gradientmetrics.com", role = c("aut")),
     person("Gradient Metrics", role = c("cph"))
   )
-Description: What the package does (one paragraph).
+Description: This package offers a unified interface for simplifying cloud 
+    storage interactions, including uploading, downloading, reading, and writing 
+    files, with functions for both Google Drive and Amazon S3.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

@@ -4,9 +4,9 @@
 \name{cloudfs-package}
 \alias{cloudfs}
 \alias{cloudfs-package}
-\title{cloudfs: What the Package Does (One Line, Title Case)}
+\title{cloudfs: Streamlined interface to interact with cloud storage platforms}
 \description{
-What the package does (one paragraph).
+This package offers a unified interface for simplifying cloud storage interactions, including uploading, downloading, reading, and writing files, with functions for both Google Drive and Amazon S3.
 }
 \author{
 \strong{Maintainer}: Iaroslav Domin \email{iaroslav@gradientmetrics.com}
