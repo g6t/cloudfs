@@ -25,6 +25,7 @@ Imports:
     glue,
     httr
 Suggests: 
+    googlesheets4,
     haven,
     jsonlite,
     knitr,
