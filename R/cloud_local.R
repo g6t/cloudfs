@@ -121,10 +121,11 @@ cloud_local_ls <- function(path = "", root = ".", recursive = FALSE,
 #' 
 #' @export
 cloud_object_ls <- function(x, path, extension, prefix = "", suffix = "") {
-  stopifnot(is.list(x))
-  stopifnot(is.character(path) & length(path) == 1)
-  stopifnot(is.character(extension) & length(extension) == 1)
-  stopifnot(is.character(prefix) & length(suffix) == 1)
+  check_class(x, "list")
+  check_string(path)
+  check_string(extension)
+  check_string(prefix)
+  check_string(suffix)
   
   if (!grepl("^([A-Za-z]|[0-9]|-|_|\\.|/)+$", path)) {
     cli::cli_abort(c(
@@ -173,11 +174,11 @@ cloud_object_ls <- function(x, path, extension, prefix = "", suffix = "") {
 #'   to `TRUE`.
 #'   
 cloud_object_prep_bulk <- function(content, quiet = FALSE) {
-  stopifnot(is.data.frame(content))
+  check_class(content, "data.frame")
   stopifnot(all(c("object", "name", "type") %in% names(content)))
-  stopifnot(is.character(content$name))
-  stopifnot(is.character(content$type))
-  stopifnot(is.logical(quiet) & !is.na(quiet))
+  check_class(content$name, "character")
+  check_class(content$type, "character")
+  check_bool(quiet)
   cont <- 
     content %>% 
     filter(.data$type != "folder", !is.na(.data$type)) %>% 
