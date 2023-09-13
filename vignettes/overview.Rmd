@@ -115,6 +115,7 @@ cloud root. For S3 use `cloud_s3_attach()`, for Google Drive, use the
 `cloud_drive_attach()` function. Let's set up a Google Drive root:
 
 ```{r eval=FALSE}
+library(cloudfs)
 cloud_drive_attach()
 ```
 
@@ -221,7 +222,7 @@ directly to Google Drive, bypassing local file generation:
 cloud_drive_write(
   p, "plots/scatterplot.png",
   fun = \(x, file) 
-    ggsave(plot = x, filename = "plots/scatterplot.png")
+    ggsave(plot = x, filename = file)
 )
 ```
 
@@ -271,7 +272,7 @@ all_data <-
 ```
 
 To upload a collection of objects, such as ggplot visualizations, to Google
-Drive, first group them in a list. Then, utilize the `cloud_object_ls()`
+Drive, first group them in a named list. Then, utilize the `cloud_object_ls()`
 function to generate a dataframe akin to the output of `cloud_drive_ls()`.
 Finally, execute `cloud_drive_write_bulk()` to complete the upload.
 
