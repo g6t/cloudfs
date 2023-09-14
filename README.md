@@ -25,8 +25,17 @@ remotes::install_github("g6t/cloudfs")
    ```R
    cloud_s3_upload("plots/my_plot.png")
    ```
+   
+3. **Extension-aware functions**
 
-3. **Effortless cloud navigation**
+   The package automatically selects the right read or write function based on
+   the file extension, simplifying your interactions.
+   
+   ```R
+   cloud_s3_write(glmnet_model, "models/glmnet.rds")
+   ```
+
+4. **Effortless cloud navigation**
 
    Browse Google Drive folders using 
    ```R
@@ -38,7 +47,7 @@ remotes::install_github("g6t/cloudfs")
    cloud_s3_ls()
    ```
 
-4. **Bulk File Management**
+5. **Bulk File Management**
 
    Easily read all data files from an S3 folder in one go.
    ```R
