@@ -1,5 +1,5 @@
 ---
-title: "`cloudfs` package overview"
+title: "cloudfs package overview"
 date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
@@ -8,7 +8,7 @@ output:
     fig_height: 7
     toc_depth: 4
 vignette: >
-  %\VignetteIndexEntry{`cloudfs` package overview}
+  %\VignetteIndexEntry{cloudfs package overview}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
