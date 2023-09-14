@@ -12,9 +12,9 @@ remotes::install_github("g6t/cloudfs")
 
 ## Key Features
 
-1. **Concise Syntax**
+1. **Relative path simplicity**
 
-   Upload files to your project's dedicated Google Drive folder with ease.
+   Use paths relative to your project's main cloud folder.
    ```R
    cloud_drive_upload("plots/my_plot.png")
    ```
