@@ -17,6 +17,7 @@
 #' - `.sav`: [haven::write_sav]
 #' - `.xml`: [xml2::write_xml]
 #' 
+#' @keywords internal
 cloud_guess_write_fun <- function(file) {
   cloud_validate_file_path(file)
   ext <- tolower(tools::file_ext(file))
@@ -57,6 +58,7 @@ cloud_guess_write_fun <- function(file) {
 #' - `.xlsx`: [cloud_read_excel]
 #' - `.xml`: [xml2::read_xml]
 #' 
+#' @keywords internal
 cloud_guess_read_fun <- function(file) {
   cloud_validate_file_path(file)
   ext <- tolower(tools::file_ext(file))

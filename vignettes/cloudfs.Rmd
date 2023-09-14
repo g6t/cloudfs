@@ -8,7 +8,7 @@ output:
     fig_height: 7
     toc_depth: 4
 vignette: >
-  %\VignetteIndexEntry{Working With Cloud File Storage}
+  %\VignetteIndexEntry{`cloudfs` package overview}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 

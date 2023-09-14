@@ -17,3 +17,4 @@ file path.}
 Makes sure that file path passed to a cloud function is in the
 right format.
 }
+\keyword{internal}

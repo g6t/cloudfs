@@ -2,12 +2,11 @@ Package: cloudfs
 Title: Streamlined interface to interact with cloud storage platforms
 Version: 0.0.1
 Authors@R: c(
-    person("Tom", "Vladeck", email = "tom@gradientmetrics.com ", role  = c("aut")),
-    person("Stefan", "Musch", email = "stefan@gradientmetrics.com", role = c("aut")),
     person("Iaroslav", "Domin", email = "iaroslav@gradientmetrics.com", role = c("aut", "cre")),
+    person("Stefan", "Musch", email = "stefan@gradientmetrics.com", role = c("aut")),
     person("Michal", "Czyz", email = "michal@gradientmetrics.com", role = c("aut")),
     person("Emmanuel", "Ugochukwu", email = "emmanuel@gradientmetrics.com", role = c("aut")),
-    person("Gradient Metrics", role = c("cph"))
+    person("Gradient Metrics", role = c("cph", "fnd"))
   )
 Description: This package offers a unified interface for simplifying cloud 
     storage interactions, including uploading, downloading, reading, and writing 
@@ -40,3 +39,4 @@ Suggests:
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3
+URL: https://g6t.github.io/cloudfs/, https://github.com/g6t/cloudfs

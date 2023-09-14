@@ -19,6 +19,7 @@ cloud_get_roots <- function(project = ".") {
 #' @inheritParams validate_desc
 #' @param key Character. What field to search for in DESCRIPTION file.
 #' 
+#' @keywords internal
 proj_desc_get <- function(key, project = ".") {
   check_string(key)
   check_string(project)
@@ -37,7 +38,8 @@ proj_desc_get <- function(key, project = ".") {
 #'   letters, digits, '-', '_', '.', spaces and '/' symbols.
 #' @param error if `TRUE` (default), throws an error if `file` is not a valid 
 #'   file path.
-#'   
+#'
+#' @keywords internal
 cloud_validate_file_path <- function(file, error = TRUE) {
   check_string(file)
   res <- grepl("^([A-Za-z]|[0-9]|-|_|\\.| |/)+$", file)
@@ -149,6 +151,7 @@ validate_desc <- function(project = ".") {
 #' @param full_names (logical) If `TRUE`, folder path is appended to object
 #'   names to give a relative file path.
 #' 
+#' @keywords internal
 cloud_prep_ls <- function(data, path, recursive, full_names) {
   check_class(data, arg_class = "data.frame")
   required_cols <- c("short_name", "last_modified", "size_b")

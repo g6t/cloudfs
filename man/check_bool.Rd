@@ -46,3 +46,4 @@ check_bool(l1)
 check_bool(l2)
 }
 }
+\keyword{internal}

@@ -18,3 +18,4 @@ to \code{TRUE}.}
 of objects. This function is used mainly to inform the user about which
 files are going to be written and to ask for confirmation
 }
+\keyword{internal}

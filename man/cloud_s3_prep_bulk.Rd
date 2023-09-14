@@ -37,3 +37,4 @@ but \code{names(name)} will always contain full names. This function:
 for confirmation
 }
 }
+\keyword{internal}

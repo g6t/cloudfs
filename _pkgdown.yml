@@ -1,0 +1,58 @@
+url: https://g6t.github.io/cloudfs/
+template:
+  bootstrap: 5
+  
+authors:
+  Stefan Musch:
+    href: https://github.com/StefanMusch
+  Iaroslav Domin:
+    href: https://github.com/idmn
+  Michal Czyz:
+    href: https://github.com/mczyzj
+  Emmanuel Ugochukwu:
+    href: https://github.com/EmmanuelUgo
+  Gradient Metrics:
+    href: https://www.gradientmetrics.com/
+    html: "<img src='https://www.gradientmetrics.com/hubfs/branding/default/gradient_default_black.png' width=108>"
+
+articles:
+- title: Overview
+  navbar: ~
+  contents:
+  - cloudfs
+
+reference:
+- title: Attach a cloud root
+  contents:
+  - cloud_drive_attach
+  - cloud_s3_attach
+- title: Browse cloud contents
+  contents:
+  - ends_with("_ls")
+  - ends_with("_browse")
+  - -cloud_local_ls
+  - -cloud_object_ls
+- title: Upload and download
+  contents:
+  - ends_with("_upload")
+  - ends_with("_download")
+- title: Write and read
+  contents:
+  - ends_with("_write")
+  - ends_with("_read")
+- title: Bulk upload and download
+  contents:
+  - cloud_local_ls
+  - ends_with("_upload_bulk")
+  - ends_with("_download_bulk")
+- title: Bulk write and read
+  contents:
+  - cloud_object_ls
+  - ends_with("_write_bulk")
+  - ends_with("_read_bulk")
+  
+- title: Miscellaneous
+  contents:
+  - cloud_get_roots
+  - cloud_drive_spreadsheet_autofit
+  - cloud_read_excel

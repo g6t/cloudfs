@@ -8,12 +8,19 @@
 \description{
 This package offers a unified interface for simplifying cloud storage interactions, including uploading, downloading, reading, and writing files, with functions for both Google Drive and Amazon S3.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://g6t.github.io/cloudfs/}
+  \item \url{https://github.com/g6t/cloudfs}
+}
+
+}
 \author{
 \strong{Maintainer}: Iaroslav Domin \email{iaroslav@gradientmetrics.com}
 
 Authors:
 \itemize{
-  \item Tom Vladeck \email{tom@gradientmetrics.com }
   \item Stefan Musch \email{stefan@gradientmetrics.com}
   \item Michal Czyz \email{michal@gradientmetrics.com}
   \item Emmanuel Ugochukwu \email{emmanuel@gradientmetrics.com}
@@ -21,7 +28,7 @@ Authors:
 
 Other contributors:
 \itemize{
-  \item Gradient Metrics [copyright holder]
+  \item Gradient Metrics [copyright holder, funder]
 }
 
 }

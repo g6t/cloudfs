@@ -20,6 +20,7 @@
 #' @param quiet All caution messages may be turned off by setting this parameter
 #'   to `TRUE`.
 #'   
+#' @keywords internal
 cloud_drive_prep_bulk <- function(content, what = c("read", "download"),
                                safe_size = 5e7, quiet = FALSE) {
   check_class(content, "data.frame")

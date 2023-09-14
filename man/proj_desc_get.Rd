@@ -15,3 +15,4 @@ directory.}
 \description{
 Extract values from DESCRUPTION file
 }
+\keyword{internal}

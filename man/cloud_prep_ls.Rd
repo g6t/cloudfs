@@ -34,3 +34,4 @@ This function takes such a dataframe from this point and:
 \item Evaluates the \code{type} column.
 }
 }
+\keyword{internal}
