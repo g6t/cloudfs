@@ -37,14 +37,14 @@ remotes::install_github("g6t/cloudfs")
 
 4. **Effortless cloud navigation**
 
-   Browse Google Drive folders using 
+   Open folders in browser:
    ```R
    cloud_drive_browse("my_folder")
    ```
     
-   or list S3 contents with
+   or list contents in console:
    ```R
-   cloud_s3_ls()
+   cloud_s3_ls("data")
    ```
 
 5. **Bulk File Management**
