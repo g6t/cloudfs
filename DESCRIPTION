@@ -1,6 +1,6 @@
 Package: cloudfs
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Streamlined interface to interact with cloud storage platforms
+Version: 0.0.1
 Authors@R: c(
     person("Tom", "Vladeck", email = "tom@gradientmetrics.com ", role  = c("aut")),
     person("Stefan", "Musch", email = "stefan@gradientmetrics.com", role = c("aut")),
@@ -9,11 +9,13 @@ Authors@R: c(
     person("Emmanuel", "Ugochukwu", email = "emmanuel@gradientmetrics.com", role = c("aut")),
     person("Gradient Metrics", role = c("cph"))
   )
-Description: What the package does (one paragraph).
-License: LGPL (>= 3)
+Description: This package offers a unified interface for simplifying cloud 
+    storage interactions, including uploading, downloading, reading, and writing 
+    files, with functions for both Google Drive and Amazon S3.
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Imports: 
     aws.s3,
     googledrive,
@@ -21,4 +23,20 @@ Imports:
     dplyr,
     cli,
     utils,
-    rlang
+    rlang,
+    glue,
+    httr
+Suggests: 
+    googlesheets4,
+    haven,
+    jsonlite,
+    knitr,
+    readr,
+    readxl,
+    rmarkdown,
+    testthat (>= 3.0.0),
+    writexl,
+    xml2
+VignetteBuilder: 
+    knitr
+Config/testthat/edition: 3

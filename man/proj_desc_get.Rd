@@ -8,6 +8,9 @@ proj_desc_get(key, project = ".")
 }
 \arguments{
 \item{key}{Character. What field to search for in DESCRIPTION file.}
+
+\item{project}{Character. Path to a project. By default it is current working
+directory.}
 }
 \description{
 Extract values from DESCRUPTION file

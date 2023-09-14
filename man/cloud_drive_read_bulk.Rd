@@ -4,13 +4,7 @@
 \alias{cloud_drive_read_bulk}
 \title{Read Google Drive contents in bulk}
 \usage{
-cloud_drive_read_bulk(
-  content,
-  fun = NULL,
-  ...,
-  quiet = FALSE,
-  project = getwd()
-)
+cloud_drive_read_bulk(content, fun = NULL, ..., quiet = FALSE)
 }
 \arguments{
 \item{content}{(data.frame) Output of \code{cloud_drive_ls()}}

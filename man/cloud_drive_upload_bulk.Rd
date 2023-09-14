@@ -4,13 +4,18 @@
 \alias{cloud_drive_upload_bulk}
 \title{Upload files to Google Drive in bulk}
 \usage{
-cloud_drive_upload_bulk(content, quiet = FALSE, project = getwd())
+cloud_drive_upload_bulk(content, quiet = FALSE, root = NULL)
 }
 \arguments{
 \item{content}{(data.frame) Output of \code{cloud_s3_ls()}}
 
 \item{quiet}{All caution messages may be turned off by setting this parameter
 to \code{TRUE}.}
+
+\item{root}{GoogleDrive id or URL of the project root -- point relative to
+which to consider all relative paths. When left as \code{NULL}, the root is
+automatically derived from the \code{cloudfs.drive} field of the project's
+DESCRIPTION file.}
 }
 \description{
 \link{cloud_local_ls} function returns a dataframe of contents of

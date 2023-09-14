@@ -6,6 +6,10 @@
 \usage{
 cloud_s3_attach(project = ".")
 }
+\arguments{
+\item{project}{Character. Path to a project. By default it is current working
+directory.}
+}
 \description{
 The \code{cloud_s3_attach()} function is used to add a field to the
 DESCRIPTION file of a project, which uniquely identifies the location of

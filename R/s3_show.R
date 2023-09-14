@@ -37,8 +37,8 @@ cloud_s3_browse_path <- function(path = "") {
   
   if (bucket_prefix$bucket == "") utils::browseURL(url)
   
-  url <- paste0(url_head, bucket_prefix$bucket)
-  if (length(prefix) != 0) 
+  url <- paste0(url, bucket_prefix$bucket)
+  if (bucket_prefix$prefix != "") 
     url <- paste0(url, "?prefix=", bucket_prefix$prefix, "/")
   utils::browseURL(url)
 }

@@ -22,13 +22,13 @@
 #'   
 cloud_drive_prep_bulk <- function(content, what = c("read", "download"),
                                safe_size = 5e7, quiet = FALSE) {
-  stopifnot(is.data.frame(content))
+  check_class(content, "data.frame")
   stopifnot(all(c("name", "type", "size_b", "id") %in% names(content)))
-  stopifnot(is.character(content$name))
-  stopifnot(is.character(content$type))
-  stopifnot(is.numeric(content$size_b))
-  stopifnot(is.character(content$id))
-  stopifnot(is.logical(quiet) & !is.na(quiet))
+  check_class(content$name, "character")
+  check_class(content$type, "character")
+  check_numeric(content$size_b)
+  check_class(content$id, "character")
+  check_bool(quiet)
   what <- what[[1]]
   cont <- 
     content %>% 
@@ -77,20 +77,21 @@ cloud_drive_prep_bulk <- function(content, what = c("read", "download"),
 #'   finds their ids and merges to the content dataframe accordingly.
 #' 
 #' @noRd   
-cloud_drive_content_find_dirs <- function(cont, project = project) {
+cloud_drive_content_find_dirs <- function(cont, root = NULL) {
   if (nrow(cont) == 0) return(cont)
   cont$dir <- dirname(cont$path)
   dir_df <- tibble(dir = unique(cont$dir))
   dir_df$dir_id <- googledrive::as_id(NA_character_)
   
-  root_id <- cloud_drive_get_root(project = project)
+  check_string(root, alt_null = TRUE)
+  if (is.null(root)) root <- cloud_drive_get_root()
+  
   for (i in seq_along(dir_df$dir)) {
     dir_df$dir_id[[i]] <- 
-      cloud_drive_find_path(root_id, dir_df$dir[[i]], create = TRUE)
+      cloud_drive_find_path(root, dir_df$dir[[i]], create = TRUE)
   }
   
-  cont %>% 
-    left_join(dir_df, by = "dir")
+  left_join(cont, dir_df, by = "dir")
 }
 
 
@@ -115,15 +116,13 @@ cloud_drive_content_find_dirs <- function(cont, project = project) {
 #' }
 #'   
 #' @export
-cloud_drive_upload_bulk <- function(content, quiet = FALSE, project = getwd()) {
-  cloud_not_wd_warning(project)
-  project_name <- proj_desc_get("Name", project)
+cloud_drive_upload_bulk <- function(content, quiet = FALSE, root = NULL) {
   # Yes, S3 function. Google Drive prep function differs from the S3 only by
   # that it additionally checks the id column. When we list local files we don't
   # know GD ids initially.
   cont <- cloud_s3_prep_bulk(content, what = "upload", quiet = quiet)
-  cont$local_path <- clean_file_path(project, cont$path)
-  cont <- cloud_drive_content_find_dirs(cont, project = project)
+  cont$local_path <- clean_file_path(cont$path)
+  cont <- cloud_drive_content_find_dirs(cont, root = root)
 
   n <- nrow(cont)
   cli::cli_progress_bar(
@@ -134,8 +133,8 @@ cloud_drive_upload_bulk <- function(content, quiet = FALSE, project = getwd()) {
     cli::cli_progress_update()
     cloud_drive_put(media = cont$local_path[[i]], path = cont$dir_id[[i]])
     cli::cli_alert_success(
-      "Local file {.path {cont$local_path[[i]]}} uploaded to Google Drive \\
-      folder of {.field {project_name}} project to {.path {cont$path[[i]]}}."
+      "Local file {.path {cont$local_path[[i]]}} uploaded to \\
+      {.path {cont$path[[i]]}} on Google Drive."
     )
   }
   cli::cli_alert_success("Done!")
@@ -163,11 +162,9 @@ cloud_drive_upload_bulk <- function(content, quiet = FALSE, project = getwd()) {
 #' }
 #'   
 #' @export
-cloud_drive_download_bulk <- function(content, quiet = FALSE, project = getwd()) {
-  cloud_not_wd_warning(project)
-  project_name <- proj_desc_get("Name", project)
+cloud_drive_download_bulk <- function(content, quiet = FALSE) {
   cont <- cloud_drive_prep_bulk(content, what = "download", quiet = quiet)
-  cont$local_path <- clean_file_path(project, cont$path)
+  cont$local_path <- clean_file_path(cont$path)
   n <- nrow(cont)
   cli::cli_progress_bar(
     format = "Downloading {cli::pb_bar} [{cli::pb_current}/{cli::pb_total}]",
@@ -185,8 +182,8 @@ cloud_drive_download_bulk <- function(content, quiet = FALSE, project = getwd())
       overwrite = TRUE
     )
     cli::cli_alert_success(
-      "File {.path {cont$path[[i]]}} downloaded from Google Drive folder of \\
-      {.field {project_name}} project to {.path {cont$local_path[[i]]}}."
+      "File {.path {cont$path[[i]]}} downloaded from Google Drive to \\
+      {.path {cont$local_path[[i]]}}."
     )
   }
   cli::cli_alert_success("Done!")
@@ -220,10 +217,9 @@ cloud_drive_download_bulk <- function(content, quiet = FALSE, project = getwd())
 #'   
 #' @export
 cloud_drive_write_bulk <- function(content, fun = NULL, ..., local = FALSE,
-                                   quiet = FALSE, project = getwd()) {
-  cloud_not_wd_warning(project)
+                                   quiet = FALSE, root = NULL) {
   cont <- cloud_object_prep_bulk(content, quiet = quiet)
-  cont <- cloud_drive_content_find_dirs(cont, project = project)
+  cont <- cloud_drive_content_find_dirs(cont, root = root)
   
   n <- nrow(cont)
   cli::cli_progress_bar(
@@ -240,7 +236,7 @@ cloud_drive_write_bulk <- function(content, fun = NULL, ..., local = FALSE,
     }
     
     if (local) {
-      local_file <- file.path(project, cont$path[[i]])
+      local_file <- cont$path[[i]]
     } else {
       file_name <- basename(cont$path[[i]])
       local_file <- file.path(tempdir(), file_name)
@@ -281,10 +277,7 @@ cloud_drive_write_bulk <- function(content, fun = NULL, ..., local = FALSE,
 #' }
 #'   
 #' @export
-cloud_drive_read_bulk <- function(content, fun = NULL, ..., quiet = FALSE,
-                               project = getwd()) {
-  cloud_not_wd_warning(project)
-  project_name <- proj_desc_get("Name", project)
+cloud_drive_read_bulk <- function(content, fun = NULL, ..., quiet = FALSE) {
   cont <- cloud_s3_prep_bulk(content, what = "read", quiet = quiet)
   n <- nrow(cont)
   res <- list()

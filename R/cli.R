@@ -143,6 +143,14 @@ check_string <- function(..., alt_null = FALSE) {
   check_scalar(..., arg_class = "character", alt_null = alt_null)
 }
 
+
+check_numeric <- function(x) {
+  if (!is.numeric(x)) {
+    x_name <- deparse(substitute(x))
+    cli::cli_abort("{.arg {x_name}} must be numeric.")
+  }
+}
+
 #' @title Check Argument's Class
 #' 
 #' @description Check if argument is of proper class.
@@ -201,9 +209,7 @@ check_class <- function(x, arg_class, alt_null = FALSE, add_msg = NULL) {
   check_null <- check_null_cond(x = x, alt_null = alt_null)
   
   if (!(inherits(x, arg_class) | check_null)) {
-    # parsing is time consuming so should run only if needed
     x_name <- deparse(substitute(x))
-    # wrong_class stores class of wrong argument, to be reused in messages
     wrong_class <- class(x)
     
     warn_msg <- ifelse(

@@ -2,7 +2,7 @@
 % Please edit documentation in R/cloud_local.R
 \name{cloud_object_ls}
 \alias{cloud_object_ls}
-\title{Prepare a ls-like dataframe for a list of objects}
+\title{Prepare an ls dataframe for a list of objects}
 \usage{
 cloud_object_ls(x, path, extension, prefix = "", suffix = "")
 }

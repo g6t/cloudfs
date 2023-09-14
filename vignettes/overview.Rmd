@@ -1,0 +1,307 @@
+---
+title: "`cloudfs` package overview"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    fig_width: 7
+    fig_height: 7
+    toc_depth: 4
+vignette: >
+  %\VignetteIndexEntry{Working With Cloud File Storage}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: 80
+---
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+library(knitr)
+opts_chunk$set(
+	comment = "",
+	#fig.width = 12, 
+	message = FALSE,
+	warning = FALSE,
+	tidy.opts = list(
+		keep.blank.line = TRUE,
+		width.cutoff = 150
+		),
+	options(width = 150),
+	eval = FALSE,
+	error = TRUE)
+```
+
+## Introduction
+
+### Project assets
+
+In terms of digital assets a data analysis project usually can be divided into
+three parts:
+
+-   **input data**: primarily tabular data (csv, sav, ...), but not limited to 
+    it; can be e.g. raw text
+
+-   **code sources**: R or Rmd scripts where the data processing happens
+
+-   **outputs**: spreadsheets, plots, presentations derived from input data
+
+It's common to segregate the storage of code sources, input data, and outputs.
+Code sources are typically housed on platforms like GitHub, optimized for
+version control and collaboration.
+
+Storing large input data on such platforms can be inefficient. Systems like git
+can become overwhelmed when tracking changes to sizable data files. Hence, cloud
+storage solutions like Amazon S3 are commonly chosen for their ability to handle
+vast datasets.
+
+Outputs, being the results destined for sharing and review, are usually stored
+separately from the code. Platforms like Google Drive are preferred for this
+purpose. Their user-friendly interfaces and easy sharing options ensure
+stakeholders can readily access and review the results.
+
+### Cloud roots
+
+In this context, we won't differentiate between assets being inputs or outputs.
+We'll simply refer to both as **artifacts**, setting them apart from code.
+
+The package includes functions for working with both **S3** and **Google
+Drive**. In our operations, we use the term **cloud root** to denote the primary
+folder on either platform, which holds the project's artifacts. Typically, the
+root folder contains subfolders like "plots", "data", and "results", though the
+exact structure isn't crucial. A project can have a root on S3, on Google Drive,
+or on both platforms simultaneously.
+
+### Motivation
+
+Consider a typical task: uploading a file to Amazon S3 using the `aws.s3`
+package as an illustrative example. Imagine we're attempting to upload an R
+model saved as an RDS file located at "models/glm.rds". This file is destined
+for the "project-1" directory within the "project-data" bucket on S3,
+representing the dedicated S3 root for this project:
+
+```{r eval=FALSE}
+aws.s3::put_object(
+  bucket = "project-data",
+  object = "project-1/models/glm.rds",
+  file = "models/glm.rds"
+)
+```
+
+Note the following:
+
+1. **Location Redundancy**: Given that our project's primary interactions are
+with the "project-1" folder in the "project-data" bucket, we're consistently
+faced with specifying this static location.
+
+2. **Path Duplication**: Both our local system and S3 use matching paths:
+"models/glm.rds". This uniformity is typically more practical than making
+exceptions.
+
+Given the repetitive nature of this code, there's room for a more streamlined
+approach. This is where the `cloudfs` package comes in. Once set up, uploading
+becomes much neater:
+
+```{r eval=FALSE}
+cloud_s3_upload("models/glm.rds")
+```
+
+## Package walkthrough
+
+### Setting up a root
+
+To begin working with the `cloudfs` package in your R project, first set up a
+cloud root. For S3 use `cloud_s3_attach()`, for Google Drive, use the
+`cloud_drive_attach()` function. Let's set up a Google Drive root:
+
+```{r eval=FALSE}
+library(cloudfs)
+cloud_drive_attach()
+```
+
+Upon execution, you'll be prompted to input the URL of the intended Google Drive
+folder to serve as the project's root. This location is then registered in the
+project's DESCRIPTION file. To conveniently access this directory in the future,
+execute `cloud_drive_browse()`.
+
+### Types of interactions
+
+Now let's talk about actual interactions with the cloud storage. Data transfer
+actions can be categorized by two parameters:
+
+1.  **direction** -- whether you're uploading data to the cloud or retrieving
+    data from it.
+
+2.  **file or R object** -- using `cloudfs`, you can not only upload and 
+    download files from cloud storages but also directly read from and write
+    objects to the cloud.
+
+`cloudfs` functions for moving files use "upload" or "download" in their names.
+Functions for direct reading or writing use "read" or "write". S3-specific
+functions contain "s3", while Google Drive ones use "drive".
+
++-------------------------+-------------------------+-------------------------+
+|                         | to cloud                | from cloud              |
++=========================+=========================+=========================+
+| file                    | `cloud_s3_upload`<br>   | `cloud_s3_download`<br> |
+|                         | `cloud_drive_upload`    | `cloud_drive_download`  |
++-------------------------+-------------------------+-------------------------+
+| R object                | `cloud_s3_write`<br>    | `cloud_s3_read`<br>     |
+|                         | `cloud_drive_write`     | `cloud_drive_read`      |
++-------------------------+-------------------------+-------------------------+
+
+
+### Practical Examples
+
+Here, we'll demonstrate the hands-on application of `cloudfs` functions for data
+transfer.
+
+Upon successfully completing the `cloud_drive_attach()` process, your project
+will be associated with a designated Google Drive root. As an initial step, we
+will create and save a ggplot scatterplot as a local PNG file for the purpose
+of demonstration.
+
+```{r eval=FALSE}
+library(ggplot2)
+p <- ggplot(mtcars, aes(mpg, disp)) + geom_point()
+if (!dir.exists("plots")) dir.create("plots")
+ggsave(plot = p, filename = "plots/scatterplot.png")
+```
+
+To upload this file to Google Drive, execute:
+
+```{r eval=FALSE}
+cloud_drive_upload("plots/scatterplot.png")
+```
+
+By invoking the `cloud_drive_ls()` function, you can view the automatically
+created "plots" folder in the console. To inspect the contents of this folder,
+which currently contains a single PNG file, use `cloud_drive_ls("plots")`. To
+access the folder on Google Drive, execute `cloud_drive_browse("plots")`. To
+directly view the scatterplot, use
+`cloud_drive_browse("plots/scatterplot.png")`.
+
+With `cloudfs`, you can directly write content to cloud storage, bypassing the
+manual creation of local files. The file generation process remains transparent
+to the user.
+
+First, let's compute a summary of the `mtcars` dataframe:
+
+```{r}
+library(dplyr, quietly = TRUE)
+summary_df <- 
+  mtcars %>% 
+  group_by(cyl) %>% 
+  summarise(across(disp, mean))
+```
+
+To export this summary to a spreadsheet, simply specify the desired file path
+with the appropriate extension. The method for writing is then inferred from
+this extension:
+
+```{r eval=FALSE}
+cloud_drive_write(summary_df, "results/mtcars_summary.xlsx")
+```
+
+To view the resulting spreadsheet in Google Drive, execute
+`cloud_drive_browse("results/mtcars_summary.xlsx")`.
+
+Just as we wrote the summary to an xlsx file, we can also read from it using
+`cloud_drive_read("results/mtcars_summary.xlsx")`.
+
+It's noteworthy that the writing and reading methods are determined
+automatically based on the file extension. For instance, ".xlsx" utilizes
+`writexl::write_xlsx()` for reading, whereas ".csv" employs `readr::write_csv`.
+A comprehensive list of default methods is available in the documentation of 
+`cloud_drive_write()` and `cloud_drive_read()` functions.
+
+Additionally, `cloudfs` offers flexibility by allowing custom writing and
+reading methods. For instance, our earlier scatterplot could have been written
+directly to Google Drive, bypassing local file generation:
+
+```{r eval=FALSE}
+cloud_drive_write(
+  p, "plots/scatterplot.png",
+  fun = \(x, file) 
+    ggsave(plot = x, filename = file)
+)
+```
+
+### Operations on multiple files at once
+
+Suppose multiple CSV files have been uploaded to the "data" folder and we intend to download them locally. Instead of invoking `cloud_s3_download()` for each file, a more efficient approach is available.
+
+But first, let's generate a few sample files for demonstration purposes.
+
+```{r eval=FALSE}
+cloud_drive_write(datasets::airquality, "data/airquality.csv")
+cloud_drive_write(datasets::trees, "data/trees.csv")
+cloud_drive_write(datasets::beaver1, "data/beaver1.csv")
+```
+
+Listing the contents of the "data" folder gives us the following:
+
+```{r eval=FALSE}
+cloud_drive_ls("data")
+#> # A tibble: 3 × 5
+#>   name           type  last_modified       size_b id      
+#>   <chr>          <chr> <dttm>               <dbl> <drv_id>
+#> 1 airquality.csv csv   2023-09-12 08:04:46   2890 1CXTi1A…
+#> 2 beaver1.csv    csv   2023-09-12 08:04:50   1901 1Fg4s1O…
+#> 3 trees.csv      csv   2023-09-12 08:04:48    400 1vDYBVt…
+```
+
+`cloudfs` offers `bulk` functions that simplify the management of multiple files
+simultaneously. For instance, to download all files listed above use
+`cloud_drive_download_bulk()`:
+
+```{r eval=FALSE}
+cloud_drive_ls("data") %>% 
+  cloud_drive_download_bulk()
+```
+
+This action automatically downloads the datasets to a local "data" directory,
+replicating the same structure as on Google Drive.
+
+To read several CSV files from the "data" folder on Google Drive into a
+consolidated list, execute:
+
+```{r eval=FALSE}
+all_data <- 
+  cloud_drive_ls("data") %>% 
+  cloud_drive_read_bulk()
+```
+
+To upload a collection of objects, such as ggplot visualizations, to Google
+Drive, first group them in a named list. Then, utilize the `cloud_object_ls()`
+function to generate a dataframe akin to the output of `cloud_drive_ls()`.
+Finally, execute `cloud_drive_write_bulk()` to complete the upload.
+
+```{r eval=FALSE}
+library(ggplot2)
+p1 <- ggplot(mtcars, aes(mpg, disp)) + geom_point()
+p2 <- ggplot(mtcars, aes(cyl)) + geom_bar()
+
+plots_list <- 
+  list("plot_1" = p1, "plot_2" = p2) %>% 
+  cloud_object_ls(path = "plots", extension = "png", suffix = "_newsletter")
+
+plots_list %>% 
+  cloud_drive_write_bulk(fun = \(x, file) ggsave(plot = x, filename = file))
+```
+
+For bulk uploads of local files to Google Drive, utilize the `cloud_local_ls()`
+function. For instance, to upload all PNG files from the local "plots" directory
+to Google Drive:
+
+```{r eval=FALSE}
+cloud_local_ls("plots") %>% 
+  filter(type == "png") %>% 
+  cloud_drive_upload_bulk()
+```
+
+### S3 functions
+
+For Amazon S3 interactions, we offer a parallel set of functions similar to
+those designed for Google Drive. These dedicated S3 functions are easily
+identifiable, beginning with the prefix `cloud_s3_`.

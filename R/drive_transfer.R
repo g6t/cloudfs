@@ -4,7 +4,7 @@
 #'   location on project's Google Drive folder
 #' 
 #' @inheritParams cloud_validate_file_path
-#' @inheritParams cloud_not_wd_warning
+#' @inheritParams cloud_drive_ls
 #'  
 #' @inherit cloud_drive_find_path details
 #'   
@@ -15,25 +15,23 @@
 #' }
 #' 
 #' @export
-cloud_drive_upload <- function(file, project = getwd()) {
+cloud_drive_upload <- function(file, root = NULL) {
   cloud_validate_file_path(file)
-  cloud_not_wd_warning(project)
   
-  project_name <- proj_desc_get("Name", project)
-  file_path <- normalizePath(file.path(project, file), mustWork = FALSE)
-  if (!file.exists(file_path)) {
-    cli::cli_abort("Can't find {.path {file}} under {.field {project}}")
+  if (!file.exists(file)) {
+    cli::cli_abort("File {.path {file}} does not exist.")
   }
   
-  root_id <- cloud_drive_get_root(project = project)
+  check_string(root, alt_null = TRUE)
+  if (is.null(root)) root <- cloud_drive_get_root()
+  
   file_dir <- dirname(file)
   if (file_dir == ".") file_dir <- ""
-  file_dir_id <- cloud_drive_find_path(root_id, file_dir, create = TRUE)
+  file_dir_id <- cloud_drive_find_path(root, file_dir, create = TRUE)
   
-  cloud_drive_put(media = file_path, path = file_dir_id)
+  cloud_drive_put(media = file, path = file_dir_id)
   cli::cli_alert_success(
-    "File {.path {file}} uploaded to Google Drive folder of \\
-    {.field {project_name}} project."
+    "File {.path {file}} uploaded to Google Drive."
   )
 }
 
@@ -43,7 +41,7 @@ cloud_drive_upload <- function(file, project = getwd()) {
 #'   project folder and saves it preserving folder structure.
 #' 
 #' @inheritParams cloud_validate_file_path
-#' @inheritParams cloud_not_wd_warning
+#' @inheritParams cloud_drive_ls
 #' 
 #' @inherit cloud_drive_find_path details
 #' 
@@ -55,24 +53,23 @@ cloud_drive_upload <- function(file, project = getwd()) {
 #' }
 #' 
 #' @export
-cloud_drive_download <- function(file, project = getwd()) {
+cloud_drive_download <- function(file, root = NULL) {
   cloud_validate_file_path(file)
-  cloud_not_wd_warning(project)
-  project_name <- proj_desc_get("Name", project)
-  root_id <- cloud_drive_get_root(project = project)
-  file_path <- normalizePath(file.path(project, file), mustWork = FALSE)
-  file_dir <- dirname(file_path)
+  
+  check_string(root, alt_null = TRUE)
+  if (is.null(root)) root <- cloud_drive_get_root()
+  
+  file_dir <- dirname(file)
   if (!dir.exists(file_dir)) dir.create(file_dir, recursive = TRUE)
-  file_id <- cloud_drive_find_path(root_id, file)
+  file_id <- cloud_drive_find_path(root, file)
   
   cloud_drive_download_by_id(
     file = file_id,
-    path = file_path,
+    path = file,
     overwrite = TRUE
   )
   cli::cli_alert_success(
-    "File {.path {file}} downloaded from Google Drive folder of \\
-    {.field {project_name}} project to {.path {file_path}}."
+    "File {.path {file}} downloaded from Google Drive."
   )
 }
 
@@ -85,7 +82,7 @@ cloud_drive_download <- function(file, project = getwd()) {
 #'   guess a suitable writing function and the output file name where possible.
 #'   
 #' @inheritParams cloud_validate_file_path
-#' @inheritParams cloud_not_wd_warning
+#' @inheritParams cloud_drive_ls
 #' 
 #' @param x An R object (e.g. data frame) to write to Google Drive.
 #' @param fun A function to write a file to cloud location to which x and a file
@@ -110,20 +107,23 @@ cloud_drive_download <- function(file, project = getwd()) {
 #' 
 #' @export
 cloud_drive_write <- function(x, file, fun = NULL, ..., local = FALSE,
-                           project = getwd()) {
+                           root = NULL) {
   cloud_validate_file_path(file)
-  stopifnot(is.logical(local))
-  project_name <- proj_desc_get("Name", project)
+  check_bool(local)
+  
   if (is.null(fun)) {
     fun <- cloud_guess_write_fun(file)
   }
-  root_id <- cloud_drive_get_root(project = project)
+  
+  check_string(root, alt_null = TRUE)
+  if (is.null(root)) root <- cloud_drive_get_root()
+  
   file_dir <- dirname(file)
   if (file_dir == ".") file_dir <- ""
-  file_dir_id <- cloud_drive_find_path(root_id, file_dir, create = TRUE)
+  file_dir_id <- cloud_drive_find_path(root, file_dir, create = TRUE)
   
   if (local) {
-    local_file <- file.path(project, file)
+    local_file <- file
   } else {
     file_name <- basename(file)
     local_file <- file.path(tempdir(), file_name)
@@ -137,8 +137,7 @@ cloud_drive_write <- function(x, file, fun = NULL, ..., local = FALSE,
   
   if (!local) {unlink(local_file)}
   cli::cli_alert_success(
-    "Written to {.path {file}} on Google Drive folder of \\
-    {.field {project_name}} project."
+    "Written to {.path {file}} on Google Drive."
   )
 }
 
@@ -148,8 +147,8 @@ cloud_drive_write <- function(x, file, fun = NULL, ..., local = FALSE,
 #'   guess an appropriate reading function based on the `file` name, but you can
 #'   also provide a function by yourself if it's needed.
 #'   
-#' @inheritParams cloud_not_wd_warning
 #' @inheritParams cloud_validate_file_path
+#' @inheritParams cloud_drive_ls
 #' 
 #' @param fun Reading function. By default is `NULL` which means that it will
 #'   be attempted to guess an appropriate reading function from file extension.
@@ -165,15 +164,17 @@ cloud_drive_write <- function(x, file, fun = NULL, ..., local = FALSE,
 #' }
 #' 
 #' @export
-cloud_drive_read <- function(file, fun = NULL, ..., project = getwd()) {
+cloud_drive_read <- function(file, fun = NULL, ..., root = NULL) {
   cloud_validate_file_path(file)
-  project_name <- proj_desc_get("Name", project)
   if (is.null(fun)) {
     fun <- cloud_guess_read_fun(file)
   }
-  root_id <- cloud_drive_get_root(project = project)
+  
+  check_string(root, alt_null = TRUE)
+  if (is.null(root)) root <- cloud_drive_get_root()
+  
   file <- clean_up_file_path(file)
-  file_id <- cloud_drive_find_path(root_id, file)
+  file_id <- cloud_drive_find_path(root, file)
   
   file_name <- basename(file)
   local_file <- file.path(tempdir(), file_name)

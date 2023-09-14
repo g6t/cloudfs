@@ -93,8 +93,6 @@ cloud_drive_guess_type <- function(file) {
 #'   - uses appropriate `type` where possible (via `cloud_drive_guess_type()`)
 #'   - `name` is automatically derived from local file path (`media`)
 #'   - makes sure that original file extension is kept in place.
-#'   - does some post-processing where appropriate, like resizing spreadsheet
-#'   columns
 #' 
 #' @noRd
 cloud_drive_put <- function(media, path) {
@@ -108,30 +106,38 @@ cloud_drive_put <- function(media, path) {
   )
   googledrive::local_drive_quiet()
   googledrive::drive_rename(id, name)
-  cloud_drive_postproc(id, type)
 }
 
-#' @description This determines which GD post-processing function to use based on
-#'   `type`.
+#' @title Automatically resize all columns in a google spreadsheet
+#' @description Finds the spreadsheet by path relative to a project root.
+#'   Applies [googlesheets4::range_autofit()] to each sheet.
 #' 
-#' @noRd
-cloud_drive_postproc <- function(id, type) {
-  if (is.null(type)) return(id)
-  fun <- switch (type,
-    "spreadsheet" = cloud_drive_postproc_spreadsheet,
-    identity
-  )
-  fun(id)
-}
-
-#' @describeIn Google Drive spreadsheet postprocessing. This is what happens
-#'   after an excel file was uploaded to GD. Namely, all columns are
-#'   automatically resised to fit the data.
+#' @inheritParams cloud_validate_file_path
+#' @inheritParams cloud_drive_ls
 #' 
-#' @noRd
-cloud_drive_postproc_spreadsheet <- function(id) {
-  sheet_names <- googlesheets4::sheet_names(id)
+#' @examples 
+#' \dontrun{
+#' cloud_drive_write(mtcars, "results/mtcars.xlsx")
+#' cloud_drive_spreadsheet_autofit("results/mtcars.xlsx")
+#' }
+#' 
+#' @export 
+cloud_drive_spreadsheet_autofit <- function(file, root = NULL) {
+  cloud_validate_file_path(file)
+  check_string(root, alt_null = TRUE)
+  
+  if (is.null(root)) root <- cloud_drive_get_root()
+  file <- clean_up_file_path(file)
+  file_id <- cloud_drive_find_path(root, file)
+  
+  file_dribble <- googledrive::as_dribble(file_id)
+  file_mime_type <- file_dribble$drive_resource[[1]]$mimeType
+  if (file_mime_type != googledrive::drive_mime_type("spreadsheet")) {
+    cli::cli_abort("{.path {file}} is not a spreadsheet.")
+  }
+  
+  sheet_names <- googlesheets4::sheet_names(file_id)
   for (sheet in sheet_names) {
-    googlesheets4::range_autofit(id, sheet = sheet)
+    googlesheets4::range_autofit(file_id, sheet = sheet)
   }
 }

@@ -7,9 +7,9 @@
 cloud_drive_find_path(root, path = "", create = FALSE)
 }
 \arguments{
-\item{root}{ID of the folder to start search at}
+\item{root}{ID of the folder to start search at.}
 
-\item{path}{Relative location with respect to the root folder}
+\item{path}{Relative location with respect to the root folder.}
 
 \item{create}{Create folders describing path if they do not exist? Default is
 \code{FALSE} so by default the function throws an error if path was not found.
