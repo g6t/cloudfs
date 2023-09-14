@@ -163,7 +163,8 @@ of demonstration.
 
 ```{r eval=FALSE}
 library(ggplot2)
-p <- ggplot(mtcars, aes(mpg, disp)) + geom_point() 
+p <- ggplot(mtcars, aes(mpg, disp)) + geom_point()
+if (!dir.exists("plots")) dir.create("plots")
 ggsave(plot = p, filename = "plots/scatterplot.png")
 ```
 
