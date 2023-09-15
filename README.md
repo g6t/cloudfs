@@ -16,14 +16,14 @@ remotes::install_github("g6t/cloudfs")
 
    Use paths relative to your project's main cloud folder.
    ```R
-   cloud_drive_upload("plots/my_plot.png")
+   cloud_drive_download("raw_data/transactions.xlsx")
    ```
 
 2. **Unified Interface for Google Drive and S3**
 
-   Uploading to S3? The process is just as straightforward.
+   Downloading from S3? The process is just as straightforward.
    ```R
-   cloud_s3_upload("plots/my_plot.png")
+   cloud_s3_download("raw_data/transactions.xlsx")
    ```
    
 3. **Extension-aware functions**
@@ -39,7 +39,7 @@ remotes::install_github("g6t/cloudfs")
 
    Open folders in browser:
    ```R
-   cloud_drive_browse("my_folder")
+   cloud_drive_browse("plots")
    ```
     
    or list contents in console:
