@@ -1,4 +1,4 @@
-# cloudfs <a href="https://g6t.github.io/cloudfs/"><img src="man/figures/logo.png" align="right" height="137" alt="cloudfs website" /></a>
+# cloudfs <a href="https://g6t.github.io/cloudfs/"><img src="man/figures/logo.svg" align="right" height="139" alt="cloudfs website" /></a>
 
 `cloudfs` is an R package that offers a unified interface for simplifying cloud
 storage interactions, including uploading, downloading, reading, and writing
