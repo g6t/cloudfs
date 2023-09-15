@@ -37,19 +37,26 @@ remotes::install_github("g6t/cloudfs")
 
 4. **Effortless cloud navigation**
 
-   Open folders in browser:
+   Open folders in browser
    ```R
    cloud_drive_browse("plots")
    ```
     
-   or list contents in console:
+   or list contents in console.
    ```R
    cloud_s3_ls("data")
    ```
 
-5. **Bulk File Management**
+5. **Bulk file management**
 
-   Easily read all data files from an S3 folder in one go.
+   Easily retrieve all data from a folder in one go
    ```R
-   cloud_s3_ls("data") %>% cloud_s3_read_bulk()
+   all_data <- 
+     cloud_s3_ls("data") %>%
+     cloud_s3_read_bulk()
+   ```
+    
+   or push multiple files to the cloud at once.
+   ```R
+   cloud_local_ls("plots") %>% cloud_drive_upload_bulk()
    ```
