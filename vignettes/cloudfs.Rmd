@@ -36,11 +36,11 @@ opts_chunk$set(
 
 ### Project assets
 
-In terms of digital assets a data analysis project usually can be divided into
+In terms of digital assets a data analysis project can usually be divided into
 three parts:
 
 -   **input data**: primarily tabular data (csv, sav, ...), but not limited to 
-    it; can be e.g. raw text
+    it; can be e.g., raw text
 
 -   **code sources**: R or Rmd scripts where the data processing happens
 
@@ -75,9 +75,9 @@ or on both platforms simultaneously.
 ### Motivation
 
 Consider a typical task: uploading a file to Amazon S3 using the `aws.s3`
-package as an illustrative example. Imagine we're attempting to upload an R
-model saved as an RDS file located at "models/glm.rds". This file is destined
-for the "project-1" directory within the "project-data" bucket on S3,
+package as an illustrative example. Imagine you're attempting to upload an R
+model saved as an RDS file located at `models/glm.rds`. This file is destined
+for the `project-1` directory within the `project-data` bucket on S3,
 representing the dedicated S3 root for this project:
 
 ```{r eval=FALSE}
@@ -95,12 +95,12 @@ with the "project-1" folder in the "project-data" bucket, we're consistently
 faced with specifying this static location.
 
 2. **Path Duplication**: Both our local system and S3 use matching paths:
-"models/glm.rds". This uniformity is typically more practical than making
+`models/glm.rds`. This uniformity is typically more practical than making
 exceptions.
 
 Given the repetitive nature of this code, there's room for a more streamlined
 approach. This is where the `cloudfs` package comes in. Once set up, uploading
-becomes much neater:
+becomes much easier and cleaner:
 
 ```{r eval=FALSE}
 cloud_s3_upload("models/glm.rds")
@@ -176,7 +176,7 @@ cloud_drive_upload("plots/scatterplot.png")
 
 By invoking the `cloud_drive_ls()` function, you can view the automatically
 created "plots" folder in the console. To inspect the contents of this folder,
-which currently contains a single PNG file, use `cloud_drive_ls("plots")`. To
+which currently contains a single PNG file, use `cloud_drive_ls("plots")` or `cloud_drive_ls(recursive = TRUE)`. To
 access the folder on Google Drive, execute `cloud_drive_browse("plots")`. To
 directly view the scatterplot, use
 `cloud_drive_browse("plots/scatterplot.png")`.
