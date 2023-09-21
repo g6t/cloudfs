@@ -103,7 +103,11 @@ cloud_s3_ls <- function(path = "", recursive = FALSE, full_names = FALSE,
   full_path <- file.path(root, path, "/")
   bucket_prefix <- s3_path_to_bucket_prefix(full_path)
   
-  cli::cli_text("{.field S3 path}: {.path {bucket_prefix$path}}")
+  if (path == "") {
+    cli::cli_text("{.field path}: <root>")
+  } else {
+    cli::cli_text("{.field path}: {.path {path}}")
+  }
 
   # NOTE: this lists all contents recursively regardless of `recursive`
   # parameter because this way it is easier to parse the response. Shouldn't

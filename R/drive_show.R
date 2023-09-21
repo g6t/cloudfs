@@ -62,7 +62,11 @@ cloud_drive_ls <- function(path = "", recursive = FALSE, full_names = FALSE,
   
   if (is.null(root)) root <- cloud_drive_get_root()
   path <- clean_up_file_path(path)
-  cli::cli_text("{.field path}: {.path {path}}")
+  if (path == "") {
+    cli::cli_text("{.field path}: <root>")
+  } else {
+    cli::cli_text("{.field path}: {.path {path}}")
+  }
   head_id <- cloud_drive_find_path(root, path)
   
   # This lists all contents of a folder recursively, but shows only basenames.
@@ -164,9 +168,14 @@ cloud_drive_ls <- function(path = "", recursive = FALSE, full_names = FALSE,
   )
   
   # join google drive ids
-  left_join(
-    res,
-    cont_df[, c("short_name", "id")],
-    by = c("name" = "short_name")
-  )
+  if (!recursive) {
+    res <- 
+      left_join(
+        res,
+        cont_df[, c("short_name", "id")],
+        by = c("name" = "short_name")
+      )
+  }
+  
+  res
 }
