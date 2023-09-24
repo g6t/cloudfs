@@ -25,8 +25,8 @@ cloud_drive_attach <- function(project = ".") {
   
   if (is.na(drive_desc)) {
     cli::cli_alert_info(
-      "For {.code cloud_drive_*} functions to work, project's \\
-      {.path DESCRIPTION} file needs to contain ID of a dedicated \\
+      "For the {.code cloud_drive_*} functions to work, the project's \\
+      {.path DESCRIPTION} file needs to contain the ID of a dedicated \\
       Google Drive folder."
     )
   } else {
@@ -59,7 +59,7 @@ cloud_drive_attach <- function(project = ".") {
       cli::cli_warn(drbl$message)
       ok <- FALSE
     } else if (!googledrive::is_folder(drbl)) {
-      cli::cli_warn("Provided URL does not correspond to a folder.")
+      cli::cli_warn("The provided URL does not correspond to a folder.")
       ok <- FALSE
     }
     
