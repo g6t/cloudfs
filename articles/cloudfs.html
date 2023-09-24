@@ -77,7 +77,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.svg" class="logo" alt=""><h1>cloudfs package overview</h1>
             
-            <h4 data-toc-skip class="date">2023-09-21</h4>
+            <h4 data-toc-skip class="date">2023-09-24</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/g6t/cloudfs/blob/HEAD/vignettes/cloudfs.Rmd" class="external-link"><code>vignettes/cloudfs.Rmd</code></a></small>
       <div class="d-none name"><code>cloudfs.Rmd</code></div>
@@ -91,11 +91,11 @@
 <div class="section level3">
 <h3 id="project-assets">Project assets<a class="anchor" aria-label="anchor" href="#project-assets"></a>
 </h3>
-<p>In terms of digital assets a data analysis project usually can be
+<p>In terms of digital assets a data analysis project can usually be
 divided into three parts:</p>
 <ul>
 <li><p><strong>input data</strong>: primarily tabular data (csv, sav,
-…), but not limited to it; can be e.g. raw text</p></li>
+…), but not limited to it; can be e.g., raw text</p></li>
 <li><p><strong>code sources</strong>: R or Rmd scripts where the data
 processing happens</p></li>
 <li><p><strong>outputs</strong>: spreadsheets, plots, presentations
@@ -132,11 +132,11 @@ a root on S3, on Google Drive, or on both platforms simultaneously.</p>
 <h3 id="motivation">Motivation<a class="anchor" aria-label="anchor" href="#motivation"></a>
 </h3>
 <p>Consider a typical task: uploading a file to Amazon S3 using the
-<code>aws.s3</code> package as an illustrative example. Imagine we’re
+<code>aws.s3</code> package as an illustrative example. Imagine you’re
 attempting to upload an R model saved as an RDS file located at
-“models/glm.rds”. This file is destined for the “project-1” directory
-within the “project-data” bucket on S3, representing the dedicated S3
-root for this project:</p>
+<code>models/glm.rds</code>. This file is destined for the
+<code>project-1</code> directory within the <code>project-data</code>
+bucket on S3, representing the dedicated S3 root for this project:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">aws.s3</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aws.s3/man/put_object.html" class="external-link">put_object</a></span><span class="op">(</span></span>
 <span>  bucket <span class="op">=</span> <span class="st">"project-data"</span>,</span>
@@ -150,12 +150,12 @@ primary interactions are with the “project-1” folder in the
 “project-data” bucket, we’re consistently faced with specifying this
 static location.</p></li>
 <li><p><strong>Path Duplication</strong>: Both our local system and S3
-use matching paths: “models/glm.rds”. This uniformity is typically more
-practical than making exceptions.</p></li>
+use matching paths: <code>models/glm.rds</code>. This uniformity is
+typically more practical than making exceptions.</p></li>
 </ol>
 <p>Given the repetitive nature of this code, there’s room for a more
 streamlined approach. This is where the <code>cloudfs</code> package
-comes in. Once set up, uploading becomes much neater:</p>
+comes in. Once set up, uploading becomes much easier and cleaner:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/cloud_s3_upload.html">cloud_s3_upload</a></span><span class="op">(</span><span class="st">"models/glm.rds"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -249,9 +249,10 @@ as a local PNG file for the purpose of demonstration.</p>
 <p>By invoking the <code><a href="../reference/cloud_drive_ls.html">cloud_drive_ls()</a></code> function, you can view
 the automatically created “plots” folder in the console. To inspect the
 contents of this folder, which currently contains a single PNG file, use
-<code>cloud_drive_ls("plots")</code>. To access the folder on Google
-Drive, execute <code>cloud_drive_browse("plots")</code>. To directly
-view the scatterplot, use
+<code>cloud_drive_ls("plots")</code> or
+<code>cloud_drive_ls(recursive = TRUE)</code>. To access the folder on
+Google Drive, execute <code>cloud_drive_browse("plots")</code>. To
+directly view the scatterplot, use
 <code>cloud_drive_browse("plots/scatterplot.png")</code>.</p>
 <p>With <code>cloudfs</code>, you can directly write content to cloud
 storage, bypassing the manual creation of local files. The file
