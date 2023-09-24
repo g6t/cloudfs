@@ -1,6 +1,9 @@
-# cloudfs <a href="https://g6t.github.io/cloudfs/"><img src="man/figures/cloudfs_logo.png" alt="cloudfs website" align="right" height="139"/></a>
-
-`cloudfs` is an R package developed by [Gradient Metrics](www.gradientmetrics.com) that offers a unified interface for simplifying cloud storage interactions. `cloudfs` supports uploading, downloading, reading, and writing files for both Google Drive and Amazon S3.
+# cloudfs <a href="https://g6t.github.io/cloudfs/"><img src="man/figures/logo.png" align="right" height="138" alt="cloudfs website" /></a>
+ 
+`cloudfs` is an R package developed by [Gradient
+Metrics](www.gradientmetrics.com) that offers a unified interface for
+simplifying cloud storage interactions. `cloudfs` supports uploading,
+downloading, reading, and writing files for both Google Drive and Amazon S3.
 
 ## Installation
 
