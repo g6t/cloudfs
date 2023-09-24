@@ -1,4 +1,4 @@
-# cloudfs <a href="https://g6t.github.io/cloudfs/"><img src="man/figures/logo.png" align="right" height="138" alt="cloudfs website" /></a>
+# cloudfs <a href="https://g6t.github.io/cloudfs/"><img src="man/figures/logo.svg" align="right" height="139" alt="cloudfs website" /></a>
  
 `cloudfs` is an R package developed by [Gradient
 Metrics](www.gradientmetrics.com) that offers a unified interface for
