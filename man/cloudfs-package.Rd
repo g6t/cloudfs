@@ -6,6 +6,8 @@
 \alias{cloudfs-package}
 \title{cloudfs: Streamlined interface to interact with cloud storage platforms}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 This package offers a unified interface for simplifying cloud storage interactions, including uploading, downloading, reading, and writing files, with functions for both Google Drive and Amazon S3.
 }
 \seealso{

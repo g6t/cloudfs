@@ -97,11 +97,11 @@ validate_desc <- function(project = ".") {
   
   if (!file.exists(desc_path)) {
     
-    yeah <- cli_yeah(
-      "Cannot find {.path DESCRIPTION} file in {.path {project}}.
-      Do you want to generate it automatically?",
-      straight = TRUE
-    )
+    yeah <- cli_yeah(glue::glue(
+      "Cannot find {{.path DESCRIPTION}} file in {cli_format_path(project)}.
+      Do you want to generate it automatically?"
+    ), straight = TRUE)
+    
     if (yeah) {
       desc_content <- c(
         "Package: -",

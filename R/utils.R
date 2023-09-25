@@ -23,3 +23,16 @@ clean_up_file_path <- function(path) {
   path <- gsub("/+", "/", path)
   path
 }
+
+#' @description Test if `path` corresponds to the current wd.
+#' @noRd
+is.wd <- function(path) {
+  normalized_path <- normalizePath(path, mustWork = FALSE)
+  normalized_wd <- normalizePath(getwd())
+  return(normalized_path == normalized_wd)
+}
+
+cli_format_path <- function(path) {
+  if (is.wd(path)) return("the working directory")
+  glue::glue("{{.path {path}}}")
+}
