@@ -180,7 +180,7 @@ cloud_drive_read <- function(file, fun = NULL, ..., root = NULL) {
   local_file <- file.path(tempdir(), file_name)
 
   cli::cli_alert_info(
-    "Trying to read {.path file} from Google Drive."
+    "Trying to read {.path {file}} from Google Drive."
   )
   
   cloud_drive_download_by_id(
