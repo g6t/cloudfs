@@ -1,6 +1,8 @@
 url: https://g6t.github.io/cloudfs/
 template:
   bootstrap: 5
+  bslib:
+    code_font: {google: "Fira Code"}
   
 authors:
   Stefan Musch:
