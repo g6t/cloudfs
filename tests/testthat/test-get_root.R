@@ -1,4 +1,4 @@
-test_that("cloud_drive_get_root: When no DESCRIPTION proposes to init", {
+test_that("cloud_drive_get_root(): When no DESCRIPTION proposes to init", {
   project <- init_tmp_project(description = FALSE)
   
   # first reject the proposal and expect error
@@ -25,7 +25,7 @@ test_that("cloud_drive_get_root: When no DESCRIPTION proposes to init", {
   remove_tmp_project(project)
 })
 
-test_that("cloud_s3_get_root: When no DESCRIPTION proposes to init", {
+test_that("cloud_s3_get_root(): When no DESCRIPTION proposes to init", {
   project <- init_tmp_project(description = FALSE)
   
   # first reject the proposal and expect error
@@ -47,6 +47,25 @@ test_that("cloud_s3_get_root: When no DESCRIPTION proposes to init", {
   expect_equal(
     unname(desc::desc_get("Package", file = project)),
     "-"
+  )
+  
+  remove_tmp_project(project)
+})
+
+# ----
+test_that("roots are retrieved correctly when in a project", {
+  project <- init_tmp_project(description = TRUE)
+  desc::desc_set(cloudfs.drive = "aaaaaa", file = project)
+  desc::desc_set(cloudfs.s3 = "test-r-package/cloudfs", file = project)
+  
+  expect_equal(
+    withr::with_dir(project, as.character(cloud_drive_get_root())),
+    "aaaaaa"
+  )
+  
+  expect_equal(
+    withr::with_dir(project, as.character(cloud_s3_get_root())),
+    "test-r-package/cloudfs"
   )
   
   remove_tmp_project(project)
