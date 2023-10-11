@@ -1,5 +1,9 @@
 test_that("Basic interactions with Google Drive, all in one go", {
   skip_if_offline()
+  drive_token_path <- "~/tmp/drive_token.rds" 
+  if (file.exists(drive_token_path)) {
+    googledrive::drive_auth(token = readRDS(drive_token_path))
+  }
   skip_if_no_drive_token()
   
   project <- init_tmp_project(description = TRUE)
@@ -54,12 +58,13 @@ test_that("Basic interactions with Google Drive, all in one go", {
     mtcars_from_drive
   )
   
-  ls_now <- withr::with_dir(project, cloud_drive_ls(recursive = TRUE))
+  ls_now <- withr::with_dir(project, cloud_drive_ls(recursive = TRUE)) |> 
+    dplyr::arrange(last_modified)
   expect_equal(
     ls_now[, c("name", "type")],
     tibble(
-      name = vals_to_names(c("DESCRIPTION", "data/mtcars.csv", "data/")),
-      type = c("", "csv", "folder")
+      name = vals_to_names(c("DESCRIPTION", "data/", "data/mtcars.csv")),
+      type = c("", "folder", "csv")
     )
   )
   
