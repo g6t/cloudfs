@@ -3,6 +3,14 @@
 #'   DESCRIPTION.
 #' 
 #' @inheritParams validate_desc
+#' @return A named list where each element corresponds to a `cloudfs.*` root
+#'   defined in the project's DESCRIPTION file. The names of the list elements
+#'   are derived from the `cloudfs.*` fields by removing the `cloudfs.` prefix.
+#' 
+#' @examples 
+#' \dontrun{
+#' roots <- cloud_get_roots()
+#' }
 #' 
 #' @export
 cloud_get_roots <- function(project = ".") {
@@ -12,7 +20,6 @@ cloud_get_roots <- function(project = ".") {
   names(res) <- str_remove_(names(res), "^cloudfs\\.")
   res
 }
-
 
 #' @title Extract values from DESCRUPTION file
 #' 

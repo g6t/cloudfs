@@ -29,8 +29,8 @@ the corresponding path. Default is \code{FALSE}.}
 \item{quiet}{all caution messages may be turned off by setting this parameter
 to \code{TRUE}.}
 
-\item{root}{GoogleDrive id or URL of the project root -- point relative to
-which to consider all relative paths. When left as \code{NULL}, the root is
+\item{root}{Google Drive ID or URL of the project root. This serves as the
+reference point for all relative paths. When left as \code{NULL}, the root is
 automatically derived from the \code{cloudfs.drive} field of the project's
 DESCRIPTION file.}
 }

@@ -17,9 +17,13 @@ be attempted to guess an appropriate reading function from file extension.}
 \item{quiet}{All caution messages may be turned off by setting this parameter
 to \code{TRUE}.}
 
-\item{root}{S3 path of the project root -- point relative to which to
-consider all relative paths. When left as \code{NULL}, the root is automatically
+\item{root}{S3 path of the project root. This serves as the reference point
+for all relative paths. When left as \code{NULL}, the root is automatically
 derived from the \code{cloudfs.s3} field of the project's DESCRIPTION file.}
+}
+\value{
+A named list where each element corresponds to the content of a file
+from S3. The names of the list elements are derived from the file names.
 }
 \description{
 \link{cloud_s3_ls} function returns a dataframe of contents of an S3

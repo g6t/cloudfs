@@ -10,17 +10,19 @@ cloud_drive_attach(project = ".")
 \item{project}{Character. Path to a project. By default it is current working
 directory.}
 }
+\value{
+This function does not return a meaningful value. Its primary purpose
+is the side effect of updating the project's DESCRIPTION file with the
+associated Google Drive folder identifier.
+}
 \description{
-The \code{cloud_drive_attach()} function is designed to add a field
-to the DESCRIPTION file of a project, which uniquely identifies the
-location of the project's folder in Google Drive. The function prompts the
-user to visit the Google Drive website (https://drive.google.com/) where
-they can find or create a dedicated folder for the project. Once the user
-has located or created the desired folder, they can copy the URL of the
-folder from the web browser and paste it into the R console. The function
-then parses the URL and populates the corresponding field (cloudfs.drive)
-in the DESCRIPTION file with a string that represents the location of the
-project in Google Drive.
+This function facilitates the association of a specific Google
+Drive folder with a project by adding a unique identifier to the project's
+DESCRIPTION file. The user is prompted to navigate to the Google Drive
+website, select or create the desired folder for the project, and then
+provide its URL. The function extracts the necessary information from the
+URL and updates the \code{cloudfs.drive} field in the DESCRIPTION file
+accordingly.
 }
 \examples{
 \dontrun{cloud_drive_attach()}

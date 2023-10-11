@@ -4,7 +4,7 @@
 \name{cloudfs-package}
 \alias{cloudfs}
 \alias{cloudfs-package}
-\title{cloudfs: Streamlined interface to interact with cloud storage platforms}
+\title{cloudfs: Streamlined Interface to Interact with Cloud Storage Platforms}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 

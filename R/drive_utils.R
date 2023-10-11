@@ -105,6 +105,7 @@ cloud_drive_put <- function(media, path) {
   )
   googledrive::local_drive_quiet()
   googledrive::drive_rename(id, name)
+  invisible(id)
 }
 
 #' @title Automatically resize all columns in a google spreadsheet
@@ -113,6 +114,8 @@ cloud_drive_put <- function(media, path) {
 #' 
 #' @inheritParams cloud_validate_file_path
 #' @inheritParams cloud_drive_ls
+#' 
+#' @return The file ID of the resized Google spreadsheet as an invisible result.
 #' 
 #' @examples 
 #' \dontrun{
@@ -139,4 +142,6 @@ cloud_drive_spreadsheet_autofit <- function(file, root = NULL) {
   for (sheet in sheet_names) {
     googlesheets4::range_autofit(file_id, sheet = sheet)
   }
+  
+  invisible(file_id)
 }

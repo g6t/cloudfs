@@ -1,12 +1,15 @@
 #' @title Upload a local file to Google Drive
 #' 
-#' @description Uploads a file from project's folder to the corresponding
-#'   location on project's Google Drive folder
+#' @description Uploads a local file from the project's directory to its
+#'   corresponding location within the project's Google Drive root folder.
 #' 
 #' @inheritParams cloud_validate_file_path
 #' @inheritParams cloud_drive_ls
 #'  
 #' @inherit cloud_drive_find_path details
+#' 
+#' @return Invisibly returns a [googledrive::dribble] object representing the
+#'   uploaded file on Google Drive.
 #'   
 #' @examples 
 #' \dontrun{
@@ -29,10 +32,11 @@ cloud_drive_upload <- function(file, root = NULL) {
   if (file_dir == ".") file_dir <- ""
   file_dir_id <- cloud_drive_find_path(root, file_dir, create = TRUE)
   
-  cloud_drive_put(media = file, path = file_dir_id)
+  id <- cloud_drive_put(media = file, path = file_dir_id)
   cli::cli_alert_success(
     "File {.path {file}} uploaded to Google Drive."
   )
+  invisible(id)
 }
 
 #' @title Download a file from Google Drive to local project folder

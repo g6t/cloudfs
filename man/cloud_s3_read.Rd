@@ -15,8 +15,8 @@ be attempted to guess an appropriate reading function from file extension.}
 
 \item{...}{Further parameters to pass to \code{fun}.}
 
-\item{root}{S3 path of the project root -- point relative to which to
-consider all relative paths. When left as \code{NULL}, the root is automatically
+\item{root}{S3 path of the project root. This serves as the reference point
+for all relative paths. When left as \code{NULL}, the root is automatically
 derived from the \code{cloudfs.s3} field of the project's DESCRIPTION file.}
 }
 \description{

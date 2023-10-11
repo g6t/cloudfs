@@ -13,11 +13,11 @@ cloud_local_ls(
 )
 }
 \arguments{
-\item{path}{(optional) Path inside local project folder to list contents of
-a subfolder. By default, when \code{path = ""}, lists root-level files and
-folders.}
+\item{path}{(optional) Path, relative to the specified root to list contents
+of. By default, when \code{path = ""}, lists root-level files and folders.}
 
-\item{root}{Local path relative to which to consider all paths.}
+\item{root}{Local directory path relative to which all other paths are
+considered.}
 
 \item{recursive}{(logical) If \code{TRUE}, lists contents recursively in all
 nested subfolders. Default is \code{FALSE}.}
@@ -25,15 +25,18 @@ nested subfolders. Default is \code{FALSE}.}
 \item{full_names}{(logical) If \code{TRUE}, folder path is appended to object
 names to give a relative file path.}
 
-\item{ignore}{(logical) Currently just ignores the "renv" folder if \code{TRUE}.
-The main reason for this parameter is that "renv" folder usually contains
-thousands of files and it takes a lot of time to calculate its size. But
-potentially we may use something like global or project-level cloud ignore
-files akin to .gitignore.}
+\item{ignore}{Logical flag indicating whether to ignore certain directories.
+Currently, if set to \code{TRUE}, the 'renv' folder is ignored due to its
+typically large size. This parameter may be expanded in the future to
+support more complex ignore patterns.}
+}
+\value{
+A tibble containing the names, last modification timestamps, and
+sizes in bytes of files and folders inside the specified local folder.
 }
 \description{
-Prints names, timestamps and sizes of files and folders inside
-local project folder.
+Retrieves names, timestamps, and sizes of files and folders
+inside local project folder.
 }
 \examples{
 \dontrun{

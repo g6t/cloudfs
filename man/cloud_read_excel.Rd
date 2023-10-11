@@ -7,7 +7,12 @@
 cloud_read_excel(path)
 }
 \arguments{
-\item{path}{Path to the xlsx/xslx file}
+\item{path}{Path to the xlsx/xls file.}
+}
+\value{
+A named list of dataframes, where each dataframe corresponds to a
+sheet in the Excel file. The names of the list elements are derived from
+the sheet names.
 }
 \description{
 Uses \link[readxl:read_excel]{readxl::read_excel} under the hood, reads all sheets and

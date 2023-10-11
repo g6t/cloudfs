@@ -10,7 +10,18 @@ cloud_get_roots(project = ".")
 \item{project}{Character. Path to a project. By default it is current working
 directory.}
 }
+\value{
+A named list where each element corresponds to a \verb{cloudfs.*} root
+defined in the project's DESCRIPTION file. The names of the list elements
+are derived from the \verb{cloudfs.*} fields by removing the \code{cloudfs.} prefix.
+}
 \description{
 Returns a list with all \verb{cloudfs.*} roots defined in a project's
 DESCRIPTION.
+}
+\examples{
+\dontrun{
+roots <- cloud_get_roots()
+}
+
 }

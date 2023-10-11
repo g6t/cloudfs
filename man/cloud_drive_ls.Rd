@@ -7,9 +7,8 @@
 cloud_drive_ls(path = "", recursive = FALSE, full_names = FALSE, root = NULL)
 }
 \arguments{
-\item{path}{(optional) Path inside Google Drive folder to list contents of
-subfolders. By default, when \code{path = ""}, lists root-level files and
-folders.}
+\item{path}{(optional) Path inside the Google Drive root folder. Specifies
+the subfolder whose contents should be listed. By default, when \code{path = ""}, lists root-level files and folders.}
 
 \item{recursive}{(logical) If \code{TRUE}, lists contents recursively in all
 nested subfolders. Default is \code{FALSE}.}
@@ -17,14 +16,19 @@ nested subfolders. Default is \code{FALSE}.}
 \item{full_names}{(logical) If \code{TRUE}, folder path is appended to object
 names to give a relative file path.}
 
-\item{root}{GoogleDrive id or URL of the project root -- point relative to
-which to consider all relative paths. When left as \code{NULL}, the root is
+\item{root}{Google Drive ID or URL of the project root. This serves as the
+reference point for all relative paths. When left as \code{NULL}, the root is
 automatically derived from the \code{cloudfs.drive} field of the project's
 DESCRIPTION file.}
 }
-\description{
-Prints names, timestamps and sizes of files and folders inside
+\value{
+A tibble containing the names, last modification timestamps, sizes in
+bytes, and Google Drive IDs of files and folders inside the specified
 Google Drive folder.
+}
+\description{
+Returns a tibble with names, timestamps, and sizes of files and
+folders inside the specified Google Drive folder.
 }
 \details{
 Google Drive file structure is different from the usual file

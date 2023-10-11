@@ -1,11 +1,13 @@
 #' @title Upload a local file to S3
 #' 
-#' @description Uploads a file from project's folder to the corresponding
-#'   location on project's S3 folder
+#' @description Uploads a local file from the project's directory to its
+#'   corresponding location within the project's S3 root folder.
 #' 
 #' @inheritParams cloud_validate_file_path
 #' @inheritParams cloud_s3_ls
-#'   
+#'  
+#' @return Invisibly returns `NULL` after successfully uploading the file.
+#'
 #' @examples 
 #' \dontrun{
 #' # uploads data/demo.csv to 'data' subfolder of project's S3 folder
@@ -33,6 +35,7 @@ cloud_s3_upload <- function(file, root = NULL) {
   cli::cli_alert_success(
     "File {.path {file}} uploaded to S3 root {.field {root}}."
   )
+  invisible(NULL)
 }
 
 #' @title Download a file from S3 to local project folder

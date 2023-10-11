@@ -7,12 +7,16 @@
 cloud_s3_browse(path = "", root = NULL)
 }
 \arguments{
-\item{path}{(optional) Path inside S3 folder to open. By default, when
-\code{path = ""}, navigates to the root level of project's S3 folder.}
+\item{path}{(optional) Path inside the S3 folder to open. Defaults to the
+root level (path = "") of the project's S3 folder.}
 
-\item{root}{S3 path of the project root -- point relative to which to
-consider all relative paths. When left as \code{NULL}, the root is automatically
+\item{root}{S3 path of the project root. This serves as the reference point
+for all relative paths. When left as \code{NULL}, the root is automatically
 derived from the \code{cloudfs.s3} field of the project's DESCRIPTION file.}
+}
+\value{
+Invisibly returns \code{NULL}. The primary purpose of this function is its
+side effect: opening the specified S3 folder in a browser.
 }
 \description{
 Opens project's S3 folder in browser.

@@ -215,6 +215,9 @@ cloud_s3_write_bulk <- function(content, fun = NULL, ..., local = FALSE,
 #' @inheritParams cloud_s3_read  
 #' @inheritParams cloud_s3_prep_bulk
 #' 
+#' @return A named list where each element corresponds to the content of a file
+#'   from S3. The names of the list elements are derived from the file names.
+#' 
 #' @examples 
 #' \dontrun{
 #' data_lst <- 

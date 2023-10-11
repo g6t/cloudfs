@@ -86,7 +86,11 @@ cloud_guess_read_fun <- function(file) {
 #' @description Uses [readxl::read_excel] under the hood, reads all sheets and
 #'   returns them as a named list of dataframes.
 #'   
-#' @param path Path to the xlsx/xslx file
+#' @param path Path to the xlsx/xls file.
+#' 
+#' @return A named list of dataframes, where each dataframe corresponds to a
+#'   sheet in the Excel file. The names of the list elements are derived from
+#'   the sheet names.
 #'
 #' @examples 
 #' \dontrun{
