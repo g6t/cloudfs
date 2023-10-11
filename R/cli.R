@@ -4,7 +4,7 @@
 #' @title User Interface: Ask a Yes/No question
 #' 
 #' @description This function is inspired by (if not mostly copied from) 
-#' [usethis::ui_yeah] function. It's purpose is to ask user a yes/no question.
+#' `usethis::ui_yeah` function. It's purpose is to ask user a yes/no question.
 #' The differences are:
 #' 1. It is more limited in answer options customization. This is done on
 #' purpose to standardize command line dialogues in our code.
@@ -15,7 +15,7 @@
 #' @param x Question to display.
 #' @param straight (logical) Ask a straight Yes/No question? By default (when
 #'   `FALSE`), two different "no" options and one "yes" option are sampled from
-#'   a pool of variants. In other words it behaves just like [usethis::ui_yeah]
+#'   a pool of variants. In other words it behaves just like `usethis::ui_yeah`
 #'   with default parameter setup. When `straight = TRUE`, it only shows "Yes"
 #'   and "No", literally.
 #' 
