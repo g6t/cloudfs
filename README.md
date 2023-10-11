@@ -8,9 +8,10 @@ downloading, reading, and writing files for both Google Drive and Amazon S3.
 ## Installation
 
 ``` r
-# not on CRAN yet
-# install.packages("cloudfs")
+# from CRAN
+install.packages("cloudfs")
 
+# from GitHub
 remotes::install_github("g6t/cloudfs")
 ```
 
