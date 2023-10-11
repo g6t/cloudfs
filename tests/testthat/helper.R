@@ -70,7 +70,7 @@ has_s3_access <- function() {
   tryCatch(
     {
       buckets <- aws.s3::bucketlist()
-      is.data.frame(buckets)
+      nrow(buckets) > 0
     }, 
     error = function(e) FALSE
   )
