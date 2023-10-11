@@ -34,6 +34,7 @@ Suggests:
     readxl,
     rmarkdown,
     testthat (>= 3.0.0),
+    withr,
     writexl,
     xml2
 VignetteBuilder: 

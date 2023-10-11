@@ -80,7 +80,6 @@ cloud_drive_download_by_id <- function(file, path, overwrite = FALSE) {
 cloud_drive_guess_type <- function(file) {
   cloud_validate_file_path(file)
   ext <- tolower(tools::file_ext(file))
-  if (ext == "") cli::cli_abort("Missing file extension, unable to guess reading function.")
   switch (
     ext,
     "xls" = "spreadsheet",

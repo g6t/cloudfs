@@ -93,7 +93,7 @@ cloud_validate_file_names <- function(x) {
 #' @keywords internal
 validate_desc <- function(project = ".") {
   
-  desc_path <- normalizePath(file.path(project, "DESCRIPTION"))
+  desc_path <- normalizePath(file.path(project, "DESCRIPTION"), mustWork = FALSE)
   
   if (!file.exists(desc_path)) {
     
@@ -103,29 +103,39 @@ validate_desc <- function(project = ".") {
     ), straight = TRUE)
     
     if (yeah) {
-      desc_content <- c(
-        "Package: -",
-        "Name: [Project Name]",
-        "Title: [Project Title]",
-        "Description: [Project Description]"
-      )
-      
-      writeLines(con = desc_path, desc_content)
-      
-      cli::cli_bullets(c(
-        "v" = "A sample DESCRIPTION file has been created at \\
-        {.path {desc_path}}.",
-        " " = "Feel free to edit the {.field Name}, {.field Title} and \\
-        {.field Description} fields as needed to reflect your current project \\
-        (optional).",
-        " " = "Please don't change the {.field Package} field."
-      ))
+      init_desc(project = project)
       return(invisible(TRUE))
     } else {
       cli::cli_abort("Cannot proceed without having {.path DESCRIPTION} file")
     }
   }
   invisible(TRUE)
+}
+
+#' @description Inserts the template DESCRIPTION into a project.
+#' 
+#' @noRd
+init_desc <- function(project = ".") {
+  desc_path <- normalizePath(file.path(project, "DESCRIPTION"), mustWork = FALSE)
+  desc_content <- c(
+    "Package: -",
+    "Name: [Project Name]",
+    "Title: [Project Title]",
+    "Description: [Project Description]"
+  )
+  
+  if (interactive()) {
+    cli::cli_bullets(c(
+      "v" = "A sample DESCRIPTION file has been created at \\
+          {.path {desc_path}}.",
+      " " = "Feel free to edit the {.field Name}, {.field Title} and \\
+          {.field Description} fields as needed to reflect your current project \\
+          (optional).",
+      " " = "Please don't change the {.field Package} field."
+    ))
+  }
+  
+  writeLines(con = desc_path, desc_content)
 }
 
 #' @title Prepare ls output
