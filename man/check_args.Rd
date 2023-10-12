@@ -16,7 +16,8 @@ List of quosures.
 Helper to catch arguments.
 }
 \examples{
+\dontrun{
 check_args(x, y)
-
+}
 }
 \keyword{internal}

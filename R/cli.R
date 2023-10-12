@@ -305,8 +305,9 @@ check_length <- function(x, arg_length = 1L, alt_null = FALSE, add_msg = NULL) {
 #' @return List of quosures.
 #' 
 #' @examples 
+#' \dontrun{
 #' check_args(x, y)
-#' 
+#' }
 #' @keywords internal
 check_args <- function(...) {
   rlang::quos(...)
