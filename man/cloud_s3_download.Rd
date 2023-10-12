@@ -2,7 +2,7 @@
 % Please edit documentation in R/s3_transfer.R
 \name{cloud_s3_download}
 \alias{cloud_s3_download}
-\title{Download a file from S3 to local project folder}
+\title{Download a file from S3 to the local project folder}
 \usage{
 cloud_s3_download(file, root = NULL)
 }
@@ -14,9 +14,12 @@ letters, digits, '-', '_', '.', spaces and '/' symbols.}
 for all relative paths. When left as \code{NULL}, the root is automatically
 derived from the \code{cloudfs.s3} field of the project's DESCRIPTION file.}
 }
+\value{
+Invisibly returns \code{NULL} after successfully downloading the file.
+}
 \description{
-Downloads a file from project's S3 folder to local project
-folder and saves it preserving folder structure.
+Retrieves a file from the project's S3 root folder and saves it
+to the local project folder, maintaining the original folder structure.
 }
 \examples{
 \dontrun{

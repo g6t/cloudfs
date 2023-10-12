@@ -10,6 +10,9 @@ cloud_guess_read_fun(file)
 \item{file}{Path to a file relative to project folder root. Can contain only
 letters, digits, '-', '_', '.', spaces and '/' symbols.}
 }
+\value{
+A reading function.
+}
 \description{
 Take a look at the switch call. That's basically it. Returns an
 appropriate function or throws an error if wasn't able to find one.

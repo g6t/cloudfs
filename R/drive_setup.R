@@ -128,6 +128,8 @@ cloud_drive_get_root <- function(project = ".") {
 #' \dontrun{
 #' cloud_drive_find_path("1ul0MYeHb0nJtnuaPinKV1WtH0n3igmN2", "models/kmeans")
 #' }
+#' 
+#' @return A [googledrive::dribble] object corresponding to the folder.
 #'
 #' @keywords internal
 cloud_drive_find_path <- function(root, path = "", create = FALSE) {

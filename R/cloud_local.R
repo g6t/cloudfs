@@ -175,6 +175,8 @@ cloud_object_ls <- function(x, path, extension, prefix = "", suffix = "") {
 #' @param content (data.frame) output of `cloud_object_ls()`
 #' @param quiet all caution messages may be turned off by setting this parameter
 #'   to `TRUE`.
+#'   
+#' @return Modified `content` dataframe.
 #'
 #' @keywords internal
 cloud_object_prep_bulk <- function(content, quiet = FALSE) {

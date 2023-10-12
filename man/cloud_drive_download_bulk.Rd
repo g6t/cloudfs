@@ -2,7 +2,7 @@
 % Please edit documentation in R/drive_transfer_bulk.R
 \name{cloud_drive_download_bulk}
 \alias{cloud_drive_download_bulk}
-\title{Download Google Drive contents in bulk}
+\title{Bulk download contents from Google Drive}
 \usage{
 cloud_drive_download_bulk(content, quiet = FALSE)
 }
@@ -12,14 +12,15 @@ cloud_drive_download_bulk(content, quiet = FALSE)
 \item{quiet}{All caution messages may be turned off by setting this parameter
 to \code{TRUE}.}
 }
+\value{
+Invisibly returns the input \code{content} dataframe.
+}
 \description{
-\link{cloud_drive_ls} function returns a dataframe of contents of a
-Google Drive folder. \code{cloud_drive_download_bulk} can be applied to such a
-dataframe to download all the listed files.
-
-The workflow in mind is that you would call \code{cloud_drive_ls()}, then use
-dplyr verbs to keep only files that you need and then call
-\code{cloud_drive_download_bulk} on the result.
+Downloads multiple files from a Google Drive folder based on
+the output dataframe from \link{cloud_drive_ls}. This function streamlines
+the process of downloading multiple files by allowing you to filter and
+select specific files from the Google Drive listing and then download
+them in bulk.
 }
 \examples{
 \dontrun{

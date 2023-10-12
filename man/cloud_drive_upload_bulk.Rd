@@ -2,7 +2,7 @@
 % Please edit documentation in R/drive_transfer_bulk.R
 \name{cloud_drive_upload_bulk}
 \alias{cloud_drive_upload_bulk}
-\title{Upload files to Google Drive in bulk}
+\title{Bulk Upload Files to Google Drive}
 \usage{
 cloud_drive_upload_bulk(content, quiet = FALSE, root = NULL)
 }
@@ -17,14 +17,16 @@ reference point for all relative paths. When left as \code{NULL}, the root is
 automatically derived from the \code{cloudfs.drive} field of the project's
 DESCRIPTION file.}
 }
+\value{
+Invisibly returns the input \code{content} dataframe.
+}
 \description{
-\link{cloud_local_ls} function returns a dataframe of contents of
-local project folder. \code{cloud_drive_upload_bulk} can be applied to such a
-dataframe to upload all the listed files.
-
-The workflow in mind is that you would call \code{cloud_local_ls()}, then use
-dplyr verbs to keep only files that you need and then call
-\code{cloud_drive_upload_bulk} on the result.
+This function streamlines the process of uploading multiple
+files from the local project folder to the project's designated Google
+Drive folder. By using \link{cloud_local_ls}, you can obtain a dataframe
+detailing the contents of the local folder. Applying
+\code{cloud_drive_upload_bulk} to this dataframe allows you to upload all listed
+files to Google Drive.
 }
 \examples{
 \dontrun{

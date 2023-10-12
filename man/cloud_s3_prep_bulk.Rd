@@ -25,6 +25,9 @@ bulk reading on a folder with gigabytes of data.}
 \item{quiet}{All caution messages may be turned off by setting this parameter
 to \code{TRUE}.}
 }
+\value{
+Transformed \code{content} dataframe.
+}
 \description{
 \code{cloud_s3_ls} returns a dataframe of contents of an S3 folder.
 This dataframe has \code{name} and \code{type} columns. \code{name} may be either full

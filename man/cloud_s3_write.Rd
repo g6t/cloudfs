@@ -7,31 +7,30 @@
 cloud_s3_write(x, file, fun = NULL, ..., local = FALSE, root = NULL)
 }
 \arguments{
-\item{x}{an R object (e.g. data frame) to write to S3.}
+\item{x}{An R object to be written to S3.}
 
 \item{file}{Path to a file relative to project folder root. Can contain only
 letters, digits, '-', '_', '.', spaces and '/' symbols.}
 
-\item{fun}{a function to write a file to cloud location to which x and a file
-path will be passed (in that order). By default, if \code{fun = NULL}, it will
-be attempted to find an appropriate writing function based on the file
-extension.}
+\item{fun}{A custom writing function. If \code{NULL} (default), the appropriate
+writing function will be inferred based on the file's extension.}
 
-\item{...}{further parameters to pass to \code{fun}}
+\item{...}{Additional arguments to pass to the writing function \code{fun}.}
 
-\item{local}{(logical) If \code{TRUE}, will additionally create a local file at
-the corresponding path. Default is \code{FALSE}.}
+\item{local}{Logical. If \code{TRUE}, a local copy of the file will also be
+created at the specified path. Default is \code{FALSE}.}
 
 \item{root}{S3 path of the project root. This serves as the reference point
 for all relative paths. When left as \code{NULL}, the root is automatically
 derived from the \code{cloudfs.s3} field of the project's DESCRIPTION file.}
 }
+\value{
+Invisibly returns \code{NULL} after successfully writing the object to S3.
+}
 \description{
-Writes an R object to a file in project's S3 folder. In most
-cases it is expected to be used for writing data.frames as csv, sav or any
-other tabular data formats to S3. But it is also possible to save any R
-object if a proper saving function is provided. It tries to guess a
-suitable writing function and the output file name where possible.
+Saves an R object to a designated location in the project's
+S3 storage. If no custom writing function is specified, the function will
+infer the appropriate writing method based on the file's extension.
 }
 \section{Default writing functions}{
 

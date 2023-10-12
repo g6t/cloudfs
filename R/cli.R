@@ -301,7 +301,11 @@ check_length <- function(x, arg_length = 1L, alt_null = FALSE, add_msg = NULL) {
 #' 
 #' @description Helper to catch arguments.
 #' 
-#' @param ... unqouted arguments names
+#' @param ... unquoted arguments names
+#' @return List of quosures.
+#' 
+#' @examples 
+#' check_args(x, y)
 #' 
 #' @keywords internal
 check_args <- function(...) {
@@ -316,6 +320,8 @@ check_args <- function(...) {
 #'   
 #' @param x Argument to check if is NULL.
 #' @param alt_null Logical. If `TRUE` it will check if `x` is `NULL`.
+#' 
+#' @return Either `TRUE` or `FALSE`.
 #' 
 #' @keywords internal
 check_null_cond <- function(x, alt_null){

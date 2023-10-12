@@ -2,7 +2,7 @@
 % Please edit documentation in R/drive_transfer.R
 \name{cloud_drive_read}
 \alias{cloud_drive_read}
-\title{Read an object from Google Drive}
+\title{Read a file from Google Drive}
 \usage{
 cloud_drive_read(file, fun = NULL, ..., root = NULL)
 }
@@ -10,20 +10,25 @@ cloud_drive_read(file, fun = NULL, ..., root = NULL)
 \item{file}{Path to a file relative to project folder root. Can contain only
 letters, digits, '-', '_', '.', spaces and '/' symbols.}
 
-\item{fun}{Reading function. By default is \code{NULL} which means that it will
-be attempted to guess an appropriate reading function from file extension.}
+\item{fun}{A custom reading function. If \code{NULL} (default), the appropriate
+reading function will be inferred based on the file's extension.}
 
-\item{...}{Further parameters to pass to \code{fun}.}
+\item{...}{Additional arguments to pass to the reading function \code{fun}.}
 
 \item{root}{Google Drive ID or URL of the project root. This serves as the
 reference point for all relative paths. When left as \code{NULL}, the root is
 automatically derived from the \code{cloudfs.drive} field of the project's
 DESCRIPTION file.}
 }
+\value{
+The content of the file read from Google Drive, with additional
+attributes containing metadata about the file.
+}
 \description{
-Reads a file from project's Google Drive. This function tries to
-guess an appropriate reading function based on the \code{file} name, but you can
-also provide a function by yourself if it's needed.
+Retrieves and reads a file from the project's Google Drive
+folder. By default, the function attempts to determine the appropriate
+reading function based on the file's extension. However, you can specify a
+custom reading function if necessary.
 }
 \section{Default reading functions}{
 

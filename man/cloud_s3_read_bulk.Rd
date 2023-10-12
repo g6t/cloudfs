@@ -2,17 +2,17 @@
 % Please edit documentation in R/s3_transfer_bulk.R
 \name{cloud_s3_read_bulk}
 \alias{cloud_s3_read_bulk}
-\title{Read S3 contents in bulk}
+\title{Bulk Read Contents from S3}
 \usage{
 cloud_s3_read_bulk(content, fun = NULL, ..., quiet = FALSE, root = NULL)
 }
 \arguments{
 \item{content}{(data.frame) Output of \code{cloud_s3_ls()}}
 
-\item{fun}{Reading function. By default is \code{NULL} which means that it will
-be attempted to guess an appropriate reading function from file extension.}
+\item{fun}{A custom reading function. If \code{NULL} (default), the appropriate
+reading function will be inferred based on the file's extension.}
 
-\item{...}{Further parameters to pass to \code{fun}.}
+\item{...}{Additional arguments to pass to the reading function \code{fun}.}
 
 \item{quiet}{All caution messages may be turned off by setting this parameter
 to \code{TRUE}.}
@@ -26,18 +26,14 @@ A named list where each element corresponds to the content of a file
 from S3. The names of the list elements are derived from the file names.
 }
 \description{
-\link{cloud_s3_ls} function returns a dataframe of contents of an S3
-folder. \code{cloud_s3_read_bulk} can be applied to such a dataframe to read all
-the listed files into a named list. \link{cloud_s3_read} is used under the hood.
-It will be attempted to guess reading function from file extensions. You
-can pass reading function manually by setting \code{fun} parameter, but it means
-that all the files will be read using one function. In fact, you probably
-shouldn't be reading multiple files of different types in bulk.
-
-The workflow in mind is that you would call \code{cloud_s3_ls()}, then use dplyr
-verbs to keep only files that you need and then call \code{cloud_s3_read_bulk}
-on the result. Note that you don't need to filter out folders -- it is done
-automatically.
+This function facilitates the bulk reading of multiple files
+from the project's designated S3 folder. By using \link{cloud_s3_ls}, you can
+obtain a dataframe detailing the contents of the S3 folder. Applying
+\code{cloud_s3_read_bulk} to this dataframe allows you to read all listed files
+into a named list. The function will, by default, infer the appropriate
+reading method based on each file's extension. However, if a specific
+reading function is provided via the \code{fun} parameter, it will be applied
+uniformly to all files, which may not be suitable for diverse file types.
 }
 \examples{
 \dontrun{

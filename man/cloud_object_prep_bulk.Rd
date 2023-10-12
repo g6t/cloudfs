@@ -13,6 +13,9 @@ cloud_object_prep_bulk(content, quiet = FALSE)
 \item{quiet}{all caution messages may be turned off by setting this parameter
 to \code{TRUE}.}
 }
+\value{
+Modified \code{content} dataframe.
+}
 \description{
 \code{cloud_object_ls} returns an ls-like dataframe for a named list
 of objects. This function is used mainly to inform the user about which

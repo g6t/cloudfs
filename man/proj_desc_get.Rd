@@ -12,6 +12,9 @@ proj_desc_get(key, project = ".")
 \item{project}{Character. Path to a project. By default it is current working
 directory.}
 }
+\value{
+A string value extracted from the DESCRIPTION field.
+}
 \description{
 Extract values from DESCRUPTION file
 }

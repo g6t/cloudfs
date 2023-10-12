@@ -17,6 +17,8 @@
 #' - `.sav`: [haven::write_sav]
 #' - `.xml`: [xml2::write_xml]
 #' 
+#' @return A writing function.
+#' 
 #' @keywords internal
 cloud_guess_write_fun <- function(file) {
   cloud_validate_file_path(file)
@@ -57,6 +59,8 @@ cloud_guess_write_fun <- function(file) {
 #' - `.xls`: [cloud_read_excel]
 #' - `.xlsx`: [cloud_read_excel]
 #' - `.xml`: [xml2::read_xml]
+#' 
+#' @return A reading function.
 #' 
 #' @keywords internal
 cloud_guess_read_fun <- function(file) {

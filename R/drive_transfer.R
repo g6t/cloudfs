@@ -39,15 +39,18 @@ cloud_drive_upload <- function(file, root = NULL) {
   invisible(id)
 }
 
-#' @title Download a file from Google Drive to local project folder
+#' @title Download a file from Google Drive to the local project folder
 #' 
-#' @description Downloads a file from project's Google Drive folder to local
-#'   project folder and saves it preserving folder structure.
+#' @description Retrieves a file from the project's Google Drive folder and 
+#'   saves it to the local project folder, maintaining the original folder 
+#'   structure.
 #' 
 #' @inheritParams cloud_validate_file_path
 #' @inheritParams cloud_drive_ls
 #' 
 #' @inherit cloud_drive_find_path details
+#' 
+#' @return Invisibly returns `NULL` after successfully downloading the file.
 #' 
 #' @examples 
 #' \dontrun{
@@ -75,29 +78,30 @@ cloud_drive_download <- function(file, root = NULL) {
   cli::cli_alert_success(
     "File {.path {file}} downloaded from Google Drive."
   )
+  invisible(NULL)
 }
 
 #' @title Write an object to Google Drive
 #' 
-#' @description Writes an R object to a file in project's Google Drive folder.
-#'   In most cases it is expected to be used for writing data.frames as csv, sav
-#'   or any other tabular data formats to Google Drive. But it is also possible
-#'   to save any R object if a proper saving function is provided. It tries to
-#'   guess a suitable writing function and the output file name where possible.
+#' @description Saves an R object to a designated location in the project's
+#'   Google Drive folder. If no custom writing function is provided, the
+#'   function will infer the appropriate writing method based on the file's
+#'   extension.
 #'   
 #' @inheritParams cloud_validate_file_path
 #' @inheritParams cloud_drive_ls
 #' 
-#' @param x An R object (e.g. data frame) to write to Google Drive.
-#' @param fun A function to write a file to cloud location to which x and a file
-#'   path will be passed (in that order). By default, if `fun = NULL`, it will
-#'   be attempted to find an appropriate writing function based on the file
-#'   extension.
-#' @param ... Further parameters to pass to `fun`
-#' @param local (logical) If `TRUE`, will additionally create a local file at
-#'   the corresponding path. Default is `FALSE`.
+#' @param x An R object to be written to Google Drive.
+#' @param fun A custom writing function. If `NULL` (default), the appropriate
+#'   writing function will be inferred based on the file's extension.
+#' @param ... Additional arguments to pass to the writing function `fun`.
+#' @param local Logical. If `TRUE`, a local copy of the file will also be
+#'   created at the specified path. Default is `FALSE`.
 #' 
 #' @inheritSection cloud_guess_write_fun Default writing functions
+#' 
+#' @return Invisibly returns a [googledrive::dribble] object representing the
+#'   written file on Google Drive.
 #' 
 #' @examples 
 #' \dontrun{
@@ -137,28 +141,34 @@ cloud_drive_write <- function(x, file, fun = NULL, ..., local = FALSE,
   
   fun(x, local_file, ...)
   
-  cloud_drive_put(media = local_file, path = file_dir_id)
+  id <- cloud_drive_put(media = local_file, path = file_dir_id)
   
   if (!local) {unlink(local_file)}
   cli::cli_alert_success(
     "Written to {.path {file}} on Google Drive."
   )
+  invisible(id)
 }
 
-#' @title Read an object from Google Drive
+#' @title Read a file from Google Drive
 #' 
-#' @description Reads a file from project's Google Drive. This function tries to
-#'   guess an appropriate reading function based on the `file` name, but you can
-#'   also provide a function by yourself if it's needed.
+#' @description Retrieves and reads a file from the project's Google Drive
+#'   folder. By default, the function attempts to determine the appropriate
+#'   reading function based on the file's extension. However, you can specify a
+#'   custom reading function if necessary.
 #'   
 #' @inheritParams cloud_validate_file_path
 #' @inheritParams cloud_drive_ls
 #' 
-#' @param fun Reading function. By default is `NULL` which means that it will
-#'   be attempted to guess an appropriate reading function from file extension.
-#' @param ... Further parameters to pass to `fun`.
+#' @param fun A custom reading function. If `NULL` (default), the appropriate
+#'   reading function will be inferred based on the file's extension.
+#'
+#' @param ... Additional arguments to pass to the reading function `fun`.
 #' 
 #' @inheritSection cloud_guess_read_fun Default reading functions
+#' 
+#' @return The content of the file read from Google Drive, with additional 
+#'   attributes containing metadata about the file.
 #' 
 #' @examples 
 #' \dontrun{

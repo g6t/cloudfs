@@ -26,6 +26,8 @@ cloud_get_roots <- function(project = ".") {
 #' @inheritParams validate_desc
 #' @param key Character. What field to search for in DESCRIPTION file.
 #' 
+#' @return A string value extracted from the DESCRIPTION field.
+#' 
 #' @keywords internal
 proj_desc_get <- function(key, project = ".") {
   check_string(key)
@@ -45,22 +47,25 @@ proj_desc_get <- function(key, project = ".") {
 #'   letters, digits, '-', '_', '.', spaces and '/' symbols.
 #' @param error if `TRUE` (default), throws an error if `file` is not a valid 
 #'   file path.
+#'   
+#' @return Either `TRUE` or `FALSE` if `error` is `FALSE`. Either `TRUE` or
+#' an error if `error` is `TRUE`.
 #'
 #' @keywords internal
 cloud_validate_file_path <- function(file, error = TRUE) {
   check_string(file)
   res <- grepl("^([A-Za-z]|[0-9]|-|_|\\.| |/)+$", file)
   if (error) {
-    if (file == "") stop("A valid file name should not be empty.")
-    if (!res) stop(
-      "File name '", file, "' is not valid\n\n",
-      "A valid file name may consist of\n",
-      "  * uppercase/lowercase letters\n",
-      "  * digits\n",
-      "  * spaces",
-      "  * '/' symbols to describe its location inside project's folder\n",
-      "  * '_', '-', '.' symbols"
-    )
+    if (file == "") cli::cli_abort("A valid file name should not be empty.")
+    if (!res) cli_abort(c(
+      "File name '{file}' is not valid",
+      "A valid file name may consist of:",
+      "*" = "uppercase/lowercase letters",
+      "*" = "digits",
+      "*" = "spaces",
+      "*" = "'/' symbols to describe its location inside project's folder",
+      "*" = "'_', '-', '.' symbols"
+    ))
   }
   res
 }
@@ -96,6 +101,8 @@ cloud_validate_file_names <- function(x) {
 #'   
 #' @param project Character. Path to a project. By default it is current working
 #'   directory.
+#'   
+#' @return Either `TRUE` or an error.
 #'
 #' @keywords internal
 validate_desc <- function(project = ".") {
@@ -167,6 +174,8 @@ init_desc <- function(project = ".") {
 #'   nested subfolders. Default is `FALSE`.
 #' @param full_names (logical) If `TRUE`, folder path is appended to object
 #'   names to give a relative file path.
+#'   
+#' @return Transformed `data`.   
 #' 
 #' @keywords internal
 cloud_prep_ls <- function(data, path, recursive, full_names) {

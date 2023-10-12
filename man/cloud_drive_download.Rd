@@ -2,7 +2,7 @@
 % Please edit documentation in R/drive_transfer.R
 \name{cloud_drive_download}
 \alias{cloud_drive_download}
-\title{Download a file from Google Drive to local project folder}
+\title{Download a file from Google Drive to the local project folder}
 \usage{
 cloud_drive_download(file, root = NULL)
 }
@@ -15,9 +15,13 @@ reference point for all relative paths. When left as \code{NULL}, the root is
 automatically derived from the \code{cloudfs.drive} field of the project's
 DESCRIPTION file.}
 }
+\value{
+Invisibly returns \code{NULL} after successfully downloading the file.
+}
 \description{
-Downloads a file from project's Google Drive folder to local
-project folder and saves it preserving folder structure.
+Retrieves a file from the project's Google Drive folder and
+saves it to the local project folder, maintaining the original folder
+structure.
 }
 \details{
 Google Drive file structure is different from the usual file

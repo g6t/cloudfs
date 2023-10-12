@@ -18,6 +18,9 @@ the object on the deepest level will always be created as a folder. E.g.
 if \code{path = "models/kmeans/model.Rds"} and \code{"model.Rds"} is missing, this
 function will create a folder with such name.}
 }
+\value{
+A \link[googledrive:dribble]{googledrive::dribble} object corresponding to the folder.
+}
 \description{
 Given a Google Drive id pointing to a folder and a relative path
 inside this folder, returns id of the object (file or folder) corresponding

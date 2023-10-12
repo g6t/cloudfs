@@ -2,7 +2,7 @@
 % Please edit documentation in R/s3_transfer_bulk.R
 \name{cloud_s3_write_bulk}
 \alias{cloud_s3_write_bulk}
-\title{Write objects to S3 in bulk}
+\title{Write multiple objects to S3 in bulk}
 \usage{
 cloud_s3_write_bulk(
   content,
@@ -16,15 +16,13 @@ cloud_s3_write_bulk(
 \arguments{
 \item{content}{(data.frame) output of \code{cloud_object_ls()}}
 
-\item{fun}{a function to write a file to cloud location to which x and a file
-path will be passed (in that order). By default, if \code{fun = NULL}, it will
-be attempted to find an appropriate writing function based on the file
-extension.}
+\item{fun}{A custom writing function. If \code{NULL} (default), the appropriate
+writing function will be inferred based on the file's extension.}
 
-\item{...}{further parameters to pass to \code{fun}}
+\item{...}{Additional arguments to pass to the writing function \code{fun}.}
 
-\item{local}{(logical) If \code{TRUE}, will additionally create a local file at
-the corresponding path. Default is \code{FALSE}.}
+\item{local}{Logical. If \code{TRUE}, a local copy of the file will also be
+created at the specified path. Default is \code{FALSE}.}
 
 \item{quiet}{all caution messages may be turned off by setting this parameter
 to \code{TRUE}.}
@@ -33,15 +31,18 @@ to \code{TRUE}.}
 for all relative paths. When left as \code{NULL}, the root is automatically
 derived from the \code{cloudfs.s3} field of the project's DESCRIPTION file.}
 }
+\value{
+Invisibly returns the input \code{content} dataframe.
+}
 \description{
-Given a named list of objects \link{cloud_object_ls} function returns
-a dataframe similar to the output of \link{cloud_local_ls} or \link{cloud_s3_ls}.
-\code{cloud_s3_write_bulk} can be applied to such a dataframe to write all the
-listed objects to S3. \link{cloud_s3_write} is used under the hood. It will be
-attempted to guess writing function from file extensions. You can pass
-writing function manually by setting \code{fun} parameter, but it means that all
-the files will be written using one function. In fact, you probably
-shouldn't be writing multiple files of different types in bulk.
+This function allows for the bulk writing of multiple R objects
+to the project's designated S3 folder. To prepare a list of objects for
+writing, use \link{cloud_object_ls}, which generates a dataframe listing the
+objects and their intended destinations in a format akin to the output of
+\link{cloud_s3_ls}. By default, the function determines the appropriate writing
+method based on each file's extension. However, if a specific writing
+function is provided via the \code{fun} parameter, it will be applied to all
+files, which may not be ideal if dealing with a variety of file types.
 }
 \examples{
 \dontrun{

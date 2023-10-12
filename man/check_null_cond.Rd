@@ -11,6 +11,9 @@ check_null_cond(x, alt_null)
 
 \item{alt_null}{Logical. If \code{TRUE} it will check if \code{x} is \code{NULL}.}
 }
+\value{
+Either \code{TRUE} or \code{FALSE}.
+}
 \description{
 Check if \code{alt_null} argument is TRUE or FALSE. If it is \code{FALSE}
 it will return \code{FALSE}. If the argument is \code{TRUE} it will check if the
