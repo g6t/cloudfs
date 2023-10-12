@@ -106,7 +106,7 @@ becomes much easier and cleaner:
 cloud_s3_upload("models/glm.rds")
 ```
 
-## Package walkthrough
+## Package walk-through
 
 ### Setting up a root
 

@@ -3,7 +3,7 @@
 #' @description Opens project's Google Drive folder in browser.
 #' 
 #' @inheritParams cloud_drive_ls
-#' @param path (optional) ath inside the Google Drive folder to open. Defaults
+#' @param path (optional) Path inside the Google Drive folder to open. Defaults
 #'   to the root level (path = "") of the project's folder.
 #'   
 #' @inherit cloud_drive_find_path details

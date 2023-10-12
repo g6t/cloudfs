@@ -41,7 +41,7 @@ remotes::install_github("g6t/cloudfs")
     cloud_s3_write(glmnet_model, "models/glmnet.rds")
     ```
 
-    If you don't like the default function, you can use a different one by explicitely calling it.
+    If you don't like the default function, you can use a different one by explicitly calling it.
 
     ``` r
     cloud_s3_write(glmnet_model, "models/glmnet.rds", fun = readr::write_rds)

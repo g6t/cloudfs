@@ -15,6 +15,7 @@ Useful links:
 \itemize{
   \item \url{https://g6t.github.io/cloudfs/}
   \item \url{https://github.com/g6t/cloudfs}
+  \item Report bugs at \url{https://github.com/g6t/cloudfs/issues}
 }
 
 }

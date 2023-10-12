@@ -21,7 +21,7 @@ cloud_get_roots <- function(project = ".") {
   res
 }
 
-#' @title Extract values from DESCRUPTION file
+#' @title Extract values from DESCRIPTION file
 #' 
 #' @inheritParams validate_desc
 #' @param key Character. What field to search for in DESCRIPTION file.

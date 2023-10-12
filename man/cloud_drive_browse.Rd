@@ -7,7 +7,7 @@
 cloud_drive_browse(path = "", root = NULL)
 }
 \arguments{
-\item{path}{(optional) ath inside the Google Drive folder to open. Defaults
+\item{path}{(optional) Path inside the Google Drive folder to open. Defaults
 to the root level (path = "") of the project's folder.}
 
 \item{root}{Google Drive ID or URL of the project root. This serves as the

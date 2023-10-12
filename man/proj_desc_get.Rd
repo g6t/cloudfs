@@ -2,7 +2,7 @@
 % Please edit documentation in R/common.R
 \name{proj_desc_get}
 \alias{proj_desc_get}
-\title{Extract values from DESCRUPTION file}
+\title{Extract values from DESCRIPTION file}
 \usage{
 proj_desc_get(key, project = ".")
 }
@@ -16,6 +16,6 @@ directory.}
 A string value extracted from the DESCRIPTION field.
 }
 \description{
-Extract values from DESCRUPTION file
+Extract values from DESCRIPTION file
 }
 \keyword{internal}
