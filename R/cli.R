@@ -23,12 +23,6 @@
 #'   `FALSE` otherwise, i.e. when user selects a "no" option or refuses to make
 #'   a selection (cancels).
 #'
-#' @examples
-#' \dontrun{
-#' cli_yeah("Is this {.strong true}?: {.code 2+2 == 4}")
-#' cli_yeah("{.field Yes} or {.field No}?", straight = TRUE)
-#' }
-#' 
 #' @keywords internal
 cli_yeah <- function(x, straight = FALSE, .envir = parent.frame()) {
   check_scalar(x, arg_class = "character")
@@ -68,41 +62,6 @@ cli_yeah <- function(x, straight = FALSE, .envir = parent.frame()) {
 #'
 #' @return Invisible `NULL` if assertion is `TRUE`, otherwise an error message.
 #'
-#' @examples
-#' # Variables values to test
-#' char_s <- "test"
-#' char_v <- c("test", "variable")
-#' num_s <- 1.5
-#' num_v <- c(2, 1.5, 3.33)
-#' logical_s <- TRUE
-#' logical_v <- c(FALSE, FALSE)
-#' int_s <- 1L
-#' int_v <- c(3L, 33L)
-#' \dontrun{
-#' # Assert Scalar Character
-#' check_scalar(char_s, arg_class = "character")
-#' check_scalar(char_v, arg_class = "character")
-#' check_scalar(num_s, arg_class = "character")
-#' check_scalar(logical_s, arg_class = "character")
-#' 
-#' # Assert Scalar Numeric
-#' check_scalar(num_s, arg_class = "numeric")
-#' check_scalar(num_v, arg_class = "numeric")
-#' check_scalar(int_s, arg_class = "numeric", alt_null = TRUE)
-#' check_scalar(logical_v, arg_class = "numeric")
-#' 
-#' # Assert Scalar Logical
-#' check_scalar(logical_s, arg_class = "logical")
-#' check_scalar(logical_v, arg_class = "logical")
-#' check_scalar(char_s, arg_class = "logical", alt_null = TRUE)
-#' check_scalar(int_v, arg_class = "logical")
-#' 
-#' #' # Assert Scalar Integer
-#' check_scalar(int_s, arg_class = "integer")
-#' check_scalar(int_v,  arg_class = "integer", alt_null = TRUE)
-#' check_scalar(num_s, arg_class = "integer")
-#' check_scalar(logical_v, arg_class = "integer", alt_null = TRUE)
-#' }
 #' @keywords internal 
 check_scalar <- function(..., arg_class, alt_null = FALSE) {
   
@@ -171,26 +130,6 @@ check_numeric <- function(x) {
 #' @return If argument `class` is same as `arg_class` it returns invisible
 #'   `NULL`. Otherwise the function throws an error.
 #'
-#' @examples
-#' c1 <- c("x", "y")
-#' n1 <- c(1,3,4)
-#' n2 <- c(1.5, 2.5)
-#' i1 <- 1L
-#' df1 <- data.frame(x = 1:5, y = 6:10)
-#' new_class <- structure("new class", class= c("character", "new class"))
-#' nl1 <- NULL
-#' \dontrun{
-#' check_class(c1, arg_class = "character")
-#' check_class(c1, arg_class = "numeric")
-#' check_class(df1, arg_class = "data.frame")
-#' check_class(
-#'   new_class, arg_class = "tbl_df",
-#'   add_msg = "{.arg {x_name}} with {.cls {wrong_class}} not {.cls {arg_class}}"
-#' )
-#' check_class(nl1, arg_class = "character")
-#' check_class(nl1, arg_class = "character", alt_null = TRUE)
-#' check_class(n2, arg_class = "character", alt_null = TRUE)
-#' }
 #' @keywords internal
 check_class <- function(x, arg_class, alt_null = FALSE, add_msg = NULL) {
   if(!(inherits(arg_class, "character") & length(arg_class) == 1)) {
@@ -246,24 +185,6 @@ check_class <- function(x, arg_class, alt_null = FALSE, add_msg = NULL) {
 #' @return Returns invisible `NULL` when argument is of asserted length,
 #'   otherwise it will throw an error.
 #'
-#' @examples
-#' x1 <- 2
-#' x2 <- c("x", "y")
-#' nl1 <- NULL
-#' \dontrun{
-#' check_length(x1, arg_length = 1L)
-#' check_length(x2, arg_length = 1L)
-#' check_length(x1, arg_length = 2L)
-#' check_length(
-#'   x1, arg_length = 2L, add_msg = "{.arg {x_name}} should be short"
-#' )
-#' check_length(
-#'   x1, arg_length = 2L, alt_null = TRUE, add_msg = "{.arg {x_name}} should be short"
-#' )
-#' check_length(
-#'   nl1, arg_length = 2L, alt_null = TRUE, add_msg = "{.arg {x_name}} should be short"
-#' )
-#' }
 #' @keywords internal
 check_length <- function(x, arg_length = 1L, alt_null = FALSE, add_msg = NULL) {
   if(!inherits(arg_length, "integer") | length(arg_length) != 1) {
@@ -304,10 +225,6 @@ check_length <- function(x, arg_length = 1L, alt_null = FALSE, add_msg = NULL) {
 #' @param ... unquoted arguments names
 #' @return List of quosures.
 #' 
-#' @examples 
-#' \dontrun{
-#' check_args(x, y)
-#' }
 #' @keywords internal
 check_args <- function(...) {
   rlang::quos(...)
@@ -357,23 +274,6 @@ check_null_cond <- function(x, alt_null){
 #' @return If argument is single `TRUE` or `FALSE` (optionally `NULL`) it 
 #'   returns invisible `NULL`. Otherwise the function throws an error.
 #'
-#' @examples
-#' c1 <- c("x", "y")
-#' n1 <- c(1,3,4)
-#' n2 <- c(1.5, 2.5)
-#' i1 <- 1L
-#' nl1 <- NULL
-#' l1 <- FALSE
-#' l2 <- c(FALSE, TRUE)
-#' \dontrun{
-#' check_bool(c1)
-#' check_bool(nl1)
-#' check_bool(nl1, alt_null = TRUE)
-#' check_bool(n2, alt_null = TRUE)
-#' check_bool(i1)
-#' check_bool(l1)
-#' check_bool(l2)
-#' }
 #' @keywords internal
 check_bool <- function(x, alt_null = FALSE, add_msg = NULL) {
   

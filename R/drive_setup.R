@@ -124,11 +124,6 @@ cloud_drive_get_root <- function(project = ".") {
 #'   path you pass to it defines strictly one object. If there's any ambiguity
 #'   it throws an error.
 #'   
-#' @examples 
-#' \dontrun{
-#' cloud_drive_find_path("1ul0MYeHb0nJtnuaPinKV1WtH0n3igmN2", "models/kmeans")
-#' }
-#' 
 #' @return A [googledrive::dribble] object corresponding to the folder.
 #'
 #' @keywords internal

@@ -33,11 +33,4 @@ purpose to standardize command line dialogues in our code.
 possible.
 }
 }
-\examples{
-\dontrun{
-cli_yeah("Is this {.strong true}?: {.code 2+2 == 4}")
-cli_yeah("{.field Yes} or {.field No}?", straight = TRUE)
-}
-
-}
 \keyword{internal}

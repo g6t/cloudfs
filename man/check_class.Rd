@@ -32,25 +32,4 @@ If argument \code{class} is same as \code{arg_class} it returns invisible
 \description{
 Check if argument is of proper class.
 }
-\examples{
-c1 <- c("x", "y")
-n1 <- c(1,3,4)
-n2 <- c(1.5, 2.5)
-i1 <- 1L
-df1 <- data.frame(x = 1:5, y = 6:10)
-new_class <- structure("new class", class= c("character", "new class"))
-nl1 <- NULL
-\dontrun{
-check_class(c1, arg_class = "character")
-check_class(c1, arg_class = "numeric")
-check_class(df1, arg_class = "data.frame")
-check_class(
-  new_class, arg_class = "tbl_df",
-  add_msg = "{.arg {x_name}} with {.cls {wrong_class}} not {.cls {arg_class}}"
-)
-check_class(nl1, arg_class = "character")
-check_class(nl1, arg_class = "character", alt_null = TRUE)
-check_class(n2, arg_class = "character", alt_null = TRUE)
-}
-}
 \keyword{internal}
