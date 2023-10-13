@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-A unified interface for simplifying cloud storage interactions, including uploading, downloading, reading, and writing files, with functions for both Google Drive and Amazon S3.
+A unified interface for simplifying cloud storage interactions, including uploading, downloading, reading, and writing files, with functions for both 'Google Drive' (\url{https://www.google.com/drive/}) and 'Amazon S3' (\url{https://aws.amazon.com/s3/}).
 }
 \seealso{
 Useful links:
