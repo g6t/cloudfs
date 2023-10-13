@@ -30,10 +30,9 @@ allows you to upload all listed files to S3.
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # create toy plots: 2 png's and 1 jpeg
 dir.create("toy_plots")
-png("toy_plots/plot1.png"); plot(rnorm(100))
-png("toy_plots/plot2.png"); plot(hist(rnorm(100)))
-png("toy_plots/plot3.jpeg"); plot(hclust(dist(USArrests), "ave"))
-dev.off()
+png("toy_plots/plot1.png"); plot(rnorm(100)); dev.off()
+png("toy_plots/plot2.png"); plot(hist(rnorm(100))); dev.off()
+png("toy_plots/plot3.jpeg"); plot(hclust(dist(USArrests), "ave")); dev.off()
 
 # upload only the two png's
 cloud_local_ls("toy_plots")  |> 
