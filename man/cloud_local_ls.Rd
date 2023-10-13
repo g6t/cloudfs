@@ -39,14 +39,14 @@ Retrieves names, timestamps, and sizes of files and folders
 inside local project folder.
 }
 \examples{
-\dontrun{
 # list only root-level files and folders
 cloud_local_ls() 
 
 # list all files in all nested folders
 cloud_local_ls(recursive = TRUE)
 
-# list contents of "plots/barplots" subfolder
+\dontrun{
+# list contents of "plots/barplots" subfolder (if it exists)
 cloud_local_ls("plots/barplots")
 }
 

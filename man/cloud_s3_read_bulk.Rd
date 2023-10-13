@@ -36,11 +36,13 @@ reading function is provided via the \code{fun} parameter, it will be applied
 uniformly to all files, which may not be suitable for diverse file types.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive() ) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# provided there's a folder called "data" in the root of the project's main
+# S3 folder, and it contains csv files
 data_lst <- 
-  cloud_s3_ls("data") \%>\% 
-  filter(type == "csv") \%>\% 
+  cloud_s3_ls("data") |>  
+  filter(type == "csv")  |>  
   cloud_s3_read_bulk()
-}
   
+\dontshow{\}) # examplesIf}
 }

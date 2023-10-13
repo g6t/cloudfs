@@ -8,11 +8,16 @@
 #'  
 #' @return Invisibly returns `NULL` after successfully uploading the file.
 #'
-#' @examples 
-#' \dontrun{
-#' # uploads data/demo.csv to 'data' subfolder of project's S3 folder
-#' cloud_s3_upload("data/demo.csv")
-#' }
+#' @examplesIf interactive() 
+#' # create a toy csv file
+#' dir.create("toy_data")
+#' write.csv(mtcars, "toy_data/mtcars.csv")
+#' 
+#' # uploads toy_data/mtcars.csv to 'data' subfolder of project's S3 folder
+#' cloud_s3_upload("toy_data/mtcars.csv")
+#' 
+#' # clean up
+#' unlink("toy_data", recursive = TRUE)
 #' 
 #' @export
 cloud_s3_upload <- function(file, root = NULL) {
@@ -38,6 +43,9 @@ cloud_s3_upload <- function(file, root = NULL) {
   invisible(NULL)
 }
 
+
+
+
 #' @title Download a file from S3 to the local project folder
 #' 
 #' @description Retrieves a file from the project's S3 root folder and saves it
@@ -48,12 +56,10 @@ cloud_s3_upload <- function(file, root = NULL) {
 #' 
 #' @return Invisibly returns `NULL` after successfully downloading the file.
 #' 
-#' @examples 
-#' \dontrun{
-#' # downloads data/demo.csv from project's S3 folder
+#' @examplesIf interactive() 
+#' # downloads data/demo.csv from project's S3 folder (provided it exists)
 #' # and saves it to local 'data' folder
 #' cloud_s3_download("data/demo.csv")
-#' }
 #' 
 #' @export
 cloud_s3_download <- function(file, root = NULL) {
@@ -95,15 +101,13 @@ cloud_s3_download <- function(file, root = NULL) {
 #'
 #' @return Invisibly returns `NULL` after successfully writing the object to S3.
 #' 
-#' @examples 
-#' \dontrun{
+#' @examplesIf interactive() 
 #' # write mtcars dataframe to mtcars.csv in data folder
 #' cloud_s3_write(mtcars, "data/mtcars.csv")
 #' cloud_s3_write(random_forest, "models/random_forest.rds")
 #' 
 #' # provide custom writing function with parameters 
 #' cloud_s3_write(c("one", "two"), "text/count.txt", writeLines, sep = "\n\n")
-#' }
 #' 
 #' @export
 cloud_s3_write <- function(x, file, fun = NULL, ..., local = FALSE,
@@ -163,12 +167,12 @@ cloud_s3_write <- function(x, file, fun = NULL, ..., local = FALSE,
 #' 
 #' @inheritSection cloud_guess_read_fun Default reading functions
 #' 
-#' @examples 
-#' \dontrun{
+#' @examplesIf interactive() 
+#' # provided there are folders called "data" and "models" in the root of your
+#' # project's main S3 folder and they contain the files mentioned below
 #' cloud_s3_read("data/mtcars.csv")
 #' cloud_s3_read("models/random_forest.rds")
 #' cloud_s3_read("data/dm.sas7bdat", fun = haven::read_sas)
-#' }
 #' 
 #' @export
 cloud_s3_read <- function(file, fun = NULL, ..., root = NULL) {

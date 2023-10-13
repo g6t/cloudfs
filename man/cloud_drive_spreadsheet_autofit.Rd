@@ -23,9 +23,8 @@ Finds the spreadsheet by path relative to a project root.
 Applies \code{\link[googlesheets4:range_autofit]{googlesheets4::range_autofit()}} to each sheet.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive() ) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 cloud_drive_write(mtcars, "results/mtcars.xlsx")
 cloud_drive_spreadsheet_autofit("results/mtcars.xlsx")
-}
-
+\dontshow{\}) # examplesIf}
 }

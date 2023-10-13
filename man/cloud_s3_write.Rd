@@ -48,13 +48,12 @@ Here's how we identify a writing function based on file extension
 }
 
 \examples{
-\dontrun{
+\dontshow{if (interactive() ) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # write mtcars dataframe to mtcars.csv in data folder
 cloud_s3_write(mtcars, "data/mtcars.csv")
 cloud_s3_write(random_forest, "models/random_forest.rds")
 
 # provide custom writing function with parameters 
 cloud_s3_write(c("one", "two"), "text/count.txt", writeLines, sep = "\n\n")
-}
-
+\dontshow{\}) # examplesIf}
 }

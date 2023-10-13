@@ -45,15 +45,15 @@ function is provided via the \code{fun} parameter, it will be applied to all
 files, which may not be ideal if dealing with a variety of file types.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive() ) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # write two csv files: data/df_mtcars.csv and data/df_iris.csv
 cloud_object_ls(
   dplyr::lst(mtcars = mtcars, iris = iris),
   path = "data",
   extension = "csv",
   prefix = "df_"
-) \%>\% 
+) |>  
 cloud_s3_write_bulk()
-}
   
+\dontshow{\}) # examplesIf}
 }

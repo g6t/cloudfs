@@ -44,7 +44,7 @@ path you pass to it defines strictly one object. If there's any ambiguity
 it throws an error.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive() ) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # list only root-level files and folders
 cloud_drive_ls() 
 
@@ -53,6 +53,5 @@ cloud_drive_ls(recursive = TRUE)
 
 # list contents of "plots/barplots" subfolder
 cloud_drive_ls("plots/barplots")
-}
-
+\dontshow{\}) # examplesIf}
 }

@@ -19,8 +19,7 @@ Uses \link[readxl:read_excel]{readxl::read_excel} under the hood, reads all shee
 returns them as a named list of dataframes.
 }
 \examples{
-\dontrun{
-data_lst <- cloud_read_excel("my_project/data.xlsx")
-}
+datasets <- readxl::readxl_example("datasets.xlsx")
+cloud_read_excel(datasets)
 
 }

@@ -53,11 +53,9 @@ cloud_s3_browse_path <- function(path = "") {
 #' @return Invisibly returns `NULL`. The primary purpose of this function is its
 #'   side effect: opening the specified S3 folder in a browser.
 #' 
-#' @examples 
-#' \dontrun{
+#' @examplesIf interactive() 
 #' cloud_s3_browse()
 #' cloud_s3_browse("data")
-#' }
 #' 
 #' @export
 cloud_s3_browse <- function(path = "", root = NULL) {
@@ -85,8 +83,7 @@ cloud_s3_browse <- function(path = "", root = NULL) {
 #' @return A tibble containing the names, last modification timestamps, and
 #'   sizes in bytes of files and folders inside the specified S3 folder.
 #' 
-#' @examples 
-#' \dontrun{
+#' @examplesIf interactive() 
 #' # list only root-level files and folders
 #' cloud_s3_ls() 
 #' 
@@ -95,7 +92,6 @@ cloud_s3_browse <- function(path = "", root = NULL) {
 #' 
 #' # list contents of "plots/barplots" subfolder
 #' cloud_s3_ls("plots/barplots")
-#' }
 #' 
 #' @export
 cloud_s3_ls <- function(path = "", recursive = FALSE, full_names = FALSE,

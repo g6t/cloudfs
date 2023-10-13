@@ -37,10 +37,9 @@ path you pass to it defines strictly one object. If there's any ambiguity
 it throws an error.
 }
 \examples{
-\dontrun{
-# downloads data/demo.csv from project's Google Drive folder
-# and saves it to local 'data' folder
+\dontshow{if (interactive() ) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# downloads data/demo.csv from project's Google Drive folder 
+# (provided it exists) and saves it to local 'data' folder
 cloud_drive_download("data/demo.csv")
-}
-
+\dontshow{\}) # examplesIf}
 }

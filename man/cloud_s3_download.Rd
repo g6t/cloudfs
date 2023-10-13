@@ -22,10 +22,9 @@ Retrieves a file from the project's S3 root folder and saves it
 to the local project folder, maintaining the original folder structure.
 }
 \examples{
-\dontrun{
-# downloads data/demo.csv from project's S3 folder
+\dontshow{if (interactive() ) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# downloads data/demo.csv from project's S3 folder (provided it exists)
 # and saves it to local 'data' folder
 cloud_s3_download("data/demo.csv")
-}
-
+\dontshow{\}) # examplesIf}
 }

@@ -34,11 +34,13 @@ extension. However, if a specific reading function is provided via the
 be suitable for diverse file types.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# provided there's a folder called "data" in the root of the project's main
+# Google Drive folder, and it contains csv files
 data_lst <- 
-  cloud_drive_ls("data") \%>\% 
-  filter(type == "csv") \%>\% 
+  cloud_drive_ls("data") |> 
+  filter(type == "csv") |> 
   cloud_drive_read_bulk()
-}
   
+\dontshow{\}) # examplesIf}
 }

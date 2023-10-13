@@ -22,9 +22,8 @@ side effect: opening the specified S3 folder in a browser.
 Opens project's S3 folder in browser.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive() ) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 cloud_s3_browse()
 cloud_s3_browse("data")
-}
-
+\dontshow{\}) # examplesIf}
 }

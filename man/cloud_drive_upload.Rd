@@ -37,9 +37,16 @@ path you pass to it defines strictly one object. If there's any ambiguity
 it throws an error.
 }
 \examples{
-\dontrun{
-# uploads data/demo.csv to 'data' subfolder of project's Google Drive folder
-cloud_drive_upload("data/demo.csv")
-}
+\dontshow{if (interactive() ) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# create a toy csv file
+dir.create("toy_data")
+write.csv(mtcars, "toy_data/mtcars.csv")
 
+# uploads toy_data/mtcars.csv to 'data' subfolder of project's 
+# Google Drive folder
+cloud_drive_upload("toy_data/mtcars.csv")
+
+# clean up
+unlink("toy_data", recursive = TRUE)
+\dontshow{\}) # examplesIf}
 }

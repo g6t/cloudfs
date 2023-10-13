@@ -25,6 +25,7 @@ URL and updates the \code{cloudfs.drive} field in the DESCRIPTION file
 accordingly.
 }
 \examples{
-\dontrun{cloud_drive_attach()}
-
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+cloud_drive_attach()
+\dontshow{\}) # examplesIf}
 }

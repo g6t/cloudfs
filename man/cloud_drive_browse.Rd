@@ -36,9 +36,8 @@ path you pass to it defines strictly one object. If there's any ambiguity
 it throws an error.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive() ) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 cloud_drive_browse()
 cloud_drive_browse("models/kmeans")
-}
-
+\dontshow{\}) # examplesIf}
 }

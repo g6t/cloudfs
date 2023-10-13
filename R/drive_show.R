@@ -11,11 +11,9 @@
 #' @return Invisibly returns `NULL`. The primary purpose of this function is its
 #'   side effect: opening the specified Google Drive folder in a browser.
 #' 
-#' @examples 
-#' \dontrun{
+#' @examplesIf interactive() 
 #' cloud_drive_browse()
 #' cloud_drive_browse("models/kmeans")
-#' }
 #' 
 #' @export
 cloud_drive_browse <- function(path = "", root = NULL) {
@@ -47,8 +45,7 @@ cloud_drive_browse <- function(path = "", root = NULL) {
 #'   bytes, and Google Drive IDs of files and folders inside the specified
 #'   Google Drive folder.
 #' 
-#' @examples 
-#' \dontrun{
+#' @examplesIf interactive() 
 #' # list only root-level files and folders
 #' cloud_drive_ls() 
 #' 
@@ -57,7 +54,6 @@ cloud_drive_browse <- function(path = "", root = NULL) {
 #' 
 #' # list contents of "plots/barplots" subfolder
 #' cloud_drive_ls("plots/barplots")
-#' }
 #' 
 #' @export
 cloud_drive_ls <- function(path = "", recursive = FALSE, full_names = FALSE,

@@ -23,10 +23,12 @@ select specific files from the Google Drive listing and then download
 them in bulk.
 }
 \examples{
-\dontrun{
-cloud_drive_ls("data") \%>\% 
-  filter(type == "csv") \%>\% 
+\dontshow{if (interactive() ) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# provided there's a folder called "data" in the root of your project's
+# Google Drive folder, and this folder contains "csv" files
+cloud_drive_ls("data") |> 
+  filter(type == "csv") |> 
   cloud_drive_download_bulk()
-}
   
+\dontshow{\}) # examplesIf}
 }

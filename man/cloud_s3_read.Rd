@@ -45,10 +45,11 @@ Here's how we identify a reading function based on file extension
 }
 
 \examples{
-\dontrun{
+\dontshow{if (interactive() ) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# provided there are folders called "data" and "models" in the root of your
+# project's main S3 folder and they contain the files mentioned below
 cloud_s3_read("data/mtcars.csv")
 cloud_s3_read("models/random_forest.rds")
 cloud_s3_read("data/dm.sas7bdat", fun = haven::read_sas)
-}
-
+\dontshow{\}) # examplesIf}
 }

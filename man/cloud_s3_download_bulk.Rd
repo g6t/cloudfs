@@ -26,10 +26,12 @@ downloading multiple files by allowing you to filter and select specific
 files from the S3 listing and then download them in bulk.
 }
 \examples{
-\dontrun{
-cloud_s3_ls("data") \%>\% 
-  filter(type == "csv") \%>\% 
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# provided there's a folder called "data" in the root of your project's
+# S3 folder, and this folder contains "csv" files
+cloud_s3_ls("data") |> 
+  filter(type == "csv") |> 
   cloud_s3_download_bulk()
-}
   
+\dontshow{\}) # examplesIf}
 }

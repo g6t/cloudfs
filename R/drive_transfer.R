@@ -11,11 +11,17 @@
 #' @return Invisibly returns a [googledrive::dribble] object representing the
 #'   uploaded file on Google Drive.
 #'   
-#' @examples 
-#' \dontrun{
-#' # uploads data/demo.csv to 'data' subfolder of project's Google Drive folder
-#' cloud_drive_upload("data/demo.csv")
-#' }
+#' @examplesIf interactive() 
+#' # create a toy csv file
+#' dir.create("toy_data")
+#' write.csv(mtcars, "toy_data/mtcars.csv")
+#' 
+#' # uploads toy_data/mtcars.csv to 'data' subfolder of project's 
+#' # Google Drive folder
+#' cloud_drive_upload("toy_data/mtcars.csv")
+#' 
+#' # clean up
+#' unlink("toy_data", recursive = TRUE)
 #' 
 #' @export
 cloud_drive_upload <- function(file, root = NULL) {
@@ -52,12 +58,10 @@ cloud_drive_upload <- function(file, root = NULL) {
 #' 
 #' @return Invisibly returns `NULL` after successfully downloading the file.
 #' 
-#' @examples 
-#' \dontrun{
-#' # downloads data/demo.csv from project's Google Drive folder
-#' # and saves it to local 'data' folder
+#' @examplesIf interactive() 
+#' # downloads data/demo.csv from project's Google Drive folder 
+#' # (provided it exists) and saves it to local 'data' folder
 #' cloud_drive_download("data/demo.csv")
-#' }
 #' 
 #' @export
 cloud_drive_download <- function(file, root = NULL) {
@@ -103,15 +107,13 @@ cloud_drive_download <- function(file, root = NULL) {
 #' @return Invisibly returns a [googledrive::dribble] object representing the
 #'   written file on Google Drive.
 #' 
-#' @examples 
-#' \dontrun{
+#' @examplesIf interactive() 
 #' # write mtcars dataframe to mtcars.csv in data folder
 #' cloud_drive_write(mtcars, "data/mtcars.csv")
 #' cloud_drive_write(random_forest, "models/random_forest.rds")
 #' 
 #' # provide custom writing function with parameters 
 #' cloud_drive_write(c("one", "two"), "text/count.txt", writeLines, sep = "\n\n")
-#' }
 #' 
 #' @export
 cloud_drive_write <- function(x, file, fun = NULL, ..., local = FALSE,
@@ -170,12 +172,13 @@ cloud_drive_write <- function(x, file, fun = NULL, ..., local = FALSE,
 #' @return The content of the file read from Google Drive, with additional 
 #'   attributes containing metadata about the file.
 #' 
-#' @examples 
-#' \dontrun{
+#' @examplesIf interactive() 
+#' # provided there are folders called "data" and "models" in the root of your
+#' # project's main Google Drive folder and they contain the files mentioned
+#' # below
 #' cloud_drive_read("data/mtcars.csv")
 #' cloud_drive_read("models/random_forest.rds")
 #' cloud_drive_read("data/dm.sas7bdat", fun = haven::read_sas)
-#' }
 #' 
 #' @export
 cloud_drive_read <- function(file, fun = NULL, ..., root = NULL) {

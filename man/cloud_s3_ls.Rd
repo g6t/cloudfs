@@ -30,7 +30,7 @@ Returns a tibble with names, timestamps, and sizes of files and
 folders inside the specified S3 folder.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive() ) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # list only root-level files and folders
 cloud_s3_ls() 
 
@@ -39,6 +39,5 @@ cloud_s3_ls(recursive = TRUE)
 
 # list contents of "plots/barplots" subfolder
 cloud_s3_ls("plots/barplots")
-}
-
+\dontshow{\}) # examplesIf}
 }

@@ -117,11 +117,9 @@ cloud_drive_put <- function(media, path) {
 #' 
 #' @return The file ID of the resized Google spreadsheet as an invisible result.
 #' 
-#' @examples 
-#' \dontrun{
+#' @examplesIf interactive() 
 #' cloud_drive_write(mtcars, "results/mtcars.xlsx")
 #' cloud_drive_spreadsheet_autofit("results/mtcars.xlsx")
-#' }
 #' 
 #' @export 
 cloud_drive_spreadsheet_autofit <- function(file, root = NULL) {

@@ -14,8 +14,8 @@
 #'   is the side effect of updating the project's DESCRIPTION file with the
 #'   associated Google Drive folder identifier.
 #'
-#' @examples
-#' \dontrun{cloud_drive_attach()}
+#' @examplesIf interactive()
+#' cloud_drive_attach()
 #'
 #' @export
 cloud_drive_attach <- function(project = ".") {

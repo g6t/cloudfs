@@ -97,9 +97,8 @@ cloud_guess_read_fun <- function(file) {
 #'   the sheet names.
 #'
 #' @examples 
-#' \dontrun{
-#' data_lst <- cloud_read_excel("my_project/data.xlsx")
-#' }
+#' datasets <- readxl::readxl_example("datasets.xlsx")
+#' cloud_read_excel(datasets)
 #' 
 #' @export
 cloud_read_excel <- function(path) {

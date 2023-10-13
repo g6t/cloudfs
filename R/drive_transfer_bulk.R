@@ -112,12 +112,21 @@ cloud_drive_content_find_dirs <- function(cont, root = NULL) {
 #' 
 #' @return Invisibly returns the input `content` dataframe.
 #' 
-#' @examples 
-#' \dontrun{
-#' cloud_local_ls("plots") %>% 
-#'   filter(type == "png") %>% 
+#' @examplesIf interactive() 
+#' # create toy plots: 2 png's and 1 jpeg
+#' dir.create("toy_plots")
+#' png("toy_plots/plot1.png"); plot(rnorm(100))
+#' png("toy_plots/plot2.png"); plot(hist(rnorm(100)))
+#' png("toy_plots/plot3.jpeg"); plot(hclust(dist(USArrests), "ave"))
+#' dev.off()
+#' 
+#' # upload only the two png's
+#' cloud_local_ls("toy_plots")  |> 
+#'   dplyr::filter(type == "png")  |> 
 #'   cloud_drive_upload_bulk()
-#' }
+#' 
+#' # clean up
+#' unlink("toy_plots", recursive = TRUE)
 #'   
 #' @export
 cloud_drive_upload_bulk <- function(content, quiet = FALSE, root = NULL) {
@@ -158,12 +167,12 @@ cloud_drive_upload_bulk <- function(content, quiet = FALSE, root = NULL) {
 #' 
 #' @return Invisibly returns the input `content` dataframe.
 #' 
-#' @examples 
-#' \dontrun{
-#' cloud_drive_ls("data") %>% 
-#'   filter(type == "csv") %>% 
+#' @examplesIf interactive() 
+#' # provided there's a folder called "data" in the root of your project's
+#' # Google Drive folder, and this folder contains "csv" files
+#' cloud_drive_ls("data") |> 
+#'   filter(type == "csv") |> 
 #'   cloud_drive_download_bulk()
-#' }
 #'   
 #' @export
 cloud_drive_download_bulk <- function(content, quiet = FALSE) {
@@ -211,17 +220,15 @@ cloud_drive_download_bulk <- function(content, quiet = FALSE) {
 #' 
 #' @return Invisibly returns the input `content` dataframe.
 #' 
-#' @examples 
-#' \dontrun{
+#' @examplesIf interactive() 
 #' # write two csv files: data/df_mtcars.csv and data/df_iris.csv
 #' cloud_object_ls(
 #'   dplyr::lst(mtcars = mtcars, iris = iris),
 #'   path = "data",
 #'   extension = "csv",
 #'   prefix = "df_"
-#' ) %>% 
+#' ) |> 
 #' cloud_drive_write_bulk()
-#' }
 #'   
 #' @export
 cloud_drive_write_bulk <- function(content, fun = NULL, ..., local = FALSE,
@@ -278,13 +285,13 @@ cloud_drive_write_bulk <- function(content, fun = NULL, ..., local = FALSE,
 #'   from Google Drive. The names of the list elements are derived from the file
 #'   names.
 #' 
-#' @examples 
-#' \dontrun{
+#' @examplesIf interactive()
+#' # provided there's a folder called "data" in the root of the project's main
+#' # Google Drive folder, and it contains csv files
 #' data_lst <- 
-#'   cloud_drive_ls("data") %>% 
-#'   filter(type == "csv") %>% 
+#'   cloud_drive_ls("data") |> 
+#'   filter(type == "csv") |> 
 #'   cloud_drive_read_bulk()
-#' }
 #'   
 #' @export
 cloud_drive_read_bulk <- function(content, fun = NULL, ..., quiet = FALSE) {

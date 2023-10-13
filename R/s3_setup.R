@@ -12,8 +12,8 @@
 #' @return This function does not return a meaningful value but modifies the
 #'   DESCRIPTION file of the specified project to include the S3 folder path.
 #'
-#' @examples
-#' \dontrun{cloud_s3_attach()}
+#' @examplesIf interactive()
+#' cloud_s3_attach()
 #'
 #' @export
 cloud_s3_attach <- function(project = ".") {

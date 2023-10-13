@@ -20,8 +20,18 @@ Returns a list with all \verb{cloudfs.*} roots defined in a project's
 DESCRIPTION.
 }
 \examples{
-\dontrun{
-roots <- cloud_get_roots()
-}
+# create a temp. folder, and put DESCRIPTION file with cloudfs.* fields into it
+tmp_project <- file.path(tempdir(), "cloudfs")
+if (!dir.exists(tmp_project)) dir.create(tmp_project)
+tmp_project_desc <- file.path(tmp_project, "DESCRIPTION")
+desc_content <- c(
+  "Package: -",
+  "cloudfs.s3: my_bucket/my_project",
+  "cloudfs.drive: aaaaaa"
+)
+writeLines(desc_content, tmp_project_desc)
+
+roots <- cloud_get_roots(tmp_project)
+roots
 
 }

@@ -23,6 +23,7 @@ URL. The function extracts the necessary information from the URL and
 updates the \code{cloudfs.s3} field in the DESCRIPTION file accordingly.
 }
 \examples{
-\dontrun{cloud_s3_attach()}
-
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+cloud_s3_attach()
+\dontshow{\}) # examplesIf}
 }
