@@ -7,13 +7,17 @@
 cloud_drive_browse(path = "", root = NULL)
 }
 \arguments{
-\item{path}{(optional) Path inside Google Drive folder to open. By default,
-when \code{path = ""}, navigates to the root level of project's folder.}
+\item{path}{(optional) Path inside the Google Drive folder to open. Defaults
+to the root level (path = "") of the project's folder.}
 
-\item{root}{GoogleDrive id or URL of the project root -- point relative to
-which to consider all relative paths. When left as \code{NULL}, the root is
+\item{root}{Google Drive ID or URL of the project root. This serves as the
+reference point for all relative paths. When left as \code{NULL}, the root is
 automatically derived from the \code{cloudfs.drive} field of the project's
 DESCRIPTION file.}
+}
+\value{
+Invisibly returns \code{NULL}. The primary purpose of this function is its
+side effect: opening the specified Google Drive folder in a browser.
 }
 \description{
 Opens project's Google Drive folder in browser.
@@ -32,9 +36,8 @@ path you pass to it defines strictly one object. If there's any ambiguity
 it throws an error.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive() ) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 cloud_drive_browse()
 cloud_drive_browse("models/kmeans")
-}
-
+\dontshow{\}) # examplesIf}
 }

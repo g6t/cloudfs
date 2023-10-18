@@ -7,7 +7,10 @@
 check_args(...)
 }
 \arguments{
-\item{...}{unqouted arguments names}
+\item{...}{unquoted arguments names}
+}
+\value{
+List of quosures.
 }
 \description{
 Helper to catch arguments.

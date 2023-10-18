@@ -32,23 +32,4 @@ otherwise it will throw an error.
 \description{
 TODO.
 }
-\examples{
-x1 <- 2
-x2 <- c("x", "y")
-nl1 <- NULL
-\dontrun{
-check_length(x1, arg_length = 1L)
-check_length(x2, arg_length = 1L)
-check_length(x1, arg_length = 2L)
-check_length(
-  x1, arg_length = 2L, add_msg = "{.arg {x_name}} should be short"
-)
-check_length(
-  x1, arg_length = 2L, alt_null = TRUE, add_msg = "{.arg {x_name}} should be short"
-)
-check_length(
-  nl1, arg_length = 2L, alt_null = TRUE, add_msg = "{.arg {x_name}} should be short"
-)
-}
-}
 \keyword{internal}

@@ -10,14 +10,18 @@ cloud_drive_upload(file, root = NULL)
 \item{file}{Path to a file relative to project folder root. Can contain only
 letters, digits, '-', '_', '.', spaces and '/' symbols.}
 
-\item{root}{GoogleDrive id or URL of the project root -- point relative to
-which to consider all relative paths. When left as \code{NULL}, the root is
+\item{root}{Google Drive ID or URL of the project root. This serves as the
+reference point for all relative paths. When left as \code{NULL}, the root is
 automatically derived from the \code{cloudfs.drive} field of the project's
 DESCRIPTION file.}
 }
+\value{
+Invisibly returns a \link[googledrive:dribble]{googledrive::dribble} object representing the
+uploaded file on Google Drive.
+}
 \description{
-Uploads a file from project's folder to the corresponding
-location on project's Google Drive folder
+Uploads a local file from the project's directory to its
+corresponding location within the project's Google Drive root folder.
 }
 \details{
 Google Drive file structure is different from the usual file
@@ -33,9 +37,16 @@ path you pass to it defines strictly one object. If there's any ambiguity
 it throws an error.
 }
 \examples{
-\dontrun{
-# uploads data/demo.csv to 'data' subfolder of project's Google Drive folder
-cloud_drive_upload("data/demo.csv")
-}
+\dontshow{if (interactive() ) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# create a toy csv file
+dir.create("toy_data")
+write.csv(mtcars, "toy_data/mtcars.csv")
 
+# uploads toy_data/mtcars.csv to 'data' subfolder of project's 
+# Google Drive folder
+cloud_drive_upload("toy_data/mtcars.csv")
+
+# clean up
+unlink("toy_data", recursive = TRUE)
+\dontshow{\}) # examplesIf}
 }

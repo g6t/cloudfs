@@ -44,18 +44,18 @@ cloud_s3_browse_path <- function(path = "") {
 }
 
 #' @title Browse project's S3 folder
-#' 
 #' @description Opens project's S3 folder in browser.
 #' 
 #' @inheritParams cloud_s3_ls
-#' @param path (optional) Path inside S3 folder to open. By default, when 
-#'   `path = ""`, navigates to the root level of project's S3 folder.
+#' @param path (optional) Path inside the S3 folder to open. Defaults to the
+#'   root level (path = "") of the project's S3 folder.
+#'   
+#' @return Invisibly returns `NULL`. The primary purpose of this function is its
+#'   side effect: opening the specified S3 folder in a browser.
 #' 
-#' @examples 
-#' \dontrun{
+#' @examplesIf interactive() 
 #' cloud_s3_browse()
 #' cloud_s3_browse("data")
-#' }
 #' 
 #' @export
 cloud_s3_browse <- function(path = "", root = NULL) {
@@ -68,19 +68,22 @@ cloud_s3_browse <- function(path = "", root = NULL) {
 
 #' @title List Contents of Project's S3 Folder
 #' 
-#' @description Prints names, timestamps and sizes of files and folders inside
-#'   S3 folder.
+#' @description Returns a tibble with names, timestamps, and sizes of files and
+#'   folders inside the specified S3 folder.
 #'
 #' @inheritParams cloud_prep_ls
 #' 
-#' @param path (optional) Path inside S3 folder to list contents of a subfolder.
-#'   By default, when `path = ""`, lists root-level files and folders.
-#' @param root S3 path of the project root -- point relative to which to
-#'   consider all relative paths. When left as `NULL`, the root is automatically
+#' @param path (optional) Path inside the S3 folder. Specifies the subfolder
+#'   whose contents should be listed. By default, when `path = ""`, lists
+#'   root-level files and folders.
+#' @param root S3 path of the project root. This serves as the reference point
+#'   for all relative paths. When left as `NULL`, the root is automatically
 #'   derived from the `cloudfs.s3` field of the project's DESCRIPTION file.
 #' 
-#' @examples 
-#' \dontrun{
+#' @return A tibble containing the names, last modification timestamps, and
+#'   sizes in bytes of files and folders inside the specified S3 folder.
+#' 
+#' @examplesIf interactive() 
 #' # list only root-level files and folders
 #' cloud_s3_ls() 
 #' 
@@ -89,7 +92,6 @@ cloud_s3_browse <- function(path = "", root = NULL) {
 #' 
 #' # list contents of "plots/barplots" subfolder
 #' cloud_s3_ls("plots/barplots")
-#' }
 #' 
 #' @export
 cloud_s3_ls <- function(path = "", recursive = FALSE, full_names = FALSE,

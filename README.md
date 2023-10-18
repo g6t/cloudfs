@@ -1,4 +1,8 @@
 # cloudfs <a href="https://g6t.github.io/cloudfs/"><img src="man/figures/logo.svg" align="right" height="139" alt="cloudfs website" /></a>
+
+<!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/cloudfs)](https://CRAN.R-project.org/package=cloudfs)
+<!-- badges: end -->
  
 `cloudfs` is an R package developed by [Gradient
 Metrics](https://www.gradientmetrics.com) that offers a unified interface for
@@ -8,9 +12,10 @@ downloading, reading, and writing files for both Google Drive and Amazon S3.
 ## Installation
 
 ``` r
-# not on CRAN yet
-# install.packages("cloudfs")
+# from CRAN
+install.packages("cloudfs")
 
+# from GitHub
 remotes::install_github("g6t/cloudfs")
 ```
 
@@ -40,7 +45,7 @@ remotes::install_github("g6t/cloudfs")
     cloud_s3_write(glmnet_model, "models/glmnet.rds")
     ```
 
-    If you don't like the default function, you can use a different one by explicitely calling it.
+    If you don't like the default function, you can use a different one by explicitly calling it.
 
     ``` r
     cloud_s3_write(glmnet_model, "models/glmnet.rds", fun = readr::write_rds)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/s3_transfer.R
 \name{cloud_s3_read}
 \alias{cloud_s3_read}
-\title{Read an object from S3}
+\title{Read a file from S3}
 \usage{
 cloud_s3_read(file, fun = NULL, ..., root = NULL)
 }
@@ -10,19 +10,24 @@ cloud_s3_read(file, fun = NULL, ..., root = NULL)
 \item{file}{Path to a file relative to project folder root. Can contain only
 letters, digits, '-', '_', '.', spaces and '/' symbols.}
 
-\item{fun}{Reading function. By default is \code{NULL} which means that it will
-be attempted to guess an appropriate reading function from file extension.}
+\item{fun}{A custom reading function. If \code{NULL} (default), the appropriate
+reading function will be inferred based on the file's extension.}
 
-\item{...}{Further parameters to pass to \code{fun}.}
+\item{...}{Additional arguments to pass to the reading function \code{fun}.}
 
-\item{root}{S3 path of the project root -- point relative to which to
-consider all relative paths. When left as \code{NULL}, the root is automatically
+\item{root}{S3 path of the project root. This serves as the reference point
+for all relative paths. When left as \code{NULL}, the root is automatically
 derived from the \code{cloudfs.s3} field of the project's DESCRIPTION file.}
 }
+\value{
+The content of the file read from S3, with additional attributes
+containing metadata about the file.
+}
 \description{
-Reads a file from project's S3. This function tries to guess an
-appropriate reading function based on the \code{file} name, but you can also
-provide a function by yourself if it's needed.
+Retrieves and reads a file from the project's S3 folder. By
+default, the function attempts to determine the appropriate reading
+function based on the file's extension. However, you can specify a custom
+reading function if necessary.
 }
 \section{Default reading functions}{
 
@@ -40,10 +45,11 @@ Here's how we identify a reading function based on file extension
 }
 
 \examples{
-\dontrun{
+\dontshow{if (interactive() ) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# provided there are folders called "data" and "models" in the root of your
+# project's main S3 folder and they contain the files mentioned below
 cloud_s3_read("data/mtcars.csv")
 cloud_s3_read("models/random_forest.rds")
 cloud_s3_read("data/dm.sas7bdat", fun = haven::read_sas)
-}
-
+\dontshow{\}) # examplesIf}
 }

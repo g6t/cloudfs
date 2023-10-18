@@ -13,6 +13,10 @@ letters, digits, '-', '_', '.', spaces and '/' symbols.}
 \item{error}{if \code{TRUE} (default), throws an error if \code{file} is not a valid
 file path.}
 }
+\value{
+Either \code{TRUE} or \code{FALSE} if \code{error} is \code{FALSE}. Either \code{TRUE} or
+an error if \code{error} is \code{TRUE}.
+}
 \description{
 Makes sure that file path passed to a cloud function is in the
 right format.

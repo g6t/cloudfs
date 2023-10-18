@@ -1,6 +1,6 @@
 Package: cloudfs
-Title: Streamlined interface to interact with cloud storage platforms
-Version: 0.0.1
+Title: Streamlined Interface to Interact with Cloud Storage Platforms
+Version: 0.1.2.9000
 Authors@R: c(
     person("Iaroslav", "Domin", email = "iaroslav@gradientmetrics.com", role = c("aut", "cre")),
     person("Stefan", "Musch", email = "stefan@gradientmetrics.com", role = c("aut")),
@@ -8,9 +8,10 @@ Authors@R: c(
     person("Emmanuel", "Ugochukwu", email = "emmanuel@gradientmetrics.com", role = c("aut")),
     person("Gradient Metrics", role = c("cph", "fnd"))
   )
-Description: This package offers a unified interface for simplifying cloud 
-    storage interactions, including uploading, downloading, reading, and writing 
-    files, with functions for both Google Drive and Amazon S3.
+Description: A unified interface for simplifying cloud storage interactions, 
+    including uploading, downloading, reading, and writing files, with functions
+    for both 'Google Drive' (<https://www.google.com/drive/>) and 'Amazon S3' 
+    (<https://aws.amazon.com/s3/>).
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -41,3 +42,4 @@ VignetteBuilder:
     knitr
 Config/testthat/edition: 3
 URL: https://g6t.github.io/cloudfs/, https://github.com/g6t/cloudfs
+BugReports: https://github.com/g6t/cloudfs/issues

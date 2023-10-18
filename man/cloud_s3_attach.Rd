@@ -10,19 +10,20 @@ cloud_s3_attach(project = ".")
 \item{project}{Character. Path to a project. By default it is current working
 directory.}
 }
+\value{
+This function does not return a meaningful value but modifies the
+DESCRIPTION file of the specified project to include the S3 folder path.
+}
 \description{
-The \code{cloud_s3_attach()} function is used to add a field to the
-DESCRIPTION file of a project, which uniquely identifies the location of
-the project's folder in an S3 cloud storage. It prompts the user to visit
-the S3 cloud storage website (https://s3.console.aws.amazon.com/) where
-they can find or create a dedicated folder for the project. After the user
-has selected or created the desired folder, they can copy the URL of the
-folder from the web browser and paste it into the R console. The function
-then parses the URL and populates the corresponding field (cloudfs.s3) in
-the DESCRIPTION file with a string that represents the location of the
-project in the S3 cloud storage.
+This function facilitates the association of a specific S3
+folder with a project by adding a unique identifier to the project's
+DESCRIPTION file. The user is prompted to navigate to the S3 console,
+select or create the desired folder for the project, and then provide its
+URL. The function extracts the necessary information from the URL and
+updates the \code{cloudfs.s3} field in the DESCRIPTION file accordingly.
 }
 \examples{
-\dontrun{cloud_s3_attach()}
-
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+cloud_s3_attach()
+\dontshow{\}) # examplesIf}
 }

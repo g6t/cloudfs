@@ -3,16 +3,17 @@
 #' @description Opens project's Google Drive folder in browser.
 #' 
 #' @inheritParams cloud_drive_ls
-#' @param path (optional) Path inside Google Drive folder to open. By default,
-#'   when `path = ""`, navigates to the root level of project's folder.
+#' @param path (optional) Path inside the Google Drive folder to open. Defaults
+#'   to the root level (path = "") of the project's folder.
 #'   
 #' @inherit cloud_drive_find_path details
 #' 
-#' @examples 
-#' \dontrun{
+#' @return Invisibly returns `NULL`. The primary purpose of this function is its
+#'   side effect: opening the specified Google Drive folder in a browser.
+#' 
+#' @examplesIf interactive() 
 #' cloud_drive_browse()
 #' cloud_drive_browse("models/kmeans")
-#' }
 #' 
 #' @export
 cloud_drive_browse <- function(path = "", root = NULL) {
@@ -25,23 +26,26 @@ cloud_drive_browse <- function(path = "", root = NULL) {
 
 #' @title List Contents of Project's Google Drive Folder
 #' 
-#' @description Prints names, timestamps and sizes of files and folders inside
-#'   Google Drive folder.
+#' @description Returns a tibble with names, timestamps, and sizes of files and
+#'   folders inside the specified Google Drive folder.
 #'
 #' @inheritParams cloud_prep_ls
 #' 
-#' @param path (optional) Path inside Google Drive folder to list contents of
-#'   subfolders. By default, when `path = ""`, lists root-level files and
-#'   folders.
-#' @param root GoogleDrive id or URL of the project root -- point relative to
-#'   which to consider all relative paths. When left as `NULL`, the root is
+#' @param path (optional) Path inside the Google Drive root folder. Specifies
+#'   the subfolder whose contents should be listed. By default, when `path =
+#'   ""`, lists root-level files and folders.
+#' @param root Google Drive ID or URL of the project root. This serves as the
+#'   reference point for all relative paths. When left as `NULL`, the root is
 #'   automatically derived from the `cloudfs.drive` field of the project's
 #'   DESCRIPTION file.
 #'   
 #' @inherit cloud_drive_find_path details
 #' 
-#' @examples 
-#' \dontrun{
+#' @return A tibble containing the names, last modification timestamps, sizes in
+#'   bytes, and Google Drive IDs of files and folders inside the specified
+#'   Google Drive folder.
+#' 
+#' @examplesIf interactive() 
 #' # list only root-level files and folders
 #' cloud_drive_ls() 
 #' 
@@ -50,7 +54,6 @@ cloud_drive_browse <- function(path = "", root = NULL) {
 #' 
 #' # list contents of "plots/barplots" subfolder
 #' cloud_drive_ls("plots/barplots")
-#' }
 #' 
 #' @export
 cloud_drive_ls <- function(path = "", recursive = FALSE, full_names = FALSE,

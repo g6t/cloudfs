@@ -10,6 +10,9 @@ validate_desc(project = ".")
 \item{project}{Character. Path to a project. By default it is current working
 directory.}
 }
+\value{
+Either \code{TRUE} or an error.
+}
 \description{
 Checks that DESCRIPTION file exists in a project folder. If it's
 not the case, proposes to create a DESCRIPTION file from template.

@@ -7,8 +7,9 @@
 cloud_s3_ls(path = "", recursive = FALSE, full_names = FALSE, root = NULL)
 }
 \arguments{
-\item{path}{(optional) Path inside S3 folder to list contents of a subfolder.
-By default, when \code{path = ""}, lists root-level files and folders.}
+\item{path}{(optional) Path inside the S3 folder. Specifies the subfolder
+whose contents should be listed. By default, when \code{path = ""}, lists
+root-level files and folders.}
 
 \item{recursive}{(logical) If \code{TRUE}, lists contents recursively in all
 nested subfolders. Default is \code{FALSE}.}
@@ -16,16 +17,20 @@ nested subfolders. Default is \code{FALSE}.}
 \item{full_names}{(logical) If \code{TRUE}, folder path is appended to object
 names to give a relative file path.}
 
-\item{root}{S3 path of the project root -- point relative to which to
-consider all relative paths. When left as \code{NULL}, the root is automatically
+\item{root}{S3 path of the project root. This serves as the reference point
+for all relative paths. When left as \code{NULL}, the root is automatically
 derived from the \code{cloudfs.s3} field of the project's DESCRIPTION file.}
 }
+\value{
+A tibble containing the names, last modification timestamps, and
+sizes in bytes of files and folders inside the specified S3 folder.
+}
 \description{
-Prints names, timestamps and sizes of files and folders inside
-S3 folder.
+Returns a tibble with names, timestamps, and sizes of files and
+folders inside the specified S3 folder.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive() ) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # list only root-level files and folders
 cloud_s3_ls() 
 
@@ -34,6 +39,5 @@ cloud_s3_ls(recursive = TRUE)
 
 # list contents of "plots/barplots" subfolder
 cloud_s3_ls("plots/barplots")
-}
-
+\dontshow{\}) # examplesIf}
 }

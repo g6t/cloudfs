@@ -19,6 +19,8 @@
 #' @param quiet All caution messages may be turned off by setting this parameter
 #'   to `TRUE`.
 #'   
+#' @return Transformed `content` dataframe.
+#'   
 #' @keywords internal
 cloud_s3_prep_bulk <- function(content, what = c("read", "upload", "download"),
                              safe_size = 5e7, quiet = FALSE) {
@@ -69,26 +71,33 @@ cloud_s3_prep_bulk <- function(content, what = c("read", "upload", "download"),
   cont
 }
 
-#' @title Upload files to S3 in bulk
+#' @title Bulk Upload Files to S3
 #' 
-#' @description [cloud_local_ls] function returns a dataframe of contents of
-#'   local project folder. `cloud_s3_upload_bulk` can be applied to such a
-#'   dataframe to upload all the listed files. [cloud_s3_upload] is used under
-#'   the hood.
-#'   
-#'   The workflow in mind is that you would call `cloud_local_ls()`, then use
-#'   dplyr verbs to keep only files that you need and then call
-#'   `cloud_s3_upload_bulk` on the result.
+#' @description This function facilitates the bulk uploading of multiple files
+#'   from the local project folder to the project's designated S3 folder. By
+#'   using [cloud_local_ls], you can obtain a dataframe detailing the contents
+#'   of the local folder. Applying `cloud_s3_upload_bulk` to this dataframe
+#'   allows you to upload all listed files to S3.
 #' 
 #' @inheritParams cloud_s3_upload
 #' @inheritParams cloud_s3_prep_bulk
 #' 
-#' @examples 
-#' \dontrun{
-#' cloud_local_ls("plots") %>% 
-#'   filter(type == "png") %>% 
+#' @return Invisibly returns the input `content` dataframe.
+#' 
+#' @examplesIf interactive()
+#' # create toy plots: 2 png's and 1 jpeg
+#' dir.create("toy_plots")
+#' png("toy_plots/plot1.png"); plot(rnorm(100)); dev.off()
+#' png("toy_plots/plot2.png"); plot(hist(rnorm(100))); dev.off()
+#' png("toy_plots/plot3.jpeg"); plot(hclust(dist(USArrests), "ave")); dev.off()
+#' 
+#' # upload only the two png's
+#' cloud_local_ls("toy_plots")  |> 
+#'   dplyr::filter(type == "png")  |> 
 #'   cloud_s3_upload_bulk()
-#' }
+#' 
+#' # clean up
+#' unlink("toy_plots", recursive = TRUE)
 #'   
 #' @export
 cloud_s3_upload_bulk <- function(content, quiet = FALSE, root = NULL) {
@@ -106,27 +115,30 @@ cloud_s3_upload_bulk <- function(content, quiet = FALSE, root = NULL) {
     cloud_s3_upload(cont$path[[i]], root = root)
   }
   cli::cli_alert_success("Done!")
+  invisible(content)
 }
 
-#' @title Download S3 contents in bulk
+#' @title Bulk Download Contents from S3
 #' 
-#' @description [cloud_s3_ls] function returns a dataframe of contents of an S3
-#'   folder. `cloud_s3_download_bulk` can be applied to such a dataframe to
-#'   download all the listed files. [cloud_s3_download] is used under the hood.
-#'   
-#'   The workflow in mind is that you would call `cloud_s3_ls()`, then use dplyr
-#'   verbs to keep only files that you need and then call `cloud_s3_download_bulk`
-#'   on the result.
+#' @description Downloads multiple files from an S3 folder based on the output 
+#'   dataframe from [cloud_s3_ls]. This function streamlines the process of 
+#'   downloading multiple files by allowing you to filter and select specific 
+#'   files from the S3 listing and then download them in bulk.
 #' 
 #' @inheritParams cloud_s3_download
 #' @inheritParams cloud_s3_prep_bulk
 #' 
-#' @examples 
-#' \dontrun{
-#' cloud_s3_ls("data") %>% 
-#'   filter(type == "csv") %>% 
+#' @return Invisibly returns the input `content` dataframe.
+#' 
+#' @examplesIf interactive()
+#' # provided there's a folder called "toy_data" in the root of your project's
+#' # S3 folder, and this folder contains "csv" files
+#' cloud_s3_ls("toy_data") |> 
+#'   filter(type == "csv") |> 
 #'   cloud_s3_download_bulk()
-#' }
+#'   
+#' # clean up
+#' unlink("toy_data", recursive = TRUE)
 #'   
 #' @export
 cloud_s3_download_bulk <- function(content, quiet = FALSE, root = NULL) {
@@ -144,33 +156,34 @@ cloud_s3_download_bulk <- function(content, quiet = FALSE, root = NULL) {
     cloud_s3_download(cont$path[[i]], root = root)
   }
   cli::cli_alert_success("Done!")
+  invisible(content)
 }
 
-#' @title Write objects to S3 in bulk
+#' @title Write multiple objects to S3 in bulk
 #'
-#' @description Given a named list of objects [cloud_object_ls] function returns
-#'   a dataframe similar to the output of [cloud_local_ls] or [cloud_s3_ls].
-#'   `cloud_s3_write_bulk` can be applied to such a dataframe to write all the
-#'   listed objects to S3. [cloud_s3_write] is used under the hood. It will be
-#'   attempted to guess writing function from file extensions. You can pass
-#'   writing function manually by setting `fun` parameter, but it means that all
-#'   the files will be written using one function. In fact, you probably
-#'   shouldn't be writing multiple files of different types in bulk.
+#' @description This function allows for the bulk writing of multiple R objects
+#'   to the project's designated S3 folder. To prepare a list of objects for
+#'   writing, use [cloud_object_ls], which generates a dataframe listing the
+#'   objects and their intended destinations in a format akin to the output of
+#'   [cloud_s3_ls]. By default, the function determines the appropriate writing
+#'   method based on each file's extension. However, if a specific writing
+#'   function is provided via the `fun` parameter, it will be applied to all
+#'   files, which may not be ideal if dealing with a variety of file types.
 #' 
 #' @inheritParams cloud_s3_write  
 #' @inheritParams cloud_object_prep_bulk
+#'
+#' @return Invisibly returns the input `content` dataframe.
 #' 
-#' @examples 
-#' \dontrun{
+#' @examplesIf interactive() 
 #' # write two csv files: data/df_mtcars.csv and data/df_iris.csv
 #' cloud_object_ls(
 #'   dplyr::lst(mtcars = mtcars, iris = iris),
 #'   path = "data",
 #'   extension = "csv",
 #'   prefix = "df_"
-#' ) %>% 
+#' ) |>  
 #' cloud_s3_write_bulk()
-#' }
 #'   
 #' @export
 cloud_s3_write_bulk <- function(content, fun = NULL, ..., local = FALSE,
@@ -195,33 +208,33 @@ cloud_s3_write_bulk <- function(content, fun = NULL, ..., local = FALSE,
     )
   }
   cli::cli_alert_success("Done!")
+  invisible(content)
 }
 
-#' @title Read S3 contents in bulk
+#' @title Bulk Read Contents from S3
 #' 
-#' @description [cloud_s3_ls] function returns a dataframe of contents of an S3
-#'   folder. `cloud_s3_read_bulk` can be applied to such a dataframe to read all
-#'   the listed files into a named list. [cloud_s3_read] is used under the hood.
-#'   It will be attempted to guess reading function from file extensions. You
-#'   can pass reading function manually by setting `fun` parameter, but it means
-#'   that all the files will be read using one function. In fact, you probably
-#'   shouldn't be reading multiple files of different types in bulk.
-#'   
-#'   The workflow in mind is that you would call `cloud_s3_ls()`, then use dplyr
-#'   verbs to keep only files that you need and then call `cloud_s3_read_bulk`
-#'   on the result. Note that you don't need to filter out folders -- it is done
-#'   automatically.
+#' @description This function facilitates the bulk reading of multiple files
+#'   from the project's designated S3 folder. By using [cloud_s3_ls], you can
+#'   obtain a dataframe detailing the contents of the S3 folder. Applying
+#'   `cloud_s3_read_bulk` to this dataframe allows you to read all listed files
+#'   into a named list. The function will, by default, infer the appropriate
+#'   reading method based on each file's extension. However, if a specific
+#'   reading function is provided via the `fun` parameter, it will be applied
+#'   uniformly to all files, which may not be suitable for diverse file types.
 #' 
 #' @inheritParams cloud_s3_read  
 #' @inheritParams cloud_s3_prep_bulk
 #' 
-#' @examples 
-#' \dontrun{
+#' @return A named list where each element corresponds to the content of a file
+#'   from S3. The names of the list elements are derived from the file names.
+#' 
+#' @examplesIf interactive() 
+#' # provided there's a folder called "data" in the root of the project's main
+#' # S3 folder, and it contains csv files
 #' data_lst <- 
-#'   cloud_s3_ls("data") %>% 
-#'   filter(type == "csv") %>% 
+#'   cloud_s3_ls("data") |>  
+#'   filter(type == "csv")  |>  
 #'   cloud_s3_read_bulk()
-#' }
 #'   
 #' @export
 cloud_s3_read_bulk <- function(content, fun = NULL, ..., quiet = FALSE,

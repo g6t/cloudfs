@@ -28,22 +28,4 @@ returns invisible \code{NULL}. Otherwise the function throws an error.
 Check if an argument is single TRUE or FALSE. As an option it is
 possible to allow \code{NULL} value when \code{alt_null = TRUE}.
 }
-\examples{
-c1 <- c("x", "y")
-n1 <- c(1,3,4)
-n2 <- c(1.5, 2.5)
-i1 <- 1L
-nl1 <- NULL
-l1 <- FALSE
-l2 <- c(FALSE, TRUE)
-\dontrun{
-check_bool(c1)
-check_bool(nl1)
-check_bool(nl1, alt_null = TRUE)
-check_bool(n2, alt_null = TRUE)
-check_bool(i1)
-check_bool(l1)
-check_bool(l2)
-}
-}
 \keyword{internal}

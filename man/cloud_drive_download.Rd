@@ -2,7 +2,7 @@
 % Please edit documentation in R/drive_transfer.R
 \name{cloud_drive_download}
 \alias{cloud_drive_download}
-\title{Download a file from Google Drive to local project folder}
+\title{Download a file from Google Drive to the local project folder}
 \usage{
 cloud_drive_download(file, root = NULL)
 }
@@ -10,14 +10,18 @@ cloud_drive_download(file, root = NULL)
 \item{file}{Path to a file relative to project folder root. Can contain only
 letters, digits, '-', '_', '.', spaces and '/' symbols.}
 
-\item{root}{GoogleDrive id or URL of the project root -- point relative to
-which to consider all relative paths. When left as \code{NULL}, the root is
+\item{root}{Google Drive ID or URL of the project root. This serves as the
+reference point for all relative paths. When left as \code{NULL}, the root is
 automatically derived from the \code{cloudfs.drive} field of the project's
 DESCRIPTION file.}
 }
+\value{
+Invisibly returns \code{NULL} after successfully downloading the file.
+}
 \description{
-Downloads a file from project's Google Drive folder to local
-project folder and saves it preserving folder structure.
+Retrieves a file from the project's Google Drive folder and
+saves it to the local project folder, maintaining the original folder
+structure.
 }
 \details{
 Google Drive file structure is different from the usual file
@@ -33,10 +37,12 @@ path you pass to it defines strictly one object. If there's any ambiguity
 it throws an error.
 }
 \examples{
-\dontrun{
-# downloads data/demo.csv from project's Google Drive folder
-# and saves it to local 'data' folder
-cloud_drive_download("data/demo.csv")
-}
+\dontshow{if (interactive() ) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# downloads toy_data/demo.csv from project's Google Drive folder 
+# (provided it exists) and saves it to local 'toy_data' folder
+cloud_drive_download("toy_data/demo.csv")
 
+# clean up
+unlink("toy_data", recursive = TRUE)
+\dontshow{\}) # examplesIf}
 }

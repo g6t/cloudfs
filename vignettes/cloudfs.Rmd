@@ -27,9 +27,9 @@ opts_chunk$set(
 		keep.blank.line = TRUE,
 		width.cutoff = 150
 		),
-	options(width = 150),
 	eval = FALSE,
-	error = TRUE)
+	error = TRUE
+)
 ```
 
 ## Introduction
@@ -106,7 +106,7 @@ becomes much easier and cleaner:
 cloud_s3_upload("models/glm.rds")
 ```
 
-## Package walkthrough
+## Package walk-through
 
 ### Setting up a root
 

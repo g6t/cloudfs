@@ -1,3 +1,5 @@
-# cloudfs 0.0.1
+# cloudfs (development version)
+
+# cloudfs 0.1.2
 
 * Initial version.

@@ -10,7 +10,28 @@ cloud_get_roots(project = ".")
 \item{project}{Character. Path to a project. By default it is current working
 directory.}
 }
+\value{
+A named list where each element corresponds to a \verb{cloudfs.*} root
+defined in the project's DESCRIPTION file. The names of the list elements
+are derived from the \verb{cloudfs.*} fields by removing the \code{cloudfs.} prefix.
+}
 \description{
 Returns a list with all \verb{cloudfs.*} roots defined in a project's
 DESCRIPTION.
+}
+\examples{
+# create a temp. folder, and put DESCRIPTION file with cloudfs.* fields into it
+tmp_project <- file.path(tempdir(), "cloudfs")
+if (!dir.exists(tmp_project)) dir.create(tmp_project)
+tmp_project_desc <- file.path(tmp_project, "DESCRIPTION")
+desc_content <- c(
+  "Package: -",
+  "cloudfs.s3: my_bucket/my_project",
+  "cloudfs.drive: aaaaaa"
+)
+writeLines(desc_content, tmp_project_desc)
+
+roots <- cloud_get_roots(tmp_project)
+roots
+
 }

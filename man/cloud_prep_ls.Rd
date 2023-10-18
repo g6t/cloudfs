@@ -17,6 +17,9 @@ nested subfolders. Default is \code{FALSE}.}
 \item{full_names}{(logical) If \code{TRUE}, folder path is appended to object
 names to give a relative file path.}
 }
+\value{
+Transformed \code{data}.
+}
 \description{
 Under the hood all ls functions (s3, drive, local) obtain
 information about folder content recursively regardless of \code{recursive}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/s3_transfer_bulk.R
 \name{cloud_s3_download_bulk}
 \alias{cloud_s3_download_bulk}
-\title{Download S3 contents in bulk}
+\title{Bulk Download Contents from S3}
 \usage{
 cloud_s3_download_bulk(content, quiet = FALSE, root = NULL)
 }
@@ -12,24 +12,29 @@ cloud_s3_download_bulk(content, quiet = FALSE, root = NULL)
 \item{quiet}{All caution messages may be turned off by setting this parameter
 to \code{TRUE}.}
 
-\item{root}{S3 path of the project root -- point relative to which to
-consider all relative paths. When left as \code{NULL}, the root is automatically
+\item{root}{S3 path of the project root. This serves as the reference point
+for all relative paths. When left as \code{NULL}, the root is automatically
 derived from the \code{cloudfs.s3} field of the project's DESCRIPTION file.}
 }
+\value{
+Invisibly returns the input \code{content} dataframe.
+}
 \description{
-\link{cloud_s3_ls} function returns a dataframe of contents of an S3
-folder. \code{cloud_s3_download_bulk} can be applied to such a dataframe to
-download all the listed files. \link{cloud_s3_download} is used under the hood.
-
-The workflow in mind is that you would call \code{cloud_s3_ls()}, then use dplyr
-verbs to keep only files that you need and then call \code{cloud_s3_download_bulk}
-on the result.
+Downloads multiple files from an S3 folder based on the output
+dataframe from \link{cloud_s3_ls}. This function streamlines the process of
+downloading multiple files by allowing you to filter and select specific
+files from the S3 listing and then download them in bulk.
 }
 \examples{
-\dontrun{
-cloud_s3_ls("data") \%>\% 
-  filter(type == "csv") \%>\% 
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# provided there's a folder called "toy_data" in the root of your project's
+# S3 folder, and this folder contains "csv" files
+cloud_s3_ls("toy_data") |> 
+  filter(type == "csv") |> 
   cloud_s3_download_bulk()
-}
   
+# clean up
+unlink("toy_data", recursive = TRUE)
+  
+\dontshow{\}) # examplesIf}
 }

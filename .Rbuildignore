@@ -7,3 +7,5 @@
 ^docs$
 ^pkgdown$
 ^tools$
+^cran-comments\.md$
+^CRAN-SUBMISSION$

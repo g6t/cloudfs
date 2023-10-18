@@ -3,6 +3,24 @@
 #'   DESCRIPTION.
 #' 
 #' @inheritParams validate_desc
+#' @return A named list where each element corresponds to a `cloudfs.*` root
+#'   defined in the project's DESCRIPTION file. The names of the list elements
+#'   are derived from the `cloudfs.*` fields by removing the `cloudfs.` prefix.
+#' 
+#' @examples 
+#' # create a temp. folder, and put DESCRIPTION file with cloudfs.* fields into it
+#' tmp_project <- file.path(tempdir(), "cloudfs")
+#' if (!dir.exists(tmp_project)) dir.create(tmp_project)
+#' tmp_project_desc <- file.path(tmp_project, "DESCRIPTION")
+#' desc_content <- c(
+#'   "Package: -",
+#'   "cloudfs.s3: my_bucket/my_project",
+#'   "cloudfs.drive: aaaaaa"
+#' )
+#' writeLines(desc_content, tmp_project_desc)
+#' 
+#' roots <- cloud_get_roots(tmp_project)
+#' roots
 #' 
 #' @export
 cloud_get_roots <- function(project = ".") {
@@ -14,10 +32,12 @@ cloud_get_roots <- function(project = ".") {
 }
 
 
-#' @title Extract values from DESCRUPTION file
+#' @title Extract values from DESCRIPTION file
 #' 
 #' @inheritParams validate_desc
 #' @param key Character. What field to search for in DESCRIPTION file.
+#' 
+#' @return A string value extracted from the DESCRIPTION field.
 #' 
 #' @keywords internal
 proj_desc_get <- function(key, project = ".") {
@@ -38,22 +58,25 @@ proj_desc_get <- function(key, project = ".") {
 #'   letters, digits, '-', '_', '.', spaces and '/' symbols.
 #' @param error if `TRUE` (default), throws an error if `file` is not a valid 
 #'   file path.
+#'   
+#' @return Either `TRUE` or `FALSE` if `error` is `FALSE`. Either `TRUE` or
+#' an error if `error` is `TRUE`.
 #'
 #' @keywords internal
 cloud_validate_file_path <- function(file, error = TRUE) {
   check_string(file)
   res <- grepl("^([A-Za-z]|[0-9]|-|_|\\.| |/)+$", file)
   if (error) {
-    if (file == "") stop("A valid file name should not be empty.")
-    if (!res) stop(
-      "File name '", file, "' is not valid\n\n",
-      "A valid file name may consist of\n",
-      "  * uppercase/lowercase letters\n",
-      "  * digits\n",
-      "  * spaces",
-      "  * '/' symbols to describe its location inside project's folder\n",
-      "  * '_', '-', '.' symbols"
-    )
+    if (file == "") cli::cli_abort("A valid file name should not be empty.")
+    if (!res) cli_abort(c(
+      "File name '{file}' is not valid",
+      "A valid file name may consist of:",
+      "*" = "uppercase/lowercase letters",
+      "*" = "digits",
+      "*" = "spaces",
+      "*" = "'/' symbols to describe its location inside project's folder",
+      "*" = "'_', '-', '.' symbols"
+    ))
   }
   res
 }
@@ -89,6 +112,8 @@ cloud_validate_file_names <- function(x) {
 #'   
 #' @param project Character. Path to a project. By default it is current working
 #'   directory.
+#'   
+#' @return Either `TRUE` or an error.
 #'
 #' @keywords internal
 validate_desc <- function(project = ".") {
@@ -160,6 +185,8 @@ init_desc <- function(project = ".") {
 #'   nested subfolders. Default is `FALSE`.
 #' @param full_names (logical) If `TRUE`, folder path is appended to object
 #'   names to give a relative file path.
+#'   
+#' @return Transformed `data`.   
 #' 
 #' @keywords internal
 cloud_prep_ls <- function(data, path, recursive, full_names) {

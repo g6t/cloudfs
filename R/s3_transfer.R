@@ -1,16 +1,23 @@
 #' @title Upload a local file to S3
 #' 
-#' @description Uploads a file from project's folder to the corresponding
-#'   location on project's S3 folder
+#' @description Uploads a local file from the project's directory to its
+#'   corresponding location within the project's S3 root folder.
 #' 
 #' @inheritParams cloud_validate_file_path
 #' @inheritParams cloud_s3_ls
-#'   
-#' @examples 
-#' \dontrun{
-#' # uploads data/demo.csv to 'data' subfolder of project's S3 folder
-#' cloud_s3_upload("data/demo.csv")
-#' }
+#'  
+#' @return Invisibly returns `NULL` after successfully uploading the file.
+#'
+#' @examplesIf interactive() 
+#' # create a toy csv file
+#' dir.create("toy_data")
+#' write.csv(mtcars, "toy_data/mtcars.csv")
+#' 
+#' # uploads toy_data/mtcars.csv to 'data' subfolder of project's S3 folder
+#' cloud_s3_upload("toy_data/mtcars.csv")
+#' 
+#' # clean up
+#' unlink("toy_data", recursive = TRUE)
 #' 
 #' @export
 cloud_s3_upload <- function(file, root = NULL) {
@@ -33,22 +40,29 @@ cloud_s3_upload <- function(file, root = NULL) {
   cli::cli_alert_success(
     "File {.path {file}} uploaded to S3 root {.field {root}}."
   )
+  invisible(NULL)
 }
 
-#' @title Download a file from S3 to local project folder
+
+
+
+#' @title Download a file from S3 to the local project folder
 #' 
-#' @description Downloads a file from project's S3 folder to local project 
-#' folder and saves it preserving folder structure.
+#' @description Retrieves a file from the project's S3 root folder and saves it
+#'   to the local project folder, maintaining the original folder structure.
 #' 
 #' @inheritParams cloud_validate_file_path
 #' @inheritParams cloud_s3_ls
 #' 
-#' @examples 
-#' \dontrun{
-#' # downloads data/demo.csv from project's S3 folder
-#' # and saves it to local 'data' folder
-#' cloud_s3_download("data/demo.csv")
-#' }
+#' @return Invisibly returns `NULL` after successfully downloading the file.
+#' 
+#' @examplesIf interactive() 
+#' # downloads toy_data/demo.csv from project's S3 folder (provided it exists)
+#' # and saves it to local 'toy_data' folder
+#' cloud_s3_download("toy_data/demo.csv")
+#' 
+#' # clean up
+#' unlink("toy_data", recursive = TRUE)
 #' 
 #' @export
 cloud_s3_download <- function(file, root = NULL) {
@@ -67,39 +81,36 @@ cloud_s3_download <- function(file, root = NULL) {
   cli::cli_alert_success(
     "File {.path {file}} downloaded from S3 root {.field {root}}."
   )
+  invisible(NULL)
 }
 
 #' @title Write an object to S3
 #' 
-#' @description Writes an R object to a file in project's S3 folder. In most
-#'   cases it is expected to be used for writing data.frames as csv, sav or any
-#'   other tabular data formats to S3. But it is also possible to save any R
-#'   object if a proper saving function is provided. It tries to guess a
-#'   suitable writing function and the output file name where possible.
+#' @description Saves an R object to a designated location in the project's
+#'   S3 storage. If no custom writing function is specified, the function will
+#'   infer the appropriate writing method based on the file's extension.
 #'   
 #' @inheritParams cloud_validate_file_path
 #' @inheritParams cloud_s3_ls
 #' 
-#' @param x an R object (e.g. data frame) to write to S3.
-#' @param fun a function to write a file to cloud location to which x and a file
-#'   path will be passed (in that order). By default, if `fun = NULL`, it will
-#'   be attempted to find an appropriate writing function based on the file
-#'   extension.
-#' @param ... further parameters to pass to `fun`
-#' @param local (logical) If `TRUE`, will additionally create a local file at
-#'   the corresponding path. Default is `FALSE`.
+#' @param x An R object to be written to S3.
+#' @param fun A custom writing function. If `NULL` (default), the appropriate
+#'   writing function will be inferred based on the file's extension.
+#' @param ... Additional arguments to pass to the writing function `fun`.
+#' @param local Logical. If `TRUE`, a local copy of the file will also be
+#'   created at the specified path. Default is `FALSE`.
 #' 
 #' @inheritSection cloud_guess_write_fun Default writing functions
+#'
+#' @return Invisibly returns `NULL` after successfully writing the object to S3.
 #' 
-#' @examples 
-#' \dontrun{
+#' @examplesIf interactive() 
 #' # write mtcars dataframe to mtcars.csv in data folder
 #' cloud_s3_write(mtcars, "data/mtcars.csv")
 #' cloud_s3_write(random_forest, "models/random_forest.rds")
 #' 
 #' # provide custom writing function with parameters 
 #' cloud_s3_write(c("one", "two"), "text/count.txt", writeLines, sep = "\n\n")
-#' }
 #' 
 #' @export
 cloud_s3_write <- function(x, file, fun = NULL, ..., local = FALSE,
@@ -137,29 +148,34 @@ cloud_s3_write <- function(x, file, fun = NULL, ..., local = FALSE,
   cli::cli_alert_success(
     "Written to {.path {file}} in S3 root {.field {root}}."
   )
+  invisible(NULL)
 }
 
-#' @title Read an object from S3
+#' @title Read a file from S3
 #' 
-#' @description Reads a file from project's S3. This function tries to guess an
-#'   appropriate reading function based on the `file` name, but you can also
-#'   provide a function by yourself if it's needed.
+#' @description Retrieves and reads a file from the project's S3 folder. By
+#'   default, the function attempts to determine the appropriate reading
+#'   function based on the file's extension. However, you can specify a custom
+#'   reading function if necessary.
 #'   
 #' @inheritParams cloud_validate_file_path
 #' @inheritParams cloud_s3_ls
 #' 
-#' @param fun Reading function. By default is `NULL` which means that it will
-#'   be attempted to guess an appropriate reading function from file extension.
-#' @param ... Further parameters to pass to `fun`.
+#' @param fun A custom reading function. If `NULL` (default), the appropriate
+#'   reading function will be inferred based on the file's extension.
+#' @param ... Additional arguments to pass to the reading function `fun`.
+#' 
+#' @return The content of the file read from S3, with additional attributes
+#'   containing metadata about the file.
 #' 
 #' @inheritSection cloud_guess_read_fun Default reading functions
 #' 
-#' @examples 
-#' \dontrun{
+#' @examplesIf interactive() 
+#' # provided there are folders called "data" and "models" in the root of your
+#' # project's main S3 folder and they contain the files mentioned below
 #' cloud_s3_read("data/mtcars.csv")
 #' cloud_s3_read("models/random_forest.rds")
 #' cloud_s3_read("data/dm.sas7bdat", fun = haven::read_sas)
-#' }
 #' 
 #' @export
 cloud_s3_read <- function(file, fun = NULL, ..., root = NULL) {

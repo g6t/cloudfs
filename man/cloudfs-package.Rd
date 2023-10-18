@@ -4,17 +4,18 @@
 \name{cloudfs-package}
 \alias{cloudfs}
 \alias{cloudfs-package}
-\title{cloudfs: Streamlined interface to interact with cloud storage platforms}
+\title{cloudfs: Streamlined Interface to Interact with Cloud Storage Platforms}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-This package offers a unified interface for simplifying cloud storage interactions, including uploading, downloading, reading, and writing files, with functions for both Google Drive and Amazon S3.
+A unified interface for simplifying cloud storage interactions, including uploading, downloading, reading, and writing files, with functions for both 'Google Drive' (\url{https://www.google.com/drive/}) and 'Amazon S3' (\url{https://aws.amazon.com/s3/}).
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://g6t.github.io/cloudfs/}
   \item \url{https://github.com/g6t/cloudfs}
+  \item Report bugs at \url{https://github.com/g6t/cloudfs/issues}
 }
 
 }

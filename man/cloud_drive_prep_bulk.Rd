@@ -25,6 +25,9 @@ bulk reading on a folder with gigabytes of data.}
 \item{quiet}{All caution messages may be turned off by setting this parameter
 to \code{TRUE}.}
 }
+\value{
+Transformed \code{content} dataframe.
+}
 \description{
 \code{cloud_drive_ls} returns a dataframe of contents of a Google
 Drive folder. This dataframe has \code{name}, \code{type} and \code{id} columns. \code{name}

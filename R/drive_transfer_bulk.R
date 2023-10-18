@@ -20,6 +20,8 @@
 #' @param quiet All caution messages may be turned off by setting this parameter
 #'   to `TRUE`.
 #'   
+#' @return Transformed `content` dataframe.
+#'   
 #' @keywords internal
 cloud_drive_prep_bulk <- function(content, what = c("read", "download"),
                                safe_size = 5e7, quiet = FALSE) {
@@ -96,25 +98,34 @@ cloud_drive_content_find_dirs <- function(cont, root = NULL) {
 }
 
 
-#' @title Upload files to Google Drive in bulk
+#' @title Bulk Upload Files to Google Drive
 #' 
-#' @description [cloud_local_ls] function returns a dataframe of contents of
-#'   local project folder. `cloud_drive_upload_bulk` can be applied to such a
-#'   dataframe to upload all the listed files.
-#'   
-#'   The workflow in mind is that you would call `cloud_local_ls()`, then use
-#'   dplyr verbs to keep only files that you need and then call
-#'   `cloud_drive_upload_bulk` on the result.
+#' @description This function streamlines the process of uploading multiple
+#'   files from the local project folder to the project's designated Google
+#'   Drive folder. By using [cloud_local_ls], you can obtain a dataframe
+#'   detailing the contents of the local folder. Applying
+#'   `cloud_drive_upload_bulk` to this dataframe allows you to upload all listed
+#'   files to Google Drive.
 #' 
 #' @inheritParams cloud_drive_upload
 #' @inheritParams cloud_s3_prep_bulk
 #' 
-#' @examples 
-#' \dontrun{
-#' cloud_local_ls("plots") %>% 
-#'   filter(type == "png") %>% 
+#' @return Invisibly returns the input `content` dataframe.
+#' 
+#' @examplesIf interactive() 
+#' # create toy plots: 2 png's and 1 jpeg
+#' dir.create("toy_plots")
+#' png("toy_plots/plot1.png"); plot(rnorm(100)); dev.off()
+#' png("toy_plots/plot2.png"); plot(hist(rnorm(100))); dev.off()
+#' png("toy_plots/plot3.jpeg"); plot(hclust(dist(USArrests), "ave")); dev.off()
+#' 
+#' # upload only the two png's
+#' cloud_local_ls("toy_plots")  |> 
+#'   dplyr::filter(type == "png")  |> 
 #'   cloud_drive_upload_bulk()
-#' }
+#' 
+#' # clean up
+#' unlink("toy_plots", recursive = TRUE)
 #'   
 #' @export
 cloud_drive_upload_bulk <- function(content, quiet = FALSE, root = NULL) {
@@ -139,28 +150,31 @@ cloud_drive_upload_bulk <- function(content, quiet = FALSE, root = NULL) {
     )
   }
   cli::cli_alert_success("Done!")
+  invisible(content)
 }
 
-
-#' @title Download Google Drive contents in bulk
+#' @title Bulk download contents from Google Drive
 #' 
-#' @description [cloud_drive_ls] function returns a dataframe of contents of a
-#'   Google Drive folder. `cloud_drive_download_bulk` can be applied to such a
-#'   dataframe to download all the listed files.
-#'   
-#'   The workflow in mind is that you would call `cloud_drive_ls()`, then use
-#'   dplyr verbs to keep only files that you need and then call
-#'   `cloud_drive_download_bulk` on the result.
+#' @description Downloads multiple files from a Google Drive folder based on 
+#'   the output dataframe from [cloud_drive_ls]. This function streamlines 
+#'   the process of downloading multiple files by allowing you to filter and 
+#'   select specific files from the Google Drive listing and then download 
+#'   them in bulk.
 #' 
 #' @inheritParams cloud_drive_download
 #' @inheritParams cloud_drive_prep_bulk
 #' 
-#' @examples 
-#' \dontrun{
-#' cloud_drive_ls("data") %>% 
-#'   filter(type == "csv") %>% 
+#' @return Invisibly returns the input `content` dataframe.
+#' 
+#' @examplesIf interactive() 
+#' # provided there's a folder called "toy_data" in the root of your project's
+#' # Google Drive folder, and this folder contains "csv" files
+#' cloud_drive_ls("toy_data") |> 
+#'   filter(type == "csv") |> 
 #'   cloud_drive_download_bulk()
-#' }
+#'   
+#' # clean up
+#' unlink("toy_data", recursive = TRUE)
 #'   
 #' @export
 cloud_drive_download_bulk <- function(content, quiet = FALSE) {
@@ -188,33 +202,35 @@ cloud_drive_download_bulk <- function(content, quiet = FALSE) {
     )
   }
   cli::cli_alert_success("Done!")
+  invisible(content)
 }
 
-#' @title Write objects to Google Drive in bulk
+#' @title Write multiple objects to Google Drive in bulk
 #'
-#' @description Given a named list of objects [cloud_object_ls] function returns
-#'   a dataframe similar to the output of [cloud_local_ls] or [cloud_drive_ls].
-#'   `cloud_drive_write_bulk` can be applied to such a dataframe to write all
-#'   the listed objects to S3. It will be attempted to guess writing function
-#'   from file extensions. You can pass writing function manually by setting
-#'   `fun` parameter, but it means that all the files will be written using one
-#'   function. In fact, you probably shouldn't be writing multiple files of
-#'   different types in bulk.
+#' @description This function allows for the bulk writing of multiple R objects
+#'   to the project's designated Google Drive folder. To prepare a list of
+#'   objects for writing, use [cloud_object_ls], which generates a dataframe
+#'   listing the objects and their intended destinations in a format akin to the
+#'   output of [cloud_drive_ls]. By default, the function determines the
+#'   appropriate writing method based on each file's extension. However, if a
+#'   specific writing function is provided via the `fun` parameter, it will be
+#'   applied to all files, which may not be ideal if dealing with a variety of
+#'   file types.
 #' 
 #' @inheritParams cloud_drive_write  
 #' @inheritParams cloud_object_prep_bulk
 #' 
-#' @examples 
-#' \dontrun{
+#' @return Invisibly returns the input `content` dataframe.
+#' 
+#' @examplesIf interactive() 
 #' # write two csv files: data/df_mtcars.csv and data/df_iris.csv
 #' cloud_object_ls(
 #'   dplyr::lst(mtcars = mtcars, iris = iris),
 #'   path = "data",
 #'   extension = "csv",
 #'   prefix = "df_"
-#' ) %>% 
+#' ) |> 
 #' cloud_drive_write_bulk()
-#' }
 #'   
 #' @export
 cloud_drive_write_bulk <- function(content, fun = NULL, ..., local = FALSE,
@@ -249,33 +265,35 @@ cloud_drive_write_bulk <- function(content, fun = NULL, ..., local = FALSE,
     if (!local) {unlink(local_file)}
   }
   cli::cli_alert_success("Done!")
+  invisible(content)
 }
 
-#' @title Read Google Drive contents in bulk
+#' @title Bulk Read Contents from Google Drive
 #' 
-#' @description [cloud_drive_ls] function returns a dataframe of contents of a
-#'   Google Drive folder. `cloud_drive_read_bulk` can be applied to such a
-#'   dataframe to read all the listed files into a named list. It will be
-#'   attempted to guess reading function from file extensions. You can pass
-#'   reading function manually by setting `fun` parameter, but it means that all
-#'   the files will be read using one function. In fact, you probably shouldn't
-#'   be reading multiple files of different types in bulk.
-#'   
-#'   The workflow in mind is that you would call `cloud_drive_ls()`, then use
-#'   dplyr verbs to keep only files that you need and then call
-#'   `cloud_drive_read_bulk` on the result. Note that you don't need to filter
-#'   out folders -- it is done automatically.
+#' @description This function facilitates the bulk reading of multiple files
+#'   from the project's designated Google Drive folder. By using
+#'   [cloud_drive_ls], you can obtain a dataframe detailing the contents of the
+#'   Google Drive folder. Applying `cloud_drive_read_bulk` to this dataframe
+#'   allows you to read all listed files into a named list. The function will,
+#'   by default, infer the appropriate reading method based on each file's
+#'   extension. However, if a specific reading function is provided via the
+#'   `fun` parameter, it will be applied uniformly to all files, which may not
+#'   be suitable for diverse file types.
 #' 
 #' @inheritParams cloud_drive_read  
 #' @inheritParams cloud_drive_prep_bulk
 #' 
-#' @examples 
-#' \dontrun{
+#' @return A named list where each element corresponds to the content of a file
+#'   from Google Drive. The names of the list elements are derived from the file
+#'   names.
+#' 
+#' @examplesIf interactive()
+#' # provided there's a folder called "data" in the root of the project's main
+#' # Google Drive folder, and it contains csv files
 #' data_lst <- 
-#'   cloud_drive_ls("data") %>% 
-#'   filter(type == "csv") %>% 
+#'   cloud_drive_ls("data") |> 
+#'   filter(type == "csv") |> 
 #'   cloud_drive_read_bulk()
-#' }
 #'   
 #' @export
 cloud_drive_read_bulk <- function(content, fun = NULL, ..., quiet = FALSE) {
