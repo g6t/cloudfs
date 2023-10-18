@@ -57,9 +57,12 @@ cloud_s3_upload <- function(file, root = NULL) {
 #' @return Invisibly returns `NULL` after successfully downloading the file.
 #' 
 #' @examplesIf interactive() 
-#' # downloads data/demo.csv from project's S3 folder (provided it exists)
-#' # and saves it to local 'data' folder
-#' cloud_s3_download("data/demo.csv")
+#' # downloads toy_data/demo.csv from project's S3 folder (provided it exists)
+#' # and saves it to local 'toy_data' folder
+#' cloud_s3_download("toy_data/demo.csv")
+#' 
+#' # clean up
+#' unlink("toy_data", recursive = TRUE)
 #' 
 #' @export
 cloud_s3_download <- function(file, root = NULL) {

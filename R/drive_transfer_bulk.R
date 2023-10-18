@@ -167,11 +167,14 @@ cloud_drive_upload_bulk <- function(content, quiet = FALSE, root = NULL) {
 #' @return Invisibly returns the input `content` dataframe.
 #' 
 #' @examplesIf interactive() 
-#' # provided there's a folder called "data" in the root of your project's
+#' # provided there's a folder called "toy_data" in the root of your project's
 #' # Google Drive folder, and this folder contains "csv" files
-#' cloud_drive_ls("data") |> 
+#' cloud_drive_ls("toy_data") |> 
 #'   filter(type == "csv") |> 
 #'   cloud_drive_download_bulk()
+#'   
+#' # clean up
+#' unlink("toy_data", recursive = TRUE)
 #'   
 #' @export
 cloud_drive_download_bulk <- function(content, quiet = FALSE) {

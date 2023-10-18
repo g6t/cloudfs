@@ -24,11 +24,14 @@ them in bulk.
 }
 \examples{
 \dontshow{if (interactive() ) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-# provided there's a folder called "data" in the root of your project's
+# provided there's a folder called "toy_data" in the root of your project's
 # Google Drive folder, and this folder contains "csv" files
-cloud_drive_ls("data") |> 
+cloud_drive_ls("toy_data") |> 
   filter(type == "csv") |> 
   cloud_drive_download_bulk()
+  
+# clean up
+unlink("toy_data", recursive = TRUE)
   
 \dontshow{\}) # examplesIf}
 }

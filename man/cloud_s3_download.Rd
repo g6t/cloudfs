@@ -23,8 +23,11 @@ to the local project folder, maintaining the original folder structure.
 }
 \examples{
 \dontshow{if (interactive() ) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-# downloads data/demo.csv from project's S3 folder (provided it exists)
-# and saves it to local 'data' folder
-cloud_s3_download("data/demo.csv")
+# downloads toy_data/demo.csv from project's S3 folder (provided it exists)
+# and saves it to local 'toy_data' folder
+cloud_s3_download("toy_data/demo.csv")
+
+# clean up
+unlink("toy_data", recursive = TRUE)
 \dontshow{\}) # examplesIf}
 }

@@ -1,6 +1,6 @@
 Package: cloudfs
 Title: Streamlined Interface to Interact with Cloud Storage Platforms
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: c(
     person("Iaroslav", "Domin", email = "iaroslav@gradientmetrics.com", role = c("aut", "cre")),
     person("Stefan", "Musch", email = "stefan@gradientmetrics.com", role = c("aut")),

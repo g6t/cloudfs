@@ -38,8 +38,11 @@ it throws an error.
 }
 \examples{
 \dontshow{if (interactive() ) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-# downloads data/demo.csv from project's Google Drive folder 
-# (provided it exists) and saves it to local 'data' folder
-cloud_drive_download("data/demo.csv")
+# downloads toy_data/demo.csv from project's Google Drive folder 
+# (provided it exists) and saves it to local 'toy_data' folder
+cloud_drive_download("toy_data/demo.csv")
+
+# clean up
+unlink("toy_data", recursive = TRUE)
 \dontshow{\}) # examplesIf}
 }

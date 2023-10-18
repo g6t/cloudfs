@@ -131,11 +131,14 @@ cloud_s3_upload_bulk <- function(content, quiet = FALSE, root = NULL) {
 #' @return Invisibly returns the input `content` dataframe.
 #' 
 #' @examplesIf interactive()
-#' # provided there's a folder called "data" in the root of your project's
+#' # provided there's a folder called "toy_data" in the root of your project's
 #' # S3 folder, and this folder contains "csv" files
-#' cloud_s3_ls("data") |> 
+#' cloud_s3_ls("toy_data") |> 
 #'   filter(type == "csv") |> 
 #'   cloud_s3_download_bulk()
+#'   
+#' # clean up
+#' unlink("toy_data", recursive = TRUE)
 #'   
 #' @export
 cloud_s3_download_bulk <- function(content, quiet = FALSE, root = NULL) {

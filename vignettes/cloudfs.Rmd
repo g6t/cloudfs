@@ -27,9 +27,9 @@ opts_chunk$set(
 		keep.blank.line = TRUE,
 		width.cutoff = 150
 		),
-	options(width = 150),
 	eval = FALSE,
-	error = TRUE)
+	error = TRUE
+)
 ```
 
 ## Introduction
