@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">cloudfs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,24 +60,30 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>path</dt>
-<dd><p>(optional) Path inside S3 folder to open. By default, when
-<code>path = ""</code>, navigates to the root level of project's S3 folder.</p></dd>
+<dd><p>(optional) Path inside the S3 folder to open. Defaults to the
+root level (path = "") of the project's S3 folder.</p></dd>
 
 
 <dt>root</dt>
-<dd><p>S3 path of the project root -- point relative to which to
-consider all relative paths. When left as <code>NULL</code>, the root is automatically
+<dd><p>S3 path of the project root. This serves as the reference point
+for all relative paths. When left as <code>NULL</code>, the root is automatically
 derived from the <code>cloudfs.s3</code> field of the project's DESCRIPTION file.</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    
+
+<p>Invisibly returns <code>NULL</code>. The primary purpose of this function is its
+side effect: opening the specified S3 folder in a browser.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
 <span class="r-in"><span><span class="fu">cloud_s3_browse</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">cloud_s3_browse</span><span class="op">(</span><span class="st">"data"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

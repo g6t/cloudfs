@@ -26,7 +26,7 @@ possible.
     
     <a class="navbar-brand me-2" href="../index.html">cloudfs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,7 +66,7 @@ possible.
 
     <div class="ref-description section level2">
     <p>This function is inspired by (if not mostly copied from)
-usethis::ui_yeah function. It's purpose is to ask user a yes/no question.
+<code>usethis::ui_yeah</code> function. It's purpose is to ask user a yes/no question.
 The differences are:</p><ol><li><p>It is more limited in answer options customization. This is done on
 purpose to standardize command line dialogues in our code.</p></li>
 <li><p>It uses <code>cli</code> package under the hood, so <code>cli</code> rich text formatting is
@@ -87,7 +87,7 @@ possible.</p></li>
 <dt>straight</dt>
 <dd><p>(logical) Ask a straight Yes/No question? By default (when
 <code>FALSE</code>), two different "no" options and one "yes" option are sampled from
-a pool of variants. In other words it behaves just like usethis::ui_yeah
+a pool of variants. In other words it behaves just like <code>usethis::ui_yeah</code>
 with default parameter setup. When <code>straight = TRUE</code>, it only shows "Yes"
 and "No", literally.</p></dd>
 
@@ -105,15 +105,6 @@ and "No", literally.</p></dd>
 a selection (cancels).</p>
     </div>
 
-    <div class="section level2">
-    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">cli_yeah</span><span class="op">(</span><span class="st">"Is this {.strong true}?: {.code 2+2 == 4}"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">cli_yeah</span><span class="op">(</span><span class="st">"{.field Yes} or {.field No}?"</span>, straight <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-in"><span></span></span>
-</code></pre></div>
-    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

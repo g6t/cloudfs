@@ -12,7 +12,7 @@ DESCRIPTION."><meta property="og:image" content="https://g6t.github.io/cloudfs/l
     
     <a class="navbar-brand me-2" href="../index.html">cloudfs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,7 +67,39 @@ DESCRIPTION.</p>
 directory.</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    
 
+<p>A named list where each element corresponds to a <code>cloudfs.*</code> root
+defined in the project's DESCRIPTION file. The names of the list elements
+are derived from the <code>cloudfs.*</code> fields by removing the <code>cloudfs.</code> prefix.</p>
+    </div>
+
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># create a temp. folder, and put DESCRIPTION file with cloudfs.* fields into it</span></span></span>
+<span class="r-in"><span><span class="va">tmp_project</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"cloudfs"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="va">tmp_project</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">tmp_project</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tmp_project_desc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">tmp_project</span>, <span class="st">"DESCRIPTION"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">desc_content</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">"Package: -"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"cloudfs.s3: my_bucket/my_project"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"cloudfs.drive: aaaaaa"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="va">desc_content</span>, <span class="va">tmp_project_desc</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">roots</span> <span class="op">&lt;-</span> <span class="fu">cloud_get_roots</span><span class="op">(</span><span class="va">tmp_project</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">roots</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $s3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "my_bucket/my_project"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $drive</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "aaaaaa"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
