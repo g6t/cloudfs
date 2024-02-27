@@ -2,6 +2,7 @@
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/cloudfs)](https://CRAN.R-project.org/package=cloudfs)
+[![R-CMD-check](https://github.com/g6t/cloudfs/workflows/R-CMD-check/badge.svg)](https://github.com/g6t/cloudfs/actions)
 <!-- badges: end -->
  
 `cloudfs` is an R package developed by [Gradient
