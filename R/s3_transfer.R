@@ -35,7 +35,8 @@ cloud_s3_upload <- function(file, root = NULL) {
   aws.s3::put_object(
     bucket = bucket_prefix$bucket,
     file = file,
-    object = bucket_prefix$prefix
+    object = bucket_prefix$prefix,
+    multipart = TRUE
   )
   cli::cli_alert_success(
     "File {.path {file}} uploaded to S3 root {.field {root}}."
@@ -140,7 +141,8 @@ cloud_s3_write <- function(x, file, fun = NULL, ..., local = FALSE,
   aws.s3::put_object(
     file = local_file,
     bucket = bucket_prefix$bucket,
-    object = bucket_prefix$prefix
+    object = bucket_prefix$prefix,
+    multipart = TRUE
   )
   
   if (!local) {unlink(local_file)}
