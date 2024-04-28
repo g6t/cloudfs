@@ -78,7 +78,7 @@ cloud_drive_download_by_id <- function(file, path, overwrite = FALSE) {
 #' 
 #' @noRd
 cloud_drive_guess_type <- function(file) {
-  cloud_validate_file_path(file)
+  check_path(file)
   ext <- tolower(tools::file_ext(file))
   switch (
     ext,
@@ -112,7 +112,7 @@ cloud_drive_put <- function(media, path) {
 #' @description Finds the spreadsheet by path relative to a project root.
 #'   Applies [googlesheets4::range_autofit()] to each sheet.
 #' 
-#' @inheritParams cloud_validate_file_path
+#' @inheritParams doc_file
 #' @inheritParams cloud_drive_ls
 #' 
 #' @return The file ID of the resized Google spreadsheet as an invisible result.
@@ -123,7 +123,7 @@ cloud_drive_put <- function(media, path) {
 #' 
 #' @export 
 cloud_drive_spreadsheet_autofit <- function(file, root = NULL) {
-  cloud_validate_file_path(file)
+  check_path(file)
   check_string(root, alt_null = TRUE)
   
   if (is.null(root)) root <- cloud_drive_get_root()

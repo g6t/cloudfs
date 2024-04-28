@@ -3,7 +3,7 @@
 #' @description Take a look at the switch call. That's basically it. Returns an
 #'   appropriate function or throws an error if wasn't able to find one.
 #'   
-#' @inheritParams cloud_validate_file_path
+#' @inheritParams doc_file
 #'   
 #' @section Default writing functions:
 #' 
@@ -21,7 +21,7 @@
 #' 
 #' @keywords internal
 cloud_guess_write_fun <- function(file) {
-  cloud_validate_file_path(file)
+  check_path(file)
   ext <- tolower(tools::file_ext(file))
   if (ext == "") stop("Missing file extension, unable to guess writing function.")
   fun <- switch (
@@ -47,7 +47,7 @@ cloud_guess_write_fun <- function(file) {
 #' @description Take a look at the switch call. That's basically it. Returns an
 #'   appropriate function or throws an error if wasn't able to find one.
 #'   
-#' @inheritParams cloud_validate_file_path
+#' @inheritParams doc_file
 #' 
 #' @section Default reading functions:
 #' 
@@ -64,7 +64,7 @@ cloud_guess_write_fun <- function(file) {
 #' 
 #' @keywords internal
 cloud_guess_read_fun <- function(file) {
-  cloud_validate_file_path(file)
+  check_path(file)
   ext <- tolower(tools::file_ext(file))
   if (ext == "") stop("Missing file extension, unable to guess reading function.")
   fun <- switch (

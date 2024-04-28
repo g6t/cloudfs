@@ -3,7 +3,7 @@
 #' @description Uploads a local file from the project's directory to its
 #'   corresponding location within the project's S3 root folder.
 #' 
-#' @inheritParams cloud_validate_file_path
+#' @inheritParams doc_file
 #' @inheritParams cloud_s3_ls
 #'  
 #' @return Invisibly returns `NULL` after successfully uploading the file.
@@ -21,7 +21,7 @@
 #' 
 #' @export
 cloud_s3_upload <- function(file, root = NULL) {
-  cloud_validate_file_path(file)
+  check_path(file)
 
   check_string(root, alt_null = TRUE)
   if (is.null(root)) root <- cloud_s3_get_root()
@@ -51,7 +51,7 @@ cloud_s3_upload <- function(file, root = NULL) {
 #' @description Retrieves a file from the project's S3 root folder and saves it
 #'   to the local project folder, maintaining the original folder structure.
 #' 
-#' @inheritParams cloud_validate_file_path
+#' @inheritParams doc_file
 #' @inheritParams cloud_s3_ls
 #' 
 #' @return Invisibly returns `NULL` after successfully downloading the file.
@@ -66,7 +66,7 @@ cloud_s3_upload <- function(file, root = NULL) {
 #' 
 #' @export
 cloud_s3_download <- function(file, root = NULL) {
-  cloud_validate_file_path(file)
+  check_path(file)
   
   check_string(root, alt_null = TRUE)
   if (is.null(root)) root <- cloud_s3_get_root()
@@ -90,7 +90,7 @@ cloud_s3_download <- function(file, root = NULL) {
 #'   S3 storage. If no custom writing function is specified, the function will
 #'   infer the appropriate writing method based on the file's extension.
 #'   
-#' @inheritParams cloud_validate_file_path
+#' @inheritParams doc_file
 #' @inheritParams cloud_s3_ls
 #' 
 #' @param x An R object to be written to S3.
@@ -115,7 +115,7 @@ cloud_s3_download <- function(file, root = NULL) {
 #' @export
 cloud_s3_write <- function(x, file, fun = NULL, ..., local = FALSE,
                          root = NULL) {
-  cloud_validate_file_path(file)
+  check_path(file)
   check_bool(local)
   check_class(fun, "function", alt_null = TRUE)
   check_string(root, alt_null = TRUE)
@@ -158,7 +158,7 @@ cloud_s3_write <- function(x, file, fun = NULL, ..., local = FALSE,
 #'   function based on the file's extension. However, you can specify a custom
 #'   reading function if necessary.
 #'   
-#' @inheritParams cloud_validate_file_path
+#' @inheritParams doc_file
 #' @inheritParams cloud_s3_ls
 #' 
 #' @param fun A custom reading function. If `NULL` (default), the appropriate
@@ -179,7 +179,7 @@ cloud_s3_write <- function(x, file, fun = NULL, ..., local = FALSE,
 #' 
 #' @export
 cloud_s3_read <- function(file, fun = NULL, ..., root = NULL) {
-  cloud_validate_file_path(file)
+  check_path(file)
   check_string(root, alt_null = TRUE)
   
   if (is.null(fun)) {

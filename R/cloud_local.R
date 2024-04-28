@@ -129,17 +129,7 @@ cloud_object_ls <- function(x, path, extension, prefix = "", suffix = "") {
   check_string(extension)
   check_string(prefix)
   check_string(suffix)
-  
-  if (!grepl("^([A-Za-z]|[0-9]|-|_|\\.|/)+$", path)) {
-    cli::cli_abort(c(
-      "Directory path {.path {path}} is not valid. A valid directory path must \\
-      consist of:",
-      "*" = "uppercase/lowercase letters",
-      "*" = "digits",
-      "*" = "'/' symbols to describe its location inside project's folder",
-      "*" = "'_', '-', '.' symbols or spaces."
-    ))
-  }
+  check_path(path)
   
   if (!grepl("^([A-Za-z]|[0-9])+$", extension)) {
     cli::cli_abort(c(

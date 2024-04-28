@@ -49,38 +49,6 @@ proj_desc_get <- function(key, project = ".") {
   unname(value)
 }
 
-#' @title Validate file path for cloud functions
-#' 
-#' @description Makes sure that file path passed to a cloud function is in the
-#'   right format.
-#' 
-#' @param file Path to a file relative to project folder root. Can contain only
-#'   letters, digits, '-', '_', '.', spaces and '/' symbols.
-#' @param error if `TRUE` (default), throws an error if `file` is not a valid 
-#'   file path.
-#'   
-#' @return Either `TRUE` or `FALSE` if `error` is `FALSE`. Either `TRUE` or
-#' an error if `error` is `TRUE`.
-#'
-#' @keywords internal
-cloud_validate_file_path <- function(file, error = TRUE) {
-  check_string(file)
-  res <- grepl("^([A-Za-z]|[0-9]|-|_|\\.| |/)+$", file)
-  if (error) {
-    if (file == "") cli::cli_abort("A valid file name should not be empty.")
-    if (!res) cli_abort(c(
-      "File name '{file}' is not valid",
-      "A valid file name must consist of:",
-      "*" = "uppercase/lowercase letters",
-      "*" = "digits",
-      "*" = "spaces",
-      "*" = "'/' symbols to describe its location inside project's folder",
-      "*" = "'_', '-', '.' symbols"
-    ))
-  }
-  res
-}
-
 #' @title Validate file names
 #' 
 #' @description Given a character vector of filenames checks that all names pass
