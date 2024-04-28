@@ -70,7 +70,7 @@ cloud_validate_file_path <- function(file, error = TRUE) {
     if (file == "") cli::cli_abort("A valid file name should not be empty.")
     if (!res) cli_abort(c(
       "File name '{file}' is not valid",
-      "A valid file name may consist of:",
+      "A valid file name must consist of:",
       "*" = "uppercase/lowercase letters",
       "*" = "digits",
       "*" = "spaces",
