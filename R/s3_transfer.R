@@ -92,13 +92,12 @@ cloud_s3_download <- function(file, root = NULL) {
 #'   
 #' @inheritParams doc_file
 #' @inheritParams cloud_s3_ls
+#' @inheritParams doc_local
 #' 
 #' @param x An R object to be written to S3.
 #' @param fun A custom writing function. If `NULL` (default), the appropriate
 #'   writing function will be inferred based on the file's extension.
 #' @param ... Additional arguments to pass to the writing function `fun`.
-#' @param local Logical. If `TRUE`, a local copy of the file will also be
-#'   created at the specified path. Default is `FALSE`.
 #' 
 #' @inheritSection cloud_guess_write_fun Default writing functions
 #'
