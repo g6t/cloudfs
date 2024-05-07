@@ -40,6 +40,9 @@
     <loc>https://g6t.github.io/cloudfs/reference/check_null_cond.html</loc>
   </url>
   <url>
+    <loc>https://g6t.github.io/cloudfs/reference/check_path.html</loc>
+  </url>
+  <url>
     <loc>https://g6t.github.io/cloudfs/reference/check_scalar.html</loc>
   </url>
   <url>
@@ -148,10 +151,13 @@
     <loc>https://g6t.github.io/cloudfs/reference/cloud_s3_write_bulk.html</loc>
   </url>
   <url>
-    <loc>https://g6t.github.io/cloudfs/reference/cloud_validate_file_path.html</loc>
+    <loc>https://g6t.github.io/cloudfs/reference/cloudfs-package.html</loc>
   </url>
   <url>
-    <loc>https://g6t.github.io/cloudfs/reference/cloudfs-package.html</loc>
+    <loc>https://g6t.github.io/cloudfs/reference/doc_file.html</loc>
+  </url>
+  <url>
+    <loc>https://g6t.github.io/cloudfs/reference/doc_local.html</loc>
   </url>
   <url>
     <loc>https://g6t.github.io/cloudfs/reference/index.html</loc>
