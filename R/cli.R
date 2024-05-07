@@ -317,7 +317,7 @@ check_bool <- function(x, alt_null = FALSE, add_msg = NULL) {
 #' @description Makes sure that a path passed to a cloud function is in the
 #'   right format.
 #' 
-#' @param file Path to a file relative to project folder root. Can contain only
+#' @param path A path relative to the project folder root. Can contain only
 #'   letters, digits, '-', '_', '.', spaces and '/' symbols.
 #' @param error if `TRUE` (default), throws an error if `file` is not a valid 
 #'   file path.

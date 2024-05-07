@@ -7,11 +7,11 @@
 check_path(path, error = TRUE)
 }
 \arguments{
+\item{path}{A path relative to the project folder root. Can contain only
+letters, digits, '-', '_', '.', spaces and '/' symbols.}
+
 \item{error}{if \code{TRUE} (default), throws an error if \code{file} is not a valid
 file path.}
-
-\item{file}{Path to a file relative to project folder root. Can contain only
-letters, digits, '-', '_', '.', spaces and '/' symbols.}
 }
 \value{
 Either \code{TRUE} or \code{FALSE} if \code{error} is \code{FALSE}. Either \code{TRUE} or
