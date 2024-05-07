@@ -17,8 +17,15 @@ writing function will be inferred based on the file's extension.}
 
 \item{...}{Additional arguments to pass to the writing function \code{fun}.}
 
-\item{local}{Logical. If \code{TRUE}, a local copy of the file will also be
-created at the specified path. Default is \code{FALSE}.}
+\item{local}{Logical, defaulting to \code{FALSE}. If \code{TRUE}, the function will
+also create a local copy of the file at the specified path. Note that some
+writing functions might not overwrite existing files unless explicitly
+allowed. Typically, such functions have a parameter (often named
+\code{overwrite}) to control this behavior. Check the documentation of the
+writing function used to determine the exact parameter name and pass it
+through the \code{...} argument if necessary. Alternatively, you can define an
+anonymous function for \code{fun} that calls a writing function with the
+overwriting option enabled.}
 
 \item{root}{Google Drive ID or URL of the project root. This serves as the
 reference point for all relative paths. When left as \code{NULL}, the root is

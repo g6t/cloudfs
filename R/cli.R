@@ -310,3 +310,35 @@ check_bool <- function(x, alt_null = FALSE, add_msg = NULL) {
     ))
   }
 }
+
+
+#' @title Validate a path
+#' 
+#' @description Makes sure that a path passed to a cloud function is in the
+#'   right format.
+#' 
+#' @param path A path relative to the project folder root. Can contain only
+#'   letters, digits, '-', '_', '.', spaces and '/' symbols.
+#' @param error if `TRUE` (default), throws an error if `file` is not a valid 
+#'   file path.
+#'   
+#' @return Either `TRUE` or `FALSE` if `error` is `FALSE`. Either `TRUE` or
+#' an error if `error` is `TRUE`.
+#'
+#' @keywords internal
+check_path <- function(path, error = TRUE) {
+  res <- grepl("^([A-Za-z]|[0-9]|-|_|\\.| |/)+$", path)
+  if (error) {
+    if (path == "") cli::cli_abort("A valid path must not be empty.")
+    if (!res) cli_abort(c(
+      "Path '{path}' is not valid",
+      "A valid path must consist of:",
+      "*" = "uppercase/lowercase letters",
+      "*" = "digits",
+      "*" = "'/' symbols to separate directories in the path",
+      "*" = "'_', '-', '.' symbols or spaces"
+    ))
+  }
+  res
+}
+

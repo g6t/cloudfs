@@ -21,8 +21,15 @@ writing function will be inferred based on the file's extension.}
 
 \item{...}{Additional arguments to pass to the writing function \code{fun}.}
 
-\item{local}{Logical. If \code{TRUE}, a local copy of the file will also be
-created at the specified path. Default is \code{FALSE}.}
+\item{local}{Logical, defaulting to \code{FALSE}. If \code{TRUE}, the function will
+also create a local copy of the file at the specified path. Note that some
+writing functions might not overwrite existing files unless explicitly
+allowed. Typically, such functions have a parameter (often named
+\code{overwrite}) to control this behavior. Check the documentation of the
+writing function used to determine the exact parameter name and pass it
+through the \code{...} argument if necessary. Alternatively, you can define an
+anonymous function for \code{fun} that calls a writing function with the
+overwriting option enabled.}
 
 \item{quiet}{all caution messages may be turned off by setting this parameter
 to \code{TRUE}.}
